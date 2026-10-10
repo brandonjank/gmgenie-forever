@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.3**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.4**.
 
 ## Target
 
@@ -53,6 +53,18 @@ GM mode follows server notifications and self inspection; Forever has no
 read-only `.gm` query. Flight starts as unknown until its first command response.
 Guild report synchronization requires both GMs to be guilded and use this port.
 
+## Move an existing NPC
+
+Open `/builder`, target the NPC, stand at its new position and face the desired
+direction, then click **Move NPC here**. The command `.npc move` copies your
+current position and orientation, saves the spawn permanently and respawns it.
+The button rejects missing targets, players and pets. The core checks that the
+NPC is a persistent spawn on the same map and that you have command permission.
+
+The **Move self** and **Move self back** controls move your character using the
+Builder offsets. **Move NPC here** uses your live position rather than those
+offsets or cached coordinates.
+
 ## Bundled starter macros
 
 The addon includes **28 editable starters**, available from the player context
@@ -98,12 +110,13 @@ folder, outside the addon directory.
 
 ## Validation and limits
 
-`python tests/test_gmgenie.py` checks 223 Lua/XML script chunks in Lua 5.1,
+`python tests/test_gmgenie.py` checks 226 Lua/XML script chunks in Lua 5.1,
 manifest resources, cold-start report-type switching, synthetic report/player-info
 responses, saved settings, command routing, and hyperlink rewriting. Install
 the dependency with `python -m pip install -r tests/requirements.txt`.
 
-The suite also checks all 28 starter entries, new/existing-install migration,
+The suite also checks the actual NPC-move button callback, rejecting invalid
+targets and sending the exact command through self-whisper, plus all 28 starter entries, new/existing-install migration,
 preservation of edits/deletions, independent nested settings, generated commands,
 message lengths, the custom-topic prompt with literal percent text, and selecting
 whisper/mail examples through the modern editor callbacks. All network sends are

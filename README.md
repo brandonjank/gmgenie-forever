@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.3.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.4.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.3.zip** from the
+1. Download **GMGenie-0.7.3-forever.4.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -70,6 +70,17 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | `/spy CharacterName` | Inspect a player |
 | `/builder` | Toggle the builder |
 
+## Move a selected NPC to your position
+
+Open `/builder`, target the NPC, stand where it should be, face its desired
+direction and click **Move NPC here**. This saves the selected NPC's new position
+and orientation permanently and respawns it. It uses `.npc move`, so the target
+must be a persistent creature spawn and your GM account needs permission.
+Missing targets, players and pets are rejected before sending a command.
+
+**Move self** and **Move self back** move your character using Builder offsets.
+**Move NPC here** uses your character's current position and facing.
+
 ## Compatibility and validation
 
 Forever combines Classic content with newer UI APIs. This port updates
@@ -77,7 +88,7 @@ backdrops, Settings pages, scrolling editors, player context menus and chat
 links, rather than relying only on the TOC interface version. Commands use a
 self-whisper consumed by the core, which also works for unguilded GMs.
 
-The automated Lua 5.1 suite checks 223 Lua/XML chunks, manifest references,
+The automated Lua 5.1 suite checks 226 Lua/XML chunks, manifest references,
 command routing, synthetic report/player-info parsing, links, saved settings,
 all 28 starter macros, migration and macro editors. Network sends are mocked.
 Live checks covered login, HUD, Settings, report-type switching, player menus,

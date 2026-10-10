@@ -367,6 +367,16 @@ function GMGenie.Spawns.deleteNpc()
     GMGenieForever.SendChatMessage(".npc delete", "GUILD");
 end
 
+function GMGenie.Spawns.moveNpcHere()
+    local guid = UnitGUID("target");
+    if not guid or not guid:match("^Creature%-") then
+        GMGenie.showGMMessage("Select an NPC to move to your position and facing.");
+        return false;
+    end
+    GMGenieForever.SendChatMessage(".npc move", "GUILD");
+    return true;
+end
+
 function GMGenie.Spawns.toggleMacroWindow()
     local frame = GMGenie_Spawns_Macro;
     if frame:IsVisible() then

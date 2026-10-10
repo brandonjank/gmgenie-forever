@@ -136,6 +136,25 @@ load('Hud.lua')
 load('Tickets.lua')
 load('Spy.lua')
 load('Spawns.lua')
+move_button = ET.parse(addon / 'Spawns.xml').getroot().find(".//ui:Button[@name='$parent_MoveNpcHere']/ui:Scripts/ui:OnClick", ns)
+assert move_button is not None
+lua.execute('''
+local originalSend = C_ChatInfo.SendChatMessage
+local messages = {}
+C_ChatInfo.SendChatMessage = function(...) messages[#messages+1] = {...} end
+function UnitGUID(unit) assert(unit=='target'); return selectedGuid end
+for _,guid in ipairs({'', 'Player-0-00000001', 'Pet-0-1-1-1-1-00000001'}) do
+    selectedGuid=guid
+    assert(GMGenie.Spawns.moveNpcHere()==false)
+end
+selectedGuid=nil
+assert(GMGenie.Spawns.moveNpcHere()==false and #messages==0)
+selectedGuid='Creature-0-1-1-1-12345-00000001'
+''' + move_button.text + '''
+assert(#messages==1)
+assert(messages[1][1]=='.npc move' and messages[1][2]=='WHISPER' and messages[1][4]=='Tester')
+C_ChatInfo.SendChatMessage=originalSend
+''')
 load('Chatreader.lua')
 lua.execute('''
 -- Switching an empty report list must work before the first Spy request.
@@ -265,4 +284,4 @@ for _,kind in ipairs({'Whispers','Mail'}) do
     assert(edit.color[2]==0) -- an overlong first line must stay red
 end
 ''')
-print(f'PASS: {count} Lua/XML chunks, manifest resources, command routing, report/player-info parsing, links, saved settings, 28 starter macros, migration, and editors')
+print(f'PASS: {count} Lua/XML chunks, manifest resources, command routing, report/player-info parsing, links, saved settings, 28 starter macros, migration, editors, and selected NPC movement')

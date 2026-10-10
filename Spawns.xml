@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
     <Button name="GMGenie_Spawns_Main" inherits="GMGenie_Window" hidden="true">
         <Size>
-            <AbsDimension x="180" y="267" />
+            <AbsDimension x="180" y="290" />
         </Size>
         <Anchors>
             <Anchor point="LEFT" />
@@ -394,7 +394,7 @@
             </Frame>
             <Frame name="$parent_Buttons">
                 <Size>
-                    <AbsDimension x="170" y="98" />
+                    <AbsDimension x="170" y="121" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOP" relativeTo="$parent_Npc" relativePoint="BOTTOM">
@@ -404,7 +404,7 @@
                     </Anchor>
                 </Anchors>
                 <Frames>
-                    <Button name="$parent_Move" inherits="GMGenie_Button" text="Move">
+                    <Button name="$parent_Move" inherits="GMGenie_Button" text="Move self">
                         <Size>
                             <AbsDimension x="85" y="18" />
                         </Size>
@@ -417,7 +417,7 @@
                             </OnClick>
                         </Scripts>
                     </Button>
-                    <Button name="$parent_MoveBack" inherits="GMGenie_Button" text="Move back">
+                    <Button name="$parent_MoveBack" inherits="GMGenie_Button" text="Move self back">
                         <Size>
                             <AbsDimension x="85" y="18" />
                         </Size>
@@ -532,6 +532,28 @@
                             </OnClick>
                         </Scripts>
                     </Button>
+                    <Button name="$parent_MoveNpcHere" inherits="GMGenie_Button" text="Move NPC here">
+                        <Size>
+                            <AbsDimension x="170" y="18" />
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset>
+                                    <AbsDimension x="0" y="-80" />
+                                </Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>GMGenie.Spawns.moveNpcHere();</OnClick>
+                            <OnEnter>
+                                GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                                GameTooltip:SetText("Move selected NPC here");
+                                GameTooltip:AddLine("Target an NPC, stand at its new location and face the desired direction. Copies your current position and facing, saves the spawn permanently, and respawns the NPC.", 1, 1, 1, true);
+                                GameTooltip:Show();
+                            </OnEnter>
+                            <OnLeave>GameTooltip:Hide();</OnLeave>
+                        </Scripts>
+                    </Button>
                     <Button name="$parent_ResetCoords" inherits="GMGenie_Button" text="Reset coords">
                         <Size>
                             <AbsDimension x="85" y="18" />
@@ -539,7 +561,7 @@
                         <Anchors>
                             <Anchor point="TOPLEFT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-80" />
+                                    <AbsDimension x="0" y="-103" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -556,7 +578,7 @@
                         <Anchors>
                             <Anchor point="TOPRIGHT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-80" />
+                                    <AbsDimension x="0" y="-103" />
                                 </Offset>
                             </Anchor>
                         </Anchors>

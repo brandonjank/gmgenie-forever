@@ -63,7 +63,7 @@ function GMGenie.onLoad()
     GMGenieForever.initialized = true;
 
     -- Please do not remove the copyright notice, it would be a violation of the gpl.
-    GMGenie.showGMMessage("GMGenie 0.7.3-forever.3 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
+    GMGenie.showGMMessage("GMGenie 0.7.3-forever.4 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
 end
 
 local frame = CreateFrame("FRAME");

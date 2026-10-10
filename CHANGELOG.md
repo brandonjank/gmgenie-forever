@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.7.3-forever.3 — 2026-10-10
+## 0.7.3-forever.4 — 2026-10-10
+
+- Add **Move NPC here** to Builder: target an NPC, stand at its new location,
+  face the desired direction and click to persist its position/orientation.
+- Reject missing targets, players and pets before issuing `.npc move`.
+- Clarify the existing controls as **Move self** and **Move self back**.
+- Explain persistent spawn movement in the tooltip and installation docs.
+- Test the actual XML button callback and command transport in Lua 5.1.
+
+## 0.7.3-forever.3 â€” 2026-10-10
 
 First public Forever release, based on GM Genie 0.7.3.
 
