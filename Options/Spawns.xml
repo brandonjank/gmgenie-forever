@@ -1,28 +1,25 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
- http://wowprogramming.com/FrameXML/UI.xsd">
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
 
     <Frame name="GMGenie_Spawns_OptionsWindow" hidden="true" parent="UIParent" inherits="GMGenie_OptionsWindowTemplate">
         <Frames>
             <Frame name="$parent_Objects">
                 <Size>
-                    <AbsDimension x="275" y="64"/>
+                    <AbsDimension x="275" y="64" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent_SubText" relativePoint="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="0" y="-5"/>
+                            <AbsDimension x="0" y="-5" />
                         </Offset>
                     </Anchor>
                 </Anchors>
                 <Frames>
                     <Button name="$parent_Dropdown" inherits="GMGenie_Dropdown" text="Objects">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
-                            <Anchor point="TOPLEFT"/>
+                            <Anchor point="TOPLEFT" />
                         </Anchors>
                         <Scripts>
                             <OnClick>
@@ -31,15 +28,15 @@
                             </OnClick>
                         </Scripts>
                     </Button>
-                    <Frame name="$parent_Dropdownbuttons" inherits="UIDropDownMenuTemplate" id="50"/>
+                    <Frame name="$parent_Dropdownbuttons" inherits="UIDropDownMenuTemplate" id="50" />
                     <Button name="$parent_New" inherits="GMGenie_Button" text="New">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent_Dropdown" relativePoint="RIGHT">
                                 <Offset>
-                                    <AbsDimension x="5" y="0"/>
+                                    <AbsDimension x="5" y="0" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -51,23 +48,22 @@
                     </Button>
                     <Frame name="$parent_IdText">
                         <Size>
-                            <AbsDimension x="15" y="18"/>
+                            <AbsDimension x="15" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-5"/>
+                                    <AbsDimension x="0" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                         <Layers>
                             <Layer>
-                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Id:"
-                                            justifyH="LEFT">
+                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Id:" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="LEFT">
                                             <Offset>
-                                                <AbsDimension x="0" y="2"/>
+                                                <AbsDimension x="0" y="2" />
                                             </Offset>
                                         </Anchor>
                                     </Anchors>
@@ -77,12 +73,12 @@
                     </Frame>
                     <EditBox name="$parent_Id" enableMouse="true" inherits="GMGenie_Input_Text">
                         <Size>
-                            <AbsDimension x="75" y="18"/>
+                            <AbsDimension x="75" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="20" y="-5"/>
+                                    <AbsDimension x="20" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -94,23 +90,22 @@
                     </EditBox>
                     <Frame name="$parent_NameText">
                         <Size>
-                            <AbsDimension x="30" y="18"/>
+                            <AbsDimension x="30" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="105" y="-5"/>
+                                    <AbsDimension x="105" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                         <Layers>
                             <Layer>
-                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Name:"
-                                            justifyH="LEFT">
+                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Name:" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="LEFT">
                                             <Offset>
-                                                <AbsDimension x="0" y="2"/>
+                                                <AbsDimension x="0" y="2" />
                                             </Offset>
                                         </Anchor>
                                     </Anchors>
@@ -120,12 +115,12 @@
                     </Frame>
                     <EditBox name="$parent_Name" enableMouse="true" inherits="GMGenie_Input_Text">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="140" y="-5"/>
+                                    <AbsDimension x="140" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -138,12 +133,12 @@
 
                     <Button name="$parent_Delete" inherits="GMGenie_Button" text="Delete">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_IdText" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-5"/>
+                                    <AbsDimension x="0" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -158,12 +153,12 @@
                     </Button>
                     <Button name="$parent_Save" inherits="GMGenie_Button" text="Add">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent_Delete" relativePoint="RIGHT">
                                 <Offset>
-                                    <AbsDimension x="5" y="0"/>
+                                    <AbsDimension x="5" y="0" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -175,24 +170,24 @@
                     </Button>
                 </Frames>
             </Frame>
-            <Frame name='$parent_Npcs'>
+            <Frame name="$parent_Npcs">
                 <Size>
-                    <AbsDimension x="280" y="64"/>
+                    <AbsDimension x="280" y="64" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent_Objects" relativePoint="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="0" y="-25"/>
+                            <AbsDimension x="0" y="-25" />
                         </Offset>
                     </Anchor>
                 </Anchors>
                 <Frames>
                     <Button name="$parent_Dropdown" inherits="GMGenie_Dropdown" text="Npcs">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
-                            <Anchor point="TOPLEFT"/>
+                            <Anchor point="TOPLEFT" />
                         </Anchors>
                         <Scripts>
                             <OnClick>
@@ -201,15 +196,15 @@
                             </OnClick>
                         </Scripts>
                     </Button>
-                    <Frame name="$parent_Dropdownbuttons" inherits="UIDropDownMenuTemplate" id="50"/>
+                    <Frame name="$parent_Dropdownbuttons" inherits="UIDropDownMenuTemplate" id="50" />
                     <Button name="$parent_New" inherits="GMGenie_Button" text="New">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent_Dropdown" relativePoint="RIGHT">
                                 <Offset>
-                                    <AbsDimension x="5" y="0"/>
+                                    <AbsDimension x="5" y="0" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -221,23 +216,22 @@
                     </Button>
                     <Frame name="$parent_IdText">
                         <Size>
-                            <AbsDimension x="15" y="18"/>
+                            <AbsDimension x="15" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-5"/>
+                                    <AbsDimension x="0" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                         <Layers>
                             <Layer>
-                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Id:"
-                                            justifyH="LEFT">
+                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Id:" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="LEFT">
                                             <Offset>
-                                                <AbsDimension x="0" y="2"/>
+                                                <AbsDimension x="0" y="2" />
                                             </Offset>
                                         </Anchor>
                                     </Anchors>
@@ -247,12 +241,12 @@
                     </Frame>
                     <EditBox name="$parent_Id" enableMouse="true" inherits="GMGenie_Input_Text">
                         <Size>
-                            <AbsDimension x="75" y="18"/>
+                            <AbsDimension x="75" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="20" y="-5"/>
+                                    <AbsDimension x="20" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -264,23 +258,22 @@
                     </EditBox>
                     <Frame name="$parent_NameText">
                         <Size>
-                            <AbsDimension x="30" y="18"/>
+                            <AbsDimension x="30" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="105" y="-5"/>
+                                    <AbsDimension x="105" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                         <Layers>
                             <Layer>
-                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Name:"
-                                            justifyH="LEFT">
+                                <FontString name="$parent_Text" inherits="GenieFontNormalSmall" text="Name:" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="LEFT">
                                             <Offset>
-                                                <AbsDimension x="0" y="2"/>
+                                                <AbsDimension x="0" y="2" />
                                             </Offset>
                                         </Anchor>
                                     </Anchors>
@@ -290,12 +283,12 @@
                     </Frame>
                     <EditBox name="$parent_Name" enableMouse="true" inherits="GMGenie_Input_Text">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_Dropdown" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="140" y="-5"/>
+                                    <AbsDimension x="140" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -308,12 +301,12 @@
 
                     <Button name="$parent_Delete" inherits="GMGenie_Button" text="Delete">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parent_IdText" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="0" y="-5"/>
+                                    <AbsDimension x="0" y="-5" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -328,12 +321,12 @@
                     </Button>
                     <Button name="$parent_Save" inherits="GMGenie_Button" text="Add">
                         <Size>
-                            <AbsDimension x="135" y="18"/>
+                            <AbsDimension x="135" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent_Delete" relativePoint="RIGHT">
                                 <Offset>
-                                    <AbsDimension x="5" y="0"/>
+                                    <AbsDimension x="5" y="0" />
                                 </Offset>
                             </Anchor>
                         </Anchors>

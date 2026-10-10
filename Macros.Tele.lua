@@ -9,9 +9,9 @@ GMGenie.Macros.Tele = {};
 
 function GMGenie.Macros.Tele.run(name, title)
     if GMGenie_SavedVars.tele[title] == "RECALL" then
-        SendChatMessage('.recall ' .. name, "GUILD");
+        GMGenieForever.SendChatMessage('.recall ' .. name, "GUILD");
     else
-        SendChatMessage('.tele name ' .. name .. ' ' .. GMGenie_SavedVars.tele[title], "GUILD");
+        GMGenieForever.SendChatMessage('.tele name ' .. name .. ' ' .. GMGenie_SavedVars.tele[title], "GUILD");
     end
 end
 
@@ -23,15 +23,15 @@ function GMGenie.Macros.Tele.runFromSpy(self)
 end
 
 function GMGenie.Macros.Tele.addToUnitMenu()
-    UnitPopupMenus["GMGenie_Tele"] = {};
+    GMGenieForever.popupMenus["GMGenie_Tele"] = {};
     local TeleTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.tele);
     for _, name in pairs(TeleTemp) do
-        table.insert(UnitPopupMenus["GMGenie_Tele"], "GMGenie_Tele_" .. name);
-        UnitPopupButtons["GMGenie_Tele_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_Tele"], "GMGenie_Tele_" .. name);
+        GMGenieForever.popupButtons["GMGenie_Tele_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_Tele"], "GMGenie_TeleOptions");
-    UnitPopupButtons["GMGenie_TeleOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Tele"], "GMGenie_TeleOptions");
+    GMGenieForever.popupButtons["GMGenie_TeleOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Tele.loadDropdown(_, level)

@@ -6,7 +6,7 @@
 --You should have received a copy of the GNU General Public License along with Game Master Genie. If not, see <http://www.gnu.org/licenses/>.
 
 GMGenie = {};
-GMGenie_SavedVars = {};
+GMGenie_SavedVars = GMGenie_SavedVars or {};
 
 function GMGenie.showGMMessage(msg)
     DEFAULT_CHAT_FRAME:AddMessage("|cFFFF0000[GMGenie]|cffffffff: " .. msg);
@@ -59,8 +59,11 @@ function GMGenie.onLoad()
     GMGenie.minimap.reposition();
     GMGenie.Tickets.onLoad();
 
+    GMGenieForever.StartChatReader();
+    GMGenieForever.initialized = true;
+
     -- Please do not remove the copyright notice, it would be a violation of the gpl.
-    GMGenie.showGMMessage("GMGenie 0.7.3 by Chocochaos ((c) 2011-2014). The latest version of GM Genie can always be found at http://chocochaos.com/gmgenie/");
+    GMGenie.showGMMessage("GMGenie 0.7.3-forever.3 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
 end
 
 local frame = CreateFrame("FRAME");
@@ -99,6 +102,10 @@ end
 
 function GMGenie.loadWindow(window, title, refresh, refreshScript)
     local name = window:GetName();
+    -- Modern XML does not interpret a negative child level as a relative level.
+    -- Keep the background below labels drawn on the window itself.
+    window:SetFrameLevel(math.max(2, window:GetFrameLevel()));
+    getglobal(name .. "_Main"):SetFrameLevel(window:GetFrameLevel() - 1);
     window:RegisterForClicks("LeftButtonUp", "RightButtonUp");
     getglobal(name .. "_Title_Text"):SetText(title);
     if refresh then

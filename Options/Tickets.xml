@@ -1,15 +1,11 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
- http://wowprogramming.com/FrameXML/UI.xsd">
-    <Frame name="GMGenie_Tickets_OptionsWindow" hidden="true" parent="UIParent"
-           inherits="GMGenie_OptionsWindowTemplate">
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
+    <Frame name="GMGenie_Tickets_OptionsWindow" hidden="true" parent="UIParent" inherits="GMGenie_OptionsWindowTemplate">
         <Frames>
             <CheckButton name="$parent_showOffline" inherits="GMGenie_CheckButton">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent_SubText" relativePoint="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="-2" y="-8"/>
+                            <AbsDimension x="-2" y="-8" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -26,7 +22,7 @@
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent_showOffline" relativePoint="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="0" y="-8"/>
+                            <AbsDimension x="0" y="-8" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -40,7 +36,7 @@
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="$parent_swapWindows" relativePoint="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="0" y="-8"/>
+                            <AbsDimension x="0" y="-8" />
                         </Offset>
                     </Anchor>
                 </Anchors>

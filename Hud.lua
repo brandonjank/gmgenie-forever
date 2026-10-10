@@ -12,18 +12,22 @@ function GMGenie.Hud.onLoad()
     GMGenie_Hud:RegisterEvent("UI_ERROR_MESSAGE");
     GMGenie_Hud:SetScript("OnEvent", GMGenie.Hud.readNotice);
 
-    GMGenie_Hud_GM:SetAttribute("macrotext1", "/run GMGenie.Hud.toggleGm();");
-    GMGenie_Hud_Chat:SetAttribute("macrotext1", "/run GMGenie.Hud.toggleChat();");
-    GMGenie_Hud_Visibility:SetAttribute("macrotext1", "/run GMGenie.Hud.toggleVisibility();");
-    GMGenie_Hud_Whisper:SetAttribute("macrotext1", "/run GMGenie.Hud.toggleWhisper();");
-    GMGenie_Hud_Fly:SetAttribute("macrotext1", "/target " .. UnitName("player") .. " \n/run GMGenie.Hud.toggleFly();");
+    GMGenie_Hud_GM:SetScript("OnClick", function() GMGenie.Hud.toggleGm(); end);
+    GMGenie_Hud_Chat:SetScript("OnClick", function() GMGenie.Hud.toggleChat(); end);
+    GMGenie_Hud_Visibility:SetScript("OnClick", function() GMGenie.Hud.toggleVisibility(); end);
+    GMGenie_Hud_Whisper:SetScript("OnClick", function() GMGenie.Hud.toggleWhisper(); end);
+    GMGenie_Hud_Fly:SetScript("OnClick", function() GMGenie.Hud.toggleFly(); end);
 
     if GMGenie_SavedVars.hudClosed then
         GMGenie.Hud.toggle();
     end
 
-    Chronos.schedule(1, GMGenie.Hud.checkStatus);
-    GMGenie.Hud.flyStatus(false);
+    GMGenie_Hud_GM:SetText("GM mode: refresh");
+    GMGenie_Hud_Chat:SetText("Chat badge: refresh");
+    GMGenie_Hud_Visibility:SetText("Visibility: refresh");
+    GMGenie_Hud_Whisper:SetText("Whispers: refresh");
+    GMGenie.Hud.fly = nil;
+    GMGenie_Hud_Fly:SetText("Flight: click to set");
 end
 
 function GMGenie.Hud.toggle()
@@ -40,10 +44,11 @@ end
 ------------ HUD status functionality ------------
 --------------------------------------------------
 function GMGenie.Hud.checkStatus()
-    SendChatMessage(".gm", "GUILD");
-    SendChatMessage(".gm chat", "GUILD");
-    SendChatMessage(".gm visible", "GUILD");
-    SendChatMessage(".whispers", "GUILD");
+    -- Forever has explicit .gm on/off commands and no read-only .gm query.
+    -- Notification events keep this state current without changing it to query it.
+    GMGenieForever.SendChatMessage(".gm chat", "GUILD");
+    GMGenieForever.SendChatMessage(".gm visible", "GUILD");
+    GMGenieForever.SendChatMessage(".whispers", "GUILD");
 end
 
 function GMGenie.Hud.gmStatus(status)
@@ -91,7 +96,8 @@ function GMGenie.Hud.flyStatus(status)
     end
 end
 
-function GMGenie.Hud.readNotice(_, event, notice)
+function GMGenie.Hud.readNotice(_, event, messageType, message)
+    local notice = message or messageType;
     if event == "UI_ERROR_MESSAGE" then
         if notice == "GM mode is ON" then
             GMGenie.Hud.gmStatus(true);
@@ -114,42 +120,42 @@ end
 
 function GMGenie.Hud.toggleGm(status)
     if (not GMGenie.Hud.gm and status == nil) or status == true then
-        SendChatMessage(".gm on", "GUILD");
+        GMGenieForever.SendChatMessage(".gm on", "GUILD");
     else
-        SendChatMessage(".gm off", "GUILD");
+        GMGenieForever.SendChatMessage(".gm off", "GUILD");
     end
 end
 
 function GMGenie.Hud.toggleChat(status)
     if (not GMGenie.Hud.chat and status == nil) or status == true then
-        SendChatMessage(".gm chat on", "GUILD");
+        GMGenieForever.SendChatMessage(".gm chat on", "GUILD");
     else
-        SendChatMessage(".gm chat off", "GUILD");
+        GMGenieForever.SendChatMessage(".gm chat off", "GUILD");
     end
 end
 
 function GMGenie.Hud.toggleVisibility(status)
     if (not GMGenie.Hud.visibility and status == nil) or status == true then
-        SendChatMessage(".gm visible on", "GUILD");
+        GMGenieForever.SendChatMessage(".gm visible on", "GUILD");
     else
-        SendChatMessage(".gm visible off", "GUILD");
+        GMGenieForever.SendChatMessage(".gm visible off", "GUILD");
     end
 end
 
 function GMGenie.Hud.toggleWhisper(status)
     if (not GMGenie.Hud.whisper and status == nil) or status == true then
-        SendChatMessage(".whispers on", "GUILD");
+        GMGenieForever.SendChatMessage(".whispers on", "GUILD");
     else
-        SendChatMessage(".whispers off", "GUILD");
+        GMGenieForever.SendChatMessage(".whispers off", "GUILD");
     end
 end
 
 function GMGenie.Hud.toggleFly(status)
     if UnitName("target") == UnitName("player") or UnitName("target") == nil then
         if (not GMGenie.Hud.fly and status == nil) or status == true then
-            SendChatMessage(".gm fly on", "GUILD");
+            GMGenieForever.SendChatMessage(".gm fly on", "GUILD");
         else
-            SendChatMessage(".gm fly off", "GUILD");
+            GMGenieForever.SendChatMessage(".gm fly off", "GUILD");
         end
     else
         GMGenie.showGMMessage("Could not target self to change flight mode.");
@@ -160,7 +166,7 @@ function GMGenie.Hud.setSpeed()
     if UnitName("target") == UnitName("player") or UnitName("target") == nil then
         local speed = GMGenie_Hud_Speed:GetText();
         GMGenie_Hud_Speed:ClearFocus();
-        SendChatMessage(".mod speed all " .. speed, "GUILD");
+        GMGenieForever.SendChatMessage(".mod speed all " .. speed, "GUILD");
     else
         GMGenie.showGMMessage("Be sure to target yourself before setting the speed.");
     end

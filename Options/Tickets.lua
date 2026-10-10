@@ -35,7 +35,7 @@ function GMGenie.Tickets.optionsOnLoad()
     panel.cancel = GMGenie.Tickets.optionsUpdate;
     panel.default = GMGenie.Tickets.optionsDefault;
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal("GMGenie_Tickets_OptionsWindow_Title"):SetText("Tickets");
     getglobal("GMGenie_Tickets_OptionsWindow_SubText"):SetText("Here you can change the settings for the ticket tracker.");
@@ -44,11 +44,13 @@ function GMGenie.Tickets.optionsOnLoad()
 end
 
 function GMGenie.Tickets.optionsUpdate()
-    getglobal("GMGenie_Tickets_OptionsWindow_showOffline"):SetChecked(GMGenie_SavedVars.showOfflineTickets);
+    getglobal("GMGenie_Tickets_OptionsWindow_showOffline"):SetChecked(true);
+    getglobal("GMGenie_Tickets_OptionsWindow_showOffline"):Disable();
+    getglobal("GMGenie_Tickets_OptionsWindow_showOfflineText"):SetText("All reports shown (Forever does not provide online status)");
     getglobal("GMGenie_Tickets_OptionsWindow_swapWindows"):SetChecked(GMGenie_SavedVars.swapTicketWindows);
     getglobal("GMGenie_Tickets_OptionsWindow_useSpy"):SetChecked(GMGenie_SavedVars.useSpy);
 end
 
 function GMGenie.Tickets.ShowOptions()
-    InterfaceOptionsFrame_OpenToCategory("Tickets");
+    GMGenieForever.OpenOptions("Tickets");
 end

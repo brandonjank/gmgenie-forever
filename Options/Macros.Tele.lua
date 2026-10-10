@@ -10,7 +10,7 @@ function GMGenie.Macros.Tele.optionsOnLoad()
     panel.name = "Teleport Macros";
     panel.parent = "GM Genie";
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal(panel:GetName() .. "_Title"):SetText("Teleport Macros");
     getglobal(panel:GetName() .. "_SubText"):SetText("Here you add and update teleport macros, which will be available from the ticket interface and the player context menus.");
@@ -87,5 +87,5 @@ function GMGenie.Macros.Tele.cleanForm()
 end
 
 function GMGenie.Macros.Tele.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("Teleport Macros");
+    GMGenieForever.OpenOptions("Teleport Macros");
 end

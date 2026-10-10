@@ -10,7 +10,7 @@ function GMGenie.Macros.Mail.optionsOnLoad()
     panel.name = "Mail Macros";
     panel.parent = "GM Genie";
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal(panel:GetName() .. "_Title"):SetText("Mail Macros");
     getglobal(panel:GetName() .. "_SubText"):SetText("Here you add and update mail macros, which will be available from the ticket interface and the player context menus.");
@@ -22,7 +22,7 @@ function GMGenie.Macros.Mail.optionsOnLoad()
 end
 
 function GMGenie.Macros.Mail.updateMacroText()
-    ScrollingEdit_OnTextChanged(getglobal("GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text"), getglobal("GMGenie_Macros_Mail_OptionsWindow_Macro_Frame"));
+    GMGenieForever.TextChanged(GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text);
     GMGenie.Macros.Mail.checkMacroLength();
 end
 
@@ -35,13 +35,13 @@ function GMGenie.Macros.Mail.checkMacroLength()
     if #lines > 1 then
         maxlength = maxlength - 4;
     end
-    for _, line in pairs(lines) do
+    local tooLong = false;
+    for _, line in ipairs(lines) do
         if string.len(line) > maxlength then
-            GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:SetTextColor(255, 0, 0);
-        else
-            GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:SetTextColor(255, 255, 255);
+            tooLong = true;
         end
     end
+    GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:SetTextColor(1, tooLong and 0 or 1, tooLong and 0 or 1);
 end
 
 GMGenie.Macros.Mail.currentEditing = nil;
@@ -114,5 +114,5 @@ function GMGenie.Macros.Mail.cleanForm()
 end
 
 function GMGenie.Macros.Mail.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("Mail Macros");
+    GMGenieForever.OpenOptions("Mail Macros");
 end

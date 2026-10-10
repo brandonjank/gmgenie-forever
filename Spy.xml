@@ -1,7 +1,4 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
- http://wowprogramming.com/FrameXML/UI.xsd">
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
 
     <EditBox name="GMGenie_Spy_Uneditable" inherits="GMGenie_Input_Text" virtual="true" autoFocus="false">
         <Scripts>
@@ -13,10 +10,10 @@
 
     <Button name="GMGenie_Spy_InfoWindow" inherits="GMGenie_Window">
         <Size>
-            <AbsDimension x="230" y="235"/>
+            <AbsDimension x="230" y="235" />
         </Size>
         <Anchors>
-            <Anchor point="TOPLEFT" relativeTo="GMGenie_Tickets_View" relativePoint="TOPRIGHT"/>
+            <Anchor point="TOPLEFT" relativeTo="GMGenie_Tickets_View" relativePoint="TOPRIGHT" />
         </Anchors>
         <Scripts>
             <OnDoubleClick>
@@ -38,23 +35,23 @@
                 <Anchors>
                     <Anchor point="TOP">
                         <Offset>
-                            <AbsDimension x="0" y="-19"/>
+                            <AbsDimension x="0" y="-19" />
                         </Offset>
                     </Anchor>
                 </Anchors>
                 <Size>
-                    <AbsDimension x="220" y="23"/>
+                    <AbsDimension x="220" y="23" />
                 </Size>
                 <Layers>
                     <Layer>
                         <FontString name="$parent_CharInfo" inherits="GenieFontNormalSmall" text="" justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="TOP"/>
+                                <Anchor point="TOP" />
                             </Anchors>
                         </FontString>
                         <FontString name="$parent_Guild" inherits="GenieFontNormalSmall" text="" justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="TOP" relativeTo="$parent_CharInfo" relativePoint="BOTTOM"/>
+                                <Anchor point="TOP" relativeTo="$parent_CharInfo" relativePoint="BOTTOM" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -62,19 +59,18 @@
             </Frame>
             <Frame name="$parent_Character">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="$parent_Info" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="$parent_Info" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Character:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Character:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -84,24 +80,24 @@
                 <Frames>
                     <EditBox name="$parent_Name" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="90" y="18"/>
+                            <AbsDimension x="90" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                     </EditBox>
                     <EditBox name="$parent_Id" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="70" y="18"/>
+                            <AbsDimension x="70" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="150" y="1"/>
+                                    <AbsDimension x="150" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -110,19 +106,18 @@
             </Frame>
             <Frame name="$parent_Account">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Character" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Character" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Account:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Account:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -132,24 +127,24 @@
                 <Frames>
                     <EditBox name="$parent_Name" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="90" y="18"/>
+                            <AbsDimension x="90" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                     </EditBox>
                     <EditBox name="$parent_Id" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="70" y="18"/>
+                            <AbsDimension x="70" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="150" y="1"/>
+                                    <AbsDimension x="150" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -158,10 +153,10 @@
             </Frame>
             <Frame name="$parent_Email">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Account" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Account" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
@@ -169,7 +164,7 @@
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -179,12 +174,12 @@
                 <Frames>
                     <EditBox name="$parent_Email" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="160" y="18"/>
+                            <AbsDimension x="160" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -193,19 +188,18 @@
             </Frame>
             <Frame name="$parent_IpLat">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Email" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_Email" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Ip/Latency:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Ip/Latency:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -215,24 +209,24 @@
                 <Frames>
                     <EditBox name="$parent_Ip" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="105" y="18"/>
+                            <AbsDimension x="105" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                     </EditBox>
                     <EditBox name="$parent_Latency" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="55" y="18"/>
+                            <AbsDimension x="55" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="165" y="1"/>
+                                    <AbsDimension x="165" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -241,19 +235,18 @@
             </Frame>
             <Frame name="$parent_LastLogin">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_IpLat" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_IpLat" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Last login:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Last login:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -263,12 +256,12 @@
                 <Frames>
                     <EditBox name="$parent_LastLogin" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="160" y="18"/>
+                            <AbsDimension x="160" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -277,19 +270,18 @@
             </Frame>
             <Frame name="$parent_PlayedGM">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_LastLogin" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_LastLogin" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Played/GM:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Played/GM:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -299,24 +291,24 @@
                 <Frames>
                     <EditBox name="$parent_PlayedTime" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="105" y="18"/>
+                            <AbsDimension x="105" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                     </EditBox>
                     <EditBox name="$parent_GM" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="55" y="18"/>
+                            <AbsDimension x="55" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="165" y="1"/>
+                                    <AbsDimension x="165" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -325,19 +317,18 @@
             </Frame>
             <Frame name="$parent_MoneyPhase">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_PlayedGM" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_PlayedGM" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Gold/Phase:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Gold/Phase:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -347,24 +338,24 @@
                 <Frames>
                     <EditBox name="$parent_Money" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="105" y="18"/>
+                            <AbsDimension x="105" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
                     </EditBox>
                     <EditBox name="$parent_Phase" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="55" y="18"/>
+                            <AbsDimension x="55" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="165" y="1"/>
+                                    <AbsDimension x="165" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -373,19 +364,18 @@
             </Frame>
             <Frame name="$parent_Location">
                 <Size>
-                    <AbsDimension x="220" y="19"/>
+                    <AbsDimension x="220" y="19" />
                 </Size>
                 <Anchors>
-                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_MoneyPhase" relativePoint="BOTTOM"/>
+                    <Anchor point="TOP" relativeTo="GMGenie_Spy_InfoWindow_MoneyPhase" relativePoint="BOTTOM" />
                 </Anchors>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Location:"
-                                    justifyH="LEFT">
+                        <FontString name="$parent_Title" inherits="GenieFontNormalSmall" text="Location:" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
-                                        <AbsDimension x="0" y="2"/>
+                                        <AbsDimension x="0" y="2" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -395,12 +385,12 @@
                 <Frames>
                     <EditBox name="$parent_Location" inherits="GMGenie_Spy_Uneditable">
                         <Size>
-                            <AbsDimension x="160" y="18"/>
+                            <AbsDimension x="160" y="18" />
                         </Size>
                         <Anchors>
                             <Anchor point="LEFT">
                                 <Offset>
-                                    <AbsDimension x="60" y="1"/>
+                                    <AbsDimension x="60" y="1" />
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -413,7 +403,7 @@
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="5"/>
+                            <AbsDimension x="5" y="5" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -440,12 +430,12 @@
 
             <Button name="$parent_Macros" inherits="GMGenie_Dropdown" text="Macros">
                 <Size>
-                    <AbsDimension x="110" y="18"/>
+                    <AbsDimension x="110" y="18" />
                 </Size>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="24"/>
+                            <AbsDimension x="5" y="24" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -456,15 +446,15 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Frame name="$parent_DropdownbuttonsOne" inherits="UIDropDownMenuTemplate" id="50"/>
+            <Frame name="$parent_DropdownbuttonsOne" inherits="UIDropDownMenuTemplate" id="50" />
             <Button name="$parent_Advanced" inherits="GMGenie_Dropdown" text="Advanced tools">
                 <Size>
-                    <AbsDimension x="110" y="18"/>
+                    <AbsDimension x="110" y="18" />
                 </Size>
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT">
                         <Offset>
-                            <AbsDimension x="-5" y="24"/>
+                            <AbsDimension x="-5" y="24" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -475,13 +465,13 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Frame name="$parent_DropdownbuttonsTwo" inherits="UIDropDownMenuTemplate" id="50"/>
+            <Frame name="$parent_DropdownbuttonsTwo" inherits="UIDropDownMenuTemplate" id="50" />
 
-            <Button name="$parent_Revive" inherits="GMGenie_Button" text='Revive'>
+            <Button name="$parent_Revive" inherits="GMGenie_Button" text="Revive">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="60" y="5"/>
+                            <AbsDimension x="60" y="5" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -502,11 +492,11 @@
                     </OnLeave>
                 </Scripts>
             </Button>
-            <Button name="$parent_Freeze" inherits="GMGenie_Button" text='(Un)freeze'>
+            <Button name="$parent_Freeze" inherits="GMGenie_Button" text="(Un)freeze">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="115" y="5"/>
+                            <AbsDimension x="115" y="5" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -535,11 +525,11 @@
                     </OnLeave>
                 </Scripts>
             </Button>
-            <Button name="$parent_Appear" inherits="GMGenie_Button" text='App/Sum'>
+            <Button name="$parent_Appear" inherits="GMGenie_Button" text="App/Sum">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="170" y="5"/>
+                            <AbsDimension x="170" y="5" />
                         </Offset>
                     </Anchor>
                 </Anchors>

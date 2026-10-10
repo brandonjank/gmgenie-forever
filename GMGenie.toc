@@ -5,16 +5,18 @@
 # Game Master Genie is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with Game Master Genie. If not, see <http://www.gnu.org/licenses/>.
 
-## Interface: 40300
-## Title: GM Genie
-## Note: Game Master Genie v0.7.3 by Chocochaos
-## Author: Chocochaos
-## Version: 0.7.3
+## Interface: 16001
+## Title: GM Genie Forever
+## Notes: GM tools for WoW Forever and TrinityCore: reports, player tools, builder and starter macros.
+## Author: Chocochaos; Forever port maintained by brandonjank
+## Version: 0.7.3-forever.3
 ## DefaultState: Enabled
-## SavedVariables: GMGenie_SavedVars
+## SavedVariables: GMGenie_SavedVars, GMGenie_ForeverDiagnostics
+Forever.lua
 GMGenie.xml
 Chronos\Chronos.xml
 GMGenie.lua
+StarterMacros.lua
 Savedvariables.lua
 Chatreader.lua
 Hud.lua
@@ -24,13 +26,13 @@ Macros.Discipline.lua
 Macros.Mail.lua
 Macros.Tele.lua
 Macros.Whispers.lua
-Macros.Whispers.xml
 Tickets.lua
 Tickets.xml
 Spawns.lua
 Spawns.xml
 Spy.lua
 Spy.xml
+Macros.Whispers.xml
 Options\GMGenie.lua
 Options\GMGenie.xml
 Options\Tickets.lua

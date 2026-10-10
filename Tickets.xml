@@ -1,69 +1,66 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
- http://wowprogramming.com/FrameXML/UI.xsd">
-    <Button name="GMGenie_Tickets_StatusTemplate" virtual="true" hidden='true'>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
+    <Button name="GMGenie_Tickets_StatusTemplate" virtual="true" hidden="true">
         <Size>
-            <AbsDimension x="360" y="16"/>
+            <AbsDimension x="360" y="16" />
         </Size>
         <Layers>
             <Layer level="BORDER">
                 <FontString name="$parent_ticketId" inherits="GenieFontNormalSmall" justifyH="LEFT">
                     <Size>
-                        <AbsDimension x="37" y="14"/>
+                        <AbsDimension x="37" y="14" />
                     </Size>
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="3" y="0"/>
+                                <AbsDimension x="3" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
                 <FontString name="$parent_name" inherits="GenieFontNormalSmall" justifyH="LEFT">
                     <Size>
-                        <AbsDimension x="77" y="14"/>
+                        <AbsDimension x="77" y="14" />
                     </Size>
                     <Anchors>
                         <Anchor point="LEFT" relativeTo="$parent_ticketId" relativePoint="RIGHT">
                             <Offset>
-                                <AbsDimension x="3" y="0"/>
+                                <AbsDimension x="3" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
                 <FontString name="$parent_createStr" inherits="GenieFontNormalSmall" justifyH="LEFT">
                     <Size>
-                        <AbsDimension x="77" y="14"/>
+                        <AbsDimension x="77" y="14" />
                     </Size>
                     <Anchors>
                         <Anchor point="LEFT" relativeTo="$parent_name" relativePoint="RIGHT">
                             <Offset>
-                                <AbsDimension x="3" y="0"/>
+                                <AbsDimension x="3" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
                 <FontString name="$parent_lastModifiedStr" inherits="GenieFontNormalSmall" justifyH="LEFT">
                     <Size>
-                        <AbsDimension x="77" y="14"/>
+                        <AbsDimension x="77" y="14" />
                     </Size>
                     <Anchors>
                         <Anchor point="LEFT" relativeTo="$parent_createStr" relativePoint="RIGHT">
                             <Offset>
-                                <AbsDimension x="3" y="0"/>
+                                <AbsDimension x="3" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
                 <FontString name="$parent_assignedTo" inherits="GenieFontNormalSmall" justifyH="LEFT">
                     <Size>
-                        <AbsDimension x="77" y="14"/>
+                        <AbsDimension x="77" y="14" />
                     </Size>
                     <Anchors>
                         <Anchor point="LEFT" relativeTo="$parent_lastModifiedStr" relativePoint="RIGHT">
                             <Offset>
-                                <AbsDimension x="3" y="0"/>
+                                <AbsDimension x="3" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -72,12 +69,12 @@
             <Layer level="BACKGROUND">
                 <Texture name="$parent_Texture" alphaMode="ADD">
                     <Size>
-                        <AbsDimension x="360" y="16"/>
+                        <AbsDimension x="360" y="16" />
                     </Size>
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="0" y="0"/>
+                                <AbsDimension x="0" y="0" />
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -94,12 +91,12 @@
         </Scripts>
         <HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar" alphaMode="ADD">
             <Size>
-                <AbsDimension x="360" y="16"/>
+                <AbsDimension x="360" y="16" />
             </Size>
             <Anchors>
                 <Anchor point="TOPLEFT">
                     <Offset>
-                        <AbsDimension x="0" y="0"/>
+                        <AbsDimension x="0" y="0" />
                     </Offset>
                 </Anchor>
             </Anchors>
@@ -108,10 +105,10 @@
 
     <Button name="GMGenie_Tickets_Main" inherits="GMGenie_Window">
         <Size>
-            <AbsDimension x="370" y="235"/>
+            <AbsDimension x="370" y="257" />
         </Size>
         <Anchors>
-            <Anchor point="TOPLEFT"/>
+            <Anchor point="TOPLEFT" />
         </Anchors>
         <Scripts>
             <OnLoad>
@@ -122,7 +119,7 @@
                 self:SetPoint("TOPLEFT");
             </OnDoubleClick>
             <OnMouseWheel>
-                if arg1 == 1 then
+                if delta > 0 then
                 GMGenie.Tickets.goToPrevious();
                 else
                 GMGenie.Tickets.goToNext();
@@ -132,12 +129,12 @@
         <Frames>
             <Button name="$parent_ticketId" inherits="GMGenie_LeftButton" text="#">
                 <Size>
-                    <AbsDimension x="40" y="18"/>
+                    <AbsDimension x="40" y="18" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="-19"/>
+                            <AbsDimension x="5" y="-41" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -149,10 +146,10 @@
             </Button>
             <Button name="$parent_name" inherits="GMGenie_LeftButton" text="Name">
                 <Size>
-                    <AbsDimension x="80" y="18"/>
+                    <AbsDimension x="80" y="18" />
                 </Size>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_ticketId" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_ticketId" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -162,10 +159,10 @@
             </Button>
             <Button name="$parent_create" inherits="GMGenie_LeftButton" text="Created">
                 <Size>
-                    <AbsDimension x="80" y="18"/>
+                    <AbsDimension x="80" y="18" />
                 </Size>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_name" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_name" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -175,10 +172,10 @@
             </Button>
             <Button name="$parent_lastModified" inherits="GMGenie_LeftButton" text="Modified">
                 <Size>
-                    <AbsDimension x="80" y="18"/>
+                    <AbsDimension x="80" y="18" />
                 </Size>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_create" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_create" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -188,10 +185,10 @@
             </Button>
             <Button name="$parent_assignedTo" inherits="GMGenie_LeftButton" text="Assigned To">
                 <Size>
-                    <AbsDimension x="80" y="18"/>
+                    <AbsDimension x="80" y="18" />
                 </Size>
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_lastModified" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_lastModified" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -203,52 +200,52 @@
 
             <Button name="TicketStatusButton1" inherits="GMGenie_Tickets_StatusTemplate" id="1">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parent_ticketId" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ticketId" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton2" inherits="GMGenie_Tickets_StatusTemplate" id="2">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton1" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton1" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton3" inherits="GMGenie_Tickets_StatusTemplate" id="3">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton2" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton2" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton4" inherits="GMGenie_Tickets_StatusTemplate" id="4">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton3" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton3" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton5" inherits="GMGenie_Tickets_StatusTemplate" id="5">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton4" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton4" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton6" inherits="GMGenie_Tickets_StatusTemplate" id="6">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton5" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton5" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton7" inherits="GMGenie_Tickets_StatusTemplate" id="7">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton6" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton6" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton8" inherits="GMGenie_Tickets_StatusTemplate" id="8">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton7" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton7" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton9" inherits="GMGenie_Tickets_StatusTemplate" id="9">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton8" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton8" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
             <Button name="TicketStatusButton10" inherits="GMGenie_Tickets_StatusTemplate" id="10">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton9" relativePoint="BOTTOMLEFT"/>
+                    <Anchor point="TOPLEFT" relativeTo="TicketStatusButton9" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
 
@@ -256,7 +253,7 @@
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT">
                         <Offset>
-                            <AbsDimension x="-2" y="1"/>
+                            <AbsDimension x="-2" y="1" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -270,7 +267,7 @@
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="2" y="1"/>
+                            <AbsDimension x="2" y="1" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -282,12 +279,12 @@
             </Button>
             <Button name="$parent_Info">
                 <Size>
-                    <AbsDimension x="250" y="29"/>
+                    <AbsDimension x="250" y="29" />
                 </Size>
                 <Anchors>
                     <Anchor point="BOTTOM">
                         <Offset>
-                            <AbsDimension x="0" y="9"/>
+                            <AbsDimension x="0" y="9" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -297,7 +294,7 @@
                             <Anchors>
                                 <Anchor point="TOP">
                                     <Offset>
-                                        <AbsDimension x="0" y="-3"/>
+                                        <AbsDimension x="0" y="-3" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -306,7 +303,7 @@
                             <Anchors>
                                 <Anchor point="TOP" relativeTo="$parent_Text" relativePoint="BOTTOM">
                                     <Offset>
-                                        <AbsDimension x="0" y="-5"/>
+                                        <AbsDimension x="0" y="-5" />
                                     </Offset>
                                 </Anchor>
                             </Anchors>
@@ -325,10 +322,10 @@
 
     <Button name="GMGenie_Tickets_View" inherits="GMGenie_Window">
         <Size>
-            <AbsDimension x="230" y="235"/>
+            <AbsDimension x="230" y="235" />
         </Size>
         <Anchors>
-            <Anchor point="LEFT" relativeTo="GMGenie_Tickets_Main" relativePoint="RIGHT"/>
+            <Anchor point="LEFT" relativeTo="GMGenie_Tickets_Main" relativePoint="RIGHT" />
         </Anchors>
         <Scripts>
             <OnDoubleClick>
@@ -345,12 +342,12 @@
         <Frames>
             <Frame name="$parent_Ticket" enableMouse="true" inherits="GMGenie_Input_TextArea">
                 <Size>
-                    <AbsDimension x="196" y="173"/>
+                    <AbsDimension x="196" y="173" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="-19"/>
+                            <AbsDimension x="5" y="-19" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -367,24 +364,23 @@
                 <Anchors>
                     <Anchor point="BOTTOM">
                         <Offset>
-                            <AbsDimension x="0" y="42"/>
+                            <AbsDimension x="0" y="42" />
                         </Offset>
                     </Anchor>
                 </Anchors>
                 <Size>
-                    <AbsDimension x="220" y="23"/>
+                    <AbsDimension x="220" y="23" />
                 </Size>
                 <Layers>
                     <Layer>
-                        <FontString name="$parent_Info" inherits="GenieFontNormalSmall"
-                                    text="This ticket is also being read by" justifyH="CENTER">
+                        <FontString name="$parent_Info" inherits="GenieFontNormalSmall" text="This ticket is also being read by" justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="TOP"/>
+                                <Anchor point="TOP" />
                             </Anchors>
                         </FontString>
                         <FontString name="$parent_Names" inherits="GenieFontNormalSmall" text="" justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="TOP" relativeTo="$parent_Info" relativePoint="BOTTOM"/>
+                                <Anchor point="TOP" relativeTo="$parent_Info" relativePoint="BOTTOM" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -393,12 +389,12 @@
 
             <EditBox name="$parent_Comment" enableMouse="true" inherits="GMGenie_Input_Text">
                 <Size>
-                    <AbsDimension x="165" y="18"/>
+                    <AbsDimension x="165" y="18" />
                 </Size>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="24"/>
+                            <AbsDimension x="5" y="24" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -409,9 +405,9 @@
                     </OnEnterPressed>
                 </Scripts>
             </EditBox>
-            <Button name="$parent_SetComment" inherits="GMGenie_Button" text='Comment'>
+            <Button name="$parent_SetComment" inherits="GMGenie_Button" text="Comment">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_Comment" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_Comment" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -420,11 +416,11 @@
                 </Scripts>
             </Button>
 
-            <Button name="$parent_Delete" inherits="GMGenie_Button" text='Delete'>
+            <Button name="$parent_Delete" inherits="GMGenie_Button" text="Delete">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="5"/>
+                            <AbsDimension x="5" y="5" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -434,9 +430,9 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button name="$parent_Assign" inherits="GMGenie_Button" text='Assign'>
+            <Button name="$parent_Assign" inherits="GMGenie_Button" text="Assign">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_Delete" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_Delete" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnLoad>
@@ -463,9 +459,9 @@
                     </OnLeave>
                 </Scripts>
             </Button>
-            <Button name="$parent_Unassign" inherits="GMGenie_Button" text='Unassign'>
+            <Button name="$parent_Unassign" inherits="GMGenie_Button" text="Unassign">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_Assign" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_Assign" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -473,9 +469,9 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button name="$parent_Spy" inherits="GMGenie_Button" text='Spy'>
+            <Button name="$parent_Spy" inherits="GMGenie_Button" text="Spy">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_Unassign" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_Unassign" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>
@@ -489,10 +485,10 @@
 
     <Button name="GMGenie_Tickets_AssignPopup" inherits="GMGenie_Window">
         <Size>
-            <AbsDimension x="165" y="42"/>
+            <AbsDimension x="165" y="42" />
         </Size>
         <Anchors>
-            <Anchor point="TOP" relativeTo="GMGenie_Tickets_View" relativePoint="BOTTOM"/>
+            <Anchor point="TOP" relativeTo="GMGenie_Tickets_View" relativePoint="BOTTOM" />
         </Anchors>
         <Scripts>
             <OnLoad>
@@ -507,12 +503,12 @@
         <Frames>
             <EditBox name="$parent_GMName" enableMouse="true" inherits="GMGenie_Input_Text">
                 <Size>
-                    <AbsDimension x="100" y="18"/>
+                    <AbsDimension x="100" y="18" />
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="5" y="-19"/>
+                            <AbsDimension x="5" y="-19" />
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -524,7 +520,7 @@
             </EditBox>
             <Button name="$parent_Send" inherits="GMGenie_Button" text="Assign">
                 <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parent_GMName" relativePoint="RIGHT"/>
+                    <Anchor point="LEFT" relativeTo="$parent_GMName" relativePoint="RIGHT" />
                 </Anchors>
                 <Scripts>
                     <OnClick>

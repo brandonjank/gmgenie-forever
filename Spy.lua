@@ -28,7 +28,7 @@ function GMGenie.Spy.spy(name)
         GMGenie.Spy.currentRequest["name"] = name;
 
         GMGenie.Spy.clearCache();
-        SendChatMessage(".pin " .. name, "GUILD");
+        GMGenieForever.SendChatMessage(".pinfo " .. name, "GUILD");
     else
         GMGenie.showGMMessage("Please enter a name or make sure you have someone targeted.");
     end
@@ -118,10 +118,10 @@ end
 
 function GMGenie.Spy.processPin12(map, area, zone, pin)
     GMGenie.Spy.currentRequest["location"] = map;
-    if map ~= area then
+    if area and area ~= "" and map ~= area and area ~= zone then
         GMGenie.Spy.currentRequest["location"] = area .. ', ' .. GMGenie.Spy.currentRequest["location"];
     end
-    if string.upper(zone) ~= '<UNKNOWN>' then
+    if zone and zone ~= "" and zone ~= map and string.upper(zone) ~= '<UNKNOWN>' then
         GMGenie.Spy.currentRequest["location"] = zone .. ', ' .. GMGenie.Spy.currentRequest["location"];
     end
 
@@ -224,7 +224,7 @@ function GMGenie.Spy.copyPin()
 end
 
 function GMGenie.Spy.whisper()
-    ChatFrame_SendTell(GMGenie.Spy.currentRequest["name"]);
+    ChatFrameUtil.SendTell(GMGenie.Spy.currentRequest["name"]);
 end
 
 function GMGenie.Spy.summon()
@@ -269,28 +269,14 @@ end
 
 function GMGenie.Spy.banInfo()
     CloseDropDownMenus()
-    SendChatMessage(".baninfo account " .. GMGenie.Spy.currentRequest["account"], "GUILD");
-    SendChatMessage(".baninfo character " .. GMGenie.Spy.currentRequest["name"], "GUILD");
-    SendChatMessage(".baninfo ip " .. GMGenie.Spy.currentRequest["ip"], "GUILD");
+    GMGenieForever.SendChatMessage(".baninfo account " .. GMGenie.Spy.currentRequest["account"], "GUILD");
+    GMGenieForever.SendChatMessage(".baninfo character " .. GMGenie.Spy.currentRequest["name"], "GUILD");
+    GMGenieForever.SendChatMessage(".baninfo ip " .. GMGenie.Spy.currentRequest["ip"], "GUILD");
 end
 
 function GMGenie.Spy.lookupPlayer()
     CloseDropDownMenus()
-    SendChatMessage(".lookup player account " .. GMGenie.Spy.currentRequest["account"], "GUILD");
-    SendChatMessage(".lookup player email " .. GMGenie.Spy.currentRequest["email"], "GUILD");
-    SendChatMessage(".lookup player ip " .. GMGenie.Spy.currentRequest["ip"], "GUILD");
-end
-
-local Saved_SetItemRef = SetItemRef;
-function SetItemRef(link, text, button, chatFrame)
-    if (strsub(link, 1, 9) == "anticheat") then
-        local _, name = strsplit(":", link);
-        if (button == "LeftButton") then
-            GMGenie.Spy.antiCheat(name);
-        elseif (button == "RightButton") then
-            FriendsFrame_ShowDropdown(name, 1);
-        end
-        return;
-    end
-    Saved_SetItemRef(link, text, button, chatFrame);
+    GMGenieForever.SendChatMessage(".lookup player account " .. GMGenie.Spy.currentRequest["account"], "GUILD");
+    GMGenieForever.SendChatMessage(".lookup player email " .. GMGenie.Spy.currentRequest["email"], "GUILD");
+    GMGenieForever.SendChatMessage(".lookup player ip " .. GMGenie.Spy.currentRequest["ip"], "GUILD");
 end

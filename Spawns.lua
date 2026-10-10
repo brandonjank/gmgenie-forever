@@ -247,7 +247,7 @@ end
 function GMGenie.Spawns.initiateMove(option)
     GMGenie.Spawns.currentSpawnOption = option;
     if not (GMGenie.Spawns.currentCoords.x and GMGenie.Spawns.currentCoords.y and GMGenie.Spawns.currentCoords.z and GMGenie.Spawns.currentCoords.o and GMGenie.Spawns.currentCoords.map) then
-        SendChatMessage(".gps", "GUILD");
+        GMGenieForever.SendChatMessage(".gps", "GUILD");
         GMGenie.Spawns.waitingForGps = 1;
     else
         GMGenie.Spawns.move(GMGenie.Spawns.currentCoords.x, GMGenie.Spawns.currentCoords.y, GMGenie.Spawns.currentCoords.z, GMGenie.Spawns.currentCoords.o);
@@ -325,7 +325,7 @@ function GMGenie.Spawns.move(x, y, z, o)
     GMGenie.Spawns.currentCoords.z = z;
     GMGenie.Spawns.currentCoords.o = o;
 
-    SendChatMessage(".go xyz " .. x .. " " .. y .. " " .. z .. " " .. GMGenie.Spawns.currentCoords.map .. " " .. o, "GUILD");
+    GMGenieForever.SendChatMessage(".go xyz " .. x .. " " .. y .. " " .. z .. " " .. GMGenie.Spawns.currentCoords.map .. " " .. o, "GUILD");
     GMGenie.Spawns.updateView();
 end
 
@@ -335,7 +335,7 @@ function GMGenie.Spawns.object(objectId)
     end
     objectId = tonumber(objectId);
 
-    SendChatMessage(".gobject add " .. objectId, "GUILD");
+    GMGenieForever.SendChatMessage(".gobject add " .. objectId, "GUILD");
 end
 
 function GMGenie.Spawns.npc(npcId)
@@ -344,7 +344,7 @@ function GMGenie.Spawns.npc(npcId)
     end
     npcId = tonumber(npcId);
 
-    SendChatMessage(".npc add " .. npcId, "GUILD");
+    GMGenieForever.SendChatMessage(".npc add " .. npcId, "GUILD");
 end
 
 function GMGenie.Spawns.resetCoords()
@@ -354,17 +354,17 @@ end
 
 function GMGenie.Spawns.targetObject()
     GMGenie.Spawns.waitingForObject = true;
-    SendChatMessage(".gobject target", "GUILD");
+    GMGenieForever.SendChatMessage(".gobject target", "GUILD");
 end
 
 function GMGenie.Spawns.deleteObject(name, guid, id)
     GMGenie.Spawns.waitingForObjectDelete = true;
-    SendChatMessage(".gobject del " .. guid, "GUILD");
+    GMGenieForever.SendChatMessage(".gobject del " .. guid, "GUILD");
     GMGenie.showGMMessage("Deleting object: " .. name .. " GUID: " .. guid .. " ID: " .. id);
 end
 
 function GMGenie.Spawns.deleteNpc()
-    SendChatMessage(".npc del");
+    GMGenieForever.SendChatMessage(".npc delete", "GUILD");
 end
 
 function GMGenie.Spawns.toggleMacroWindow()
@@ -544,11 +544,11 @@ end
 
 function GMGenie.Spawns.Hyperlink.spawnHere()
     if GMGenie.Spawns.Hyperlink.type == "gameobject_entry" then
-        SendChatMessage(".gob add " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".gob add " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     elseif GMGenie.Spawns.Hyperlink.type == "creature_entry" then
-        SendChatMessage(".npc add " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".npc add " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     else
-        GMGnie.showGMMessage("Could not spawn link type " .. GMGenie.Spawns.Hyperlink.type);
+        GMGenie.showGMMessage("Could not spawn link type " .. GMGenie.Spawns.Hyperlink.type);
     end
 end
 
@@ -558,37 +558,37 @@ function GMGenie.Spawns.Hyperlink.addPreset()
     elseif GMGenie.Spawns.Hyperlink.type == "creature_entry" then
         GMGenie_SavedVars.npcs[GMGenie.Spawns.Hyperlink.name] = GMGenie.Spawns.Hyperlink.id;
     else
-        GMGnie.showGMMessage("Could not add preset for link type " .. GMGenie.Spawns.Hyperlink.type);
+        GMGenie.showGMMessage("Could not add preset for link type " .. GMGenie.Spawns.Hyperlink.type);
     end
 end
 
 function GMGenie.Spawns.Hyperlink.list()
     if GMGenie.Spawns.Hyperlink.type == "gameobject_entry" then
-        SendChatMessage(".list object " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".list object " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     elseif GMGenie.Spawns.Hyperlink.type == "creature_entry" then
-        SendChatMessage(".list creature " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".list creature " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     else
-        GMGnie.showGMMessage("Could not list link type " .. GMGenie.Spawns.Hyperlink.type);
+        GMGenie.showGMMessage("Could not list link type " .. GMGenie.Spawns.Hyperlink.type);
     end
 end
 
 function GMGenie.Spawns.Hyperlink.goTo()
     if GMGenie.Spawns.Hyperlink.type == "gameobject" then
-        SendChatMessage(".go object " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".go gameobject " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     elseif GMGenie.Spawns.Hyperlink.type == "creature" then
-        SendChatMessage(".go creature " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".go creature " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     else
-        GMGnie.showGMMessage("Could not port to link type " .. GMGenie.Spawns.Hyperlink.type);
+        GMGenie.showGMMessage("Could not port to link type " .. GMGenie.Spawns.Hyperlink.type);
     end
 end
 
 function GMGenie.Spawns.Hyperlink.remove()
     if GMGenie.Spawns.Hyperlink.type == "gameobject" then
-        SendChatMessage(".gob delete " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".gob delete " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     elseif GMGenie.Spawns.Hyperlink.type == "creature" then
-        SendChatMessage(".npc delete " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
+        GMGenieForever.SendChatMessage(".npc delete " .. GMGenie.Spawns.Hyperlink.id, "GUILD");
     else
-        GMGnie.showGMMessage("Could not remove link type " .. GMGenie.Spawns.Hyperlink.type);
+        GMGenie.showGMMessage("Could not remove link type " .. GMGenie.Spawns.Hyperlink.type);
     end
 end
 
@@ -604,15 +604,6 @@ function GMGenie.Spawns.Hyperlink.toggle(link, text)
         GMGenie.Spawns.Hyperlink.name = string.match(text, "%[(.*)%]");
     end
     ToggleDropDownMenu(1, nil, GMGenie_Spawns_Hyperlink_Menu, 'cursor', 0, 0);
-end
-
-local Saved_SetItemRef = SetItemRef;
-function SetItemRef(link, text, button, chatFrame)
-    if (strsub(link, 1, 16) == "gameobject_entry") or (strsub(link, 1, 14) == "creature_entry") or (strsub(link, 1, 10) == "gameobject") or (strsub(link, 1, 8) == "creature") then
-        GMGenie.Spawns.Hyperlink.toggle(link, text);
-        return;
-    end
-    Saved_SetItemRef(link, text, button, chatFrame);
 end
 
 -- add slash command to open/close builder widnow

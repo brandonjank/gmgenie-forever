@@ -31,8 +31,16 @@ GMGenie.Tickets.read = {};
 GMGenie.Tickets.idToNum = {};
 
 function GMGenie.Tickets.onLoad()
+    GMGenie.Tickets.kindButton = CreateFrame("Button", nil, GMGenie_Tickets_Main, "UIPanelButtonTemplate");
+    local button = GMGenie.Tickets.kindButton;
+    button:SetSize(108, 18);
+    button:SetPoint("TOPLEFT", GMGenie_Tickets_Main, "TOPLEFT", 5, -18);
+    button:SetText(GMGenie_SavedVars.ticketType);
+    button:SetScript("OnClick", function()
+        local nextType = { bug = "complaint", complaint = "suggestion", suggestion = "bug" };
+        GMGenie.Tickets.setType(nextType[GMGenie_SavedVars.ticketType] or "bug");
+    end);
     Chronos.scheduleRepeating('ticketrefresh', 60, GMGenie.Tickets.refresh);
-    GMGenie.Tickets.refresh();
     GMGenie.Tickets.done = GMGenie_SavedVars.ticketsDone;
 end
 
@@ -46,13 +54,24 @@ function GMGenie.Tickets.refresh()
         GMGenie.Tickets.onlineTickets = 0;
         GMGenie.Tickets.loadingOnline = false;
         -- get ticket list
-        SendChatMessage(".ticket list", "GUILD");
+        GMGenieForever.SendChatMessage(".ticket list", "GUILD");
         -- schedule next refresh
         Chronos.scheduleByName('ticketreupdate', 3, GMGenie.Tickets.update);
-    elseif GMGenie.Tickets.loadingOnline then
-        SendChatMessage(".ticket onlinelist", "GUILD");
-        Chronos.scheduleByName('ticketreupdate', 3, GMGenie.Tickets.update);
     end
+end
+
+function GMGenie.Tickets.setType(kind)
+    if kind ~= "bug" and kind ~= "complaint" and kind ~= "suggestion" then return end
+    if GMGenie.Tickets.tempList then
+        GMGenie.showGMMessage("Wait for the current report list to finish loading.");
+        return;
+    end
+    GMGenie.Tickets.close();
+    GMGenie_SavedVars.ticketType = kind;
+    GMGenie.Tickets.read = {};
+    GMGenie.Tickets.syncList = {};
+    GMGenie.Tickets.kindButton:SetText(kind);
+    GMGenie.Tickets.refresh();
 end
 
 -- add ticket from chat list to the addon list
@@ -92,10 +111,7 @@ end
 -- update ticket list
 function GMGenie.Tickets.update()
     -- Check onlines too?
-    if not GMGenie.Tickets.loadingOnline then
-        GMGenie.Tickets.loadingOnline = true;
-        GMGenie.Tickets.refresh();
-    else
+    do
         GMGenie.Tickets.loadingOnline = false;
 
         -- move temp list to current list and empty temp list
@@ -104,11 +120,7 @@ function GMGenie.Tickets.update()
             GMGenie.Tickets.tempList = nil;
         end
         -- calc number of pages
-        if GMGenie_SavedVars.showOfflineTickets then
-            GMGenie.Tickets.pages = math.ceil(GMGenie.Tickets.tickets / GMGenie.Tickets.perPage);
-        else
-            GMGenie.Tickets.pages = math.ceil(GMGenie.Tickets.onlineTickets / GMGenie.Tickets.perPage);
-        end
+        GMGenie.Tickets.pages = math.ceil(GMGenie.Tickets.tickets / GMGenie.Tickets.perPage);
         -- allways at least 1 page
         if GMGenie.Tickets.pages < 1 then
             GMGenie.Tickets.pages = 1;
@@ -172,10 +184,10 @@ function GMGenie.Tickets.updateView()
         plural["total"] = "";
     end
 
-    GMGenie_Tickets_Main_Info_Text:SetText(GMGenie.Tickets.tickets .. " ticket" .. plural["total"] .. " (|c" .. GMGenie.Tickets.Colours["onlineUnread"] .. GMGenie.Tickets.onlineTickets .. " online,|r |c" .. GMGenie.Tickets.Colours["offlineUnread"] .. offlineCount .. " offline|r), " .. GMGenie.Tickets.done .. " done");
+    GMGenie_Tickets_Main_Info_Text:SetText(GMGenie.Tickets.tickets .. " open " .. (GMGenie_SavedVars.ticketType or "bug") .. " reports, " .. GMGenie.Tickets.done .. " done");
     GMGenie_Tickets_Main_Info_Page:SetText("Page " .. GMGenie.Tickets.currentPage .. " of " .. GMGenie.Tickets.pages);
 
-    GMGenie_Hud_Tickets:SetText("Tickets (|c" .. GMGenie.Tickets.Colours["onlineUnread"] .. GMGenie.Tickets.onlineTickets .. "|r / |c" .. GMGenie.Tickets.Colours["offlineUnread"] .. offlineCount .. "|r)");
+    GMGenie_Hud_Tickets:SetText("Reports (" .. GMGenie.Tickets.tickets .. ")");
 
     -- previous page
     if (GMGenie.Tickets.currentPage == 1) then
@@ -203,7 +215,7 @@ function GMGenie.Tickets.updateView()
     -- loop through tickets
     for ticketNum, ticketInfo in ipairs(GMGenie.Tickets.list) do
         -- Show ticket?
-        if ticketInfo["online"] or GMGenie_SavedVars.showOfflineTickets then
+        if ticketInfo then
             i = i + 1;
             if i >= minTicket and i <= maxTicket then
                 -- colour in list
@@ -212,17 +224,9 @@ function GMGenie.Tickets.updateView()
                     colour = GMGenie.Tickets.Colours["current"];
                 else
                     if GMGenie.Tickets.read[ticketInfo["ticketId"]] then
-                        if ticketInfo["online"] then
-                            colour = GMGenie.Tickets.Colours["onlineRead"];
-                        else
-                            colour = GMGenie.Tickets.Colours["offlineRead"];
-                        end
+                        colour = GMGenie.Tickets.Colours["onlineRead"];
                     else
-                        if ticketInfo["online"] then
-                            colour = GMGenie.Tickets.Colours["onlineUnread"];
-                        else
-                            colour = GMGenie.Tickets.Colours["offlineUnread"];
-                        end
+                        colour = GMGenie.Tickets.Colours["onlineUnread"];
                     end
                 end
 
@@ -230,7 +234,7 @@ function GMGenie.Tickets.updateView()
                 getglobal("TicketStatusButton" .. num .. "_ticketId"):SetText("|c" .. colour .. ticketInfo["ticketId"] .. "|r");
                 getglobal("TicketStatusButton" .. num .. "_name"):SetText("|c" .. colour .. ticketInfo["name"] .. "|r");
                 getglobal("TicketStatusButton" .. num .. "_createStr"):SetText("|c" .. colour .. ticketInfo["createStr"] .. "|r");
-                getglobal("TicketStatusButton" .. num .. "_lastModifiedStr"):SetText("|c" .. colour .. ticketInfo["lastModifiedStr"] .. "|r");
+                getglobal("TicketStatusButton" .. num .. "_lastModifiedStr"):SetText("-");
                 getglobal("TicketStatusButton" .. num .. "_assignedTo"):SetText("|c" .. colour .. ticketInfo["assignedTo"] .. "|r");
                 getglobal("TicketStatusButton" .. num):Show();
 
@@ -292,7 +296,7 @@ function GMGenie.Tickets.toggle(showOffline)
             GMGenie.Tickets.toggleOfflineTickets();
         end
         -- refresh ticket list and initiate auto-refresh
-        GMGenie.Tickets.onLoad();
+        GMGenie.Tickets.refresh();
         -- show window
         GMGenie_Tickets_Main:Show();
     end
@@ -314,7 +318,7 @@ function GMGenie.Tickets.loadTicket(ticketId, num)
                 -- hide reading frame UNUSED ATM
                 --GMGenie_Tickets_View_Ticket_Reading:Hide();
                 -- get ticket
-                SendChatMessage(".ticket viewid " .. ticketId, "GUILD");
+                GMGenieForever.SendChatMessage(".ticket viewid " .. ticketId, "GUILD");
                 -- open spy
                 if GMGenie_SavedVars.useSpy then
                     GMGenie.Spy.spy(GMGenie.Tickets.currentTicket["name"]);
@@ -371,7 +375,7 @@ function GMGenie.Tickets.displaySync()
 end
 
 function GMGenie.Tickets.sync()
-    SendAddonMessage("GMGenie_Sync", GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
+    GMGenieForever.SendAddonMessage("GMGenie_FVR", GMGenie_SavedVars.ticketType .. ":" .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
 end
 
 function GMGenie.Tickets.syncMessage(name, ticketId)
@@ -401,14 +405,15 @@ function GMGenie.Tickets.showMessage()
 end
 
 function GMGenie.Tickets.close()
-    if GMGenie.Spy.currentRequest["name"] == GMGenie.Tickets.currentTicket["name"] then
+    local wasOpen = (GMGenie.Tickets.currentTicket["ticketId"] or 0) > 0;
+    if wasOpen and GMGenie.Spy.currentRequest and GMGenie.Spy.currentRequest["name"] == GMGenie.Tickets.currentTicket["name"] then
         GMGenie_Spy_InfoWindow:Hide();
     end
-    SendAddonMessage("GMGenie_Sync", "0", "GUILD");
+    GMGenieForever.SendAddonMessage("GMGenie_FVR", GMGenie_SavedVars.ticketType .. ":0", "GUILD");
     Chronos.unscheduleRepeating('ticketSync');
     GMGenie_Tickets_View:Hide();
     GMGenie.Tickets.currentTicket = { ["num"] = 0, ["ticketId"] = 0, ['name'] = "" };
-    if GMGenie_SavedVars.swapTicketWindows then
+    if wasOpen and GMGenie_SavedVars.swapTicketWindows then
         GMGenie.Tickets.toggle();
     end
     GMGenie.Tickets.updateView();
@@ -441,8 +446,8 @@ function GMGenie.Tickets.addLine(message)
 end
 
 function GMGenie.Tickets.delete()
-    SendChatMessage(".ticket close " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
-    SendChatMessage(".ticket del " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
+    GMGenieForever.SendChatMessage(".ticket close " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
+    GMGenieForever.SendChatMessage(".ticket del " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
     GMGenie.Tickets.done = GMGenie.Tickets.done + 1;
     GMGenie_SavedVars.ticketsDone = GMGenie.Tickets.done;
     local offlineCount = GMGenie.Tickets.tickets - GMGenie.Tickets.onlineTickets;
@@ -451,7 +456,7 @@ function GMGenie.Tickets.delete()
 end
 
 function GMGenie.Tickets.assignToSelf()
-    SendChatMessage(".ticket assign " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. UnitName("player"), "GUILD");
+    GMGenieForever.SendChatMessage(".ticket assign " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. UnitName("player"), "GUILD");
 end
 
 function GMGenie.Tickets.assign()
@@ -461,19 +466,19 @@ end
 
 function GMGenie.Tickets.assignTo()
     GMGenie_Tickets_AssignPopup:Hide();
-    SendChatMessage(".ticket assign " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. GMGenie_Tickets_AssignPopup_GMName:GetText(), "GUILD");
+    GMGenieForever.SendChatMessage(".ticket assign " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. GMGenie_Tickets_AssignPopup_GMName:GetText(), "GUILD");
 end
 
 function GMGenie.Tickets.unassign()
-    SendChatMessage(".ticket unassign " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
+    GMGenieForever.SendChatMessage(".ticket unassign " .. GMGenie.Tickets.currentTicket["ticketId"], "GUILD");
 end
 
 function GMGenie.Tickets.setComment()
-    SendChatMessage(".ticket comment " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. GMGenie_Tickets_View_Comment:GetText(), "GUILD");
+    GMGenieForever.SendChatMessage(".ticket comment " .. GMGenie.Tickets.currentTicket["ticketId"] .. " " .. GMGenie_Tickets_View_Comment:GetText(), "GUILD");
 end
 
 function GMGenie.Tickets.toggleSpy()
-    if GMGenie_Spy_InfoWindow:IsVisible() and GMGenie.Tickets.currentTicket["name"] == GMGenie.Spy.currentRequest["name"] then
+    if GMGenie.Spy.currentRequest and GMGenie_Spy_InfoWindow:IsVisible() and GMGenie.Tickets.currentTicket["name"] == GMGenie.Spy.currentRequest["name"] then
         GMGenie_Spy_InfoWindow:Hide();
     else
         GMGenie.Spy.spy(GMGenie.Tickets.currentTicket["name"]);
@@ -482,14 +487,19 @@ end
 
 -- add slash command to open.close ticket widnow
 SLASH_TICKETS1 = "/tickets";
-SlashCmdList["TICKETS"] = GMGenie.Tickets.toggle;
+SlashCmdList["TICKETS"] = function(command)
+    command = strtrim(command or ""):lower();
+    if command ~= "" then GMGenie.Tickets.setType(command); end
+    GMGenie.Tickets.toggle();
+end;
 
 local frame = CreateFrame("FRAME");
 frame:RegisterEvent("CHAT_MSG_ADDON");
 
-function frame:OnEvent(event, arg1)
-    if event == "CHAT_MSG_ADDON" and (arg1 == "GMGenie_TicketSync" or arg1 == "GMGenie_Sync") then
-        GMGenie.Tickets.syncMessage(arg4, arg2);
+function frame:OnEvent(event, arg1, arg2, arg3, arg4)
+    if event == "CHAT_MSG_ADDON" and arg1 == "GMGenie_FVR" and arg3 == "GUILD" then
+        local kind, id = arg2:match("^(%a+):(%d+)$");
+        if kind == GMGenie_SavedVars.ticketType then GMGenie.Tickets.syncMessage(arg4, tonumber(id)); end
     end
 end
 

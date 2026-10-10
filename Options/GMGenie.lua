@@ -25,7 +25,7 @@ function GMGenie.optionsOnLoad()
     panel.cancel = GMGenie.optionsUpdate;
     panel.default = GMGenie.optionsDefault;
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal("GMGenie_OptionsWindow_Title"):SetText("Game Master Genie");
     getglobal("GMGenie_OptionsWindow_SubText"):SetText("Here you can change the settings for GM Genie.");
@@ -39,5 +39,5 @@ function GMGenie.optionsUpdate()
 end
 
 function GMGenie.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("GM Genie");
+    GMGenieForever.OpenOptions("GM Genie");
 end

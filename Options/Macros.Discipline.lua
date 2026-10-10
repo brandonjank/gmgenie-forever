@@ -9,10 +9,10 @@ function GMGenie.Macros.Discipline.optionsOnLoad()
     local panel = getglobal("GMGenie_Macros_Discipline_OptionsFrame");
     panel.name = "Discipline Macros";
     panel.parent = "GM Genie";
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     GMGenie_Macros_Discipline_OptionsWindow_Title:SetText("Discipline Macros");
-    GMGenie_Macros_Discipline_OptionsWindow_SubText:SetText("Here you add and update mute and ban macros, which will be available from the playerinfo window and the player context menus.");
+    GMGenie_Macros_Discipline_OptionsWindow_SubText:SetText("Editable mute and ban examples are included. Mutes use minutes; bans use s/m/h/d. Examples announce to GMs only. Choose durations and reasons to match your server rules.");
 
     UIDropDownMenu_Initialize(getglobal("GMGenie_Macros_Discipline_OptionsWindow_Mute_Dropdownbuttons"), GMGenie.Macros.Discipline.Mute.loadOptionsDropdown, "MENU");
     UIDropDownMenu_Initialize(getglobal("GMGenie_Macros_Discipline_OptionsWindow_CharBan_Dropdownbuttons"), GMGenie.Macros.Discipline.CharBan.loadOptionsDropdown, "MENU");
@@ -21,7 +21,7 @@ function GMGenie.Macros.Discipline.optionsOnLoad()
 end
 
 function GMGenie.Macros.Discipline.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("Discipline Macros");
+    GMGenieForever.OpenOptions("Discipline Macros");
 end
 
 

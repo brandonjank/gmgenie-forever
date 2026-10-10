@@ -21,8 +21,8 @@ function GMGenie.Macros.Whispers.run(name, title)
         GMGenie_Macros_Whispers_SubjectPopup_Subject:SetFocus();
     else
         local args = { strsplit("\n", msg) };
-        for _, text in pairs(args) do
-            SendChatMessage(text, "WHISPER", nil, name);
+        for _, text in ipairs(args) do
+            GMGenieForever.SendChatMessage(text, "WHISPER", nil, name);
         end
     end
 end
@@ -39,26 +39,26 @@ function GMGenie.Macros.Whispers.sendWithSubject()
     local subject = GMGenie_Macros_Whispers_SubjectPopup_Subject:GetText();
     GMGenie_Macros_Whispers_SubjectPopup_Subject:SetText('');
 
-    local msg = string.gsub(GMGenie.Macros.Whispers.curWhisperMessage, "SUBJECT", subject);
+    local msg = string.gsub(GMGenie.Macros.Whispers.curWhisperMessage, "SUBJECT", function() return subject end);
     local args = { strsplit("\n", msg) };
-    for _, text in pairs(args) do
-        SendChatMessage(text, "WHISPER", nil, GMGenie.Macros.Whispers.curName);
+    for _, text in ipairs(args) do
+        GMGenieForever.SendChatMessage(text, "WHISPER", nil, GMGenie.Macros.Whispers.curName);
     end
 
     GMGenie.Macros.Whispers.curWhisperMessage = '';
 end
 
 function GMGenie.Macros.Whispers.addToUnitMenu()
-    UnitPopupMenus["GMGenie_Whispers"] = {};
+    GMGenieForever.popupMenus["GMGenie_Whispers"] = {};
 
     local whispersTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.whispers);
     for _, name in pairs(whispersTemp) do
-        table.insert(UnitPopupMenus["GMGenie_Whispers"], "GMGenie_Whispers_" .. name);
-        UnitPopupButtons["GMGenie_Whispers_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_Whispers"], "GMGenie_Whispers_" .. name);
+        GMGenieForever.popupButtons["GMGenie_Whispers_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_Whispers"], "GMGenie_WhisperOptions");
-    UnitPopupButtons["GMGenie_WhisperOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Whispers"], "GMGenie_WhisperOptions");
+    GMGenieForever.popupButtons["GMGenie_WhisperOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Whispers.loadDropdown(_, level)

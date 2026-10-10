@@ -29,10 +29,8 @@ function GMGenie.timeStrToSeconds(timeStr)
 end
 
 -- Read from chat
-local ORIG_ChatFrame_MessageEventHandler = ChatFrame_MessageEventHandler;
-function ChatFrame_MessageEventHandler(self, event, ...)
-    local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 = ...;
-
+function GMGenie.readSystemMessage(arg1)
+    local event = "CHAT_MSG_SYSTEM";
     local ActionTaken = false;
 
     -- development code to analize chat messages
@@ -48,6 +46,10 @@ function ChatFrame_MessageEventHandler(self, event, ...)
         end
         -- ticket list or reading ticket
         local ticketId, name, createStr, lastModifiedStr, rest = string.match(arg1, "^%|cffaaffaaTicket%|r:%|cffaaccff%s([0-9]+).%|r%s%|cff00ff00Created%sby%|r:%|cff00ccff%s(.+)%|r%s%|cff00ff00Created%|r:%|cff00ccff%s([a-zA-Z0-9%s]+)%sago%|r%s%|cff00ff00Last%schange%|r:%|cff00ccff%s([a-zA-Z0-9%s]+)%sago%|r%s(.*)$");
+        if not ticketId then
+            ticketId, name, createStr, rest = arg1:match("^|cffaaffaaTicket|r:|cffaaccff%s(%d+).|r%s|cff00ff00Created by|r:|cff00ccff%s(.-)|r%s|cff00ff00Created|r:|cff00ccff%s(.-)%sago|r%s(.*)$");
+            if ticketId then lastModifiedStr = "0s"; end
+        end
 
         if ticketId and name and createStr and lastModifiedStr then
             ticketId = tonumber(ticketId);
@@ -168,6 +170,9 @@ function ChatFrame_MessageEventHandler(self, event, ...)
             else
                 if GMGenie.Spy.waitingForPin then
                     local offline, name1, _, guid = string.match(arg1, "Player  ?(.*) %|cffffffff%|Hplayer:(.*)%|h%[(.*)%]%|h%|r %(guid: (.*)%)");
+                    if not name1 then
+                        offline, name1, guid = GMGenieForever.PlainText(arg1):match("Player%s*(.-)%s%[([^%]]+)%]%s%((.-)%)");
+                    end
                     local phase = string.match(arg1, "Phase: (.*)");
                     local account, accountId, gmLevel = string.match(arg1, "Account: (.*) %(ID: (.*)%), GMLevel: (.*)");
                     local login, failedLogins = string.match(arg1, "Last Login: (.*) %(Failed Logins: (.*)%)");
@@ -176,17 +181,32 @@ function ChatFrame_MessageEventHandler(self, event, ...)
                     if not email then
                         email = string.match(arg1, "Email: (.*)");
                     end
+                    email = arg1:match("%- Email: (.*)") or email;
                     local ip, locked = string.match(arg1, "Last IP: (.*) %(Locked: (.*)%)");
                     local level = string.match(arg1, "Level: ([0-9]+)");
                     local race, class = string.match(arg1, "Race: (.*), (.*)");
                     local alive = string.match(arg1, "Alive %?: (.*)");
                     local money = string.match(arg1, "Money: (.*)");
                     local map, area, zone = string.match(arg1, "Map: (.*), Area: (.*), Zone: (.*)");
+                    if not map then
+                        map, zone, area = arg1:match("Map: (.-), Zone: (.-), Area: (.*)");
+                        if not map then
+                            map, zone = arg1:match("Map: (.-), Zone: (.*)");
+                            area = zone;
+                        end
+                    end
                     local guild, guildId = string.match(arg1, "Guild: (.*) %(ID: (.*)%)");
                     local guildRank = string.match(arg1, "Rank: (.*)");
                     local note = string.match(arg1, "Note: (.*)");
                     local officerNote = string.match(arg1, "O. Note: (.*)");
                     local playedTime = string.match(arg1, "Played time: (.*)");
+                    if name1 == UnitName("player") and arg1:find("Player", 1, true) then
+                        GMGenieForever.readingSelf = true;
+                        GMGenie.Hud.gmStatus(false);
+                    elseif GMGenieForever.readingSelf and arg1:find("GM Mode active", 1, true) then
+                        GMGenie.Hud.gmStatus(true);
+                    end
+                    if playedTime then GMGenieForever.readingSelf = false; end
 
 
                     if offline then
@@ -279,6 +299,7 @@ function ChatFrame_MessageEventHandler(self, event, ...)
         if GMGenie.Spawns.waitingForObject then
             local name, guid, id = string.match(arg1, "%|cffffffff%|Hgameobject:.*%|h%[(.*)%]%|h%|r%sGUID:%s(.*)%sID:%s(.*)");
             if name and guid and id then
+                GMGenie.Spawns.waitingForObject = false;
                 GMGenie.Spawns.deleteObject(name, guid, id);
                 ActionTaken = true;
             elseif string.find(arg1, "X:%s.*%sY:%s.*%sZ:%s.*%sMapId:%s.*") or string.find(arg1, "Orientation:%s.*") or string.find(arg1, "Phasemask%s.*") then
@@ -299,9 +320,10 @@ function ChatFrame_MessageEventHandler(self, event, ...)
         end
 
         local charName = UnitName("player");
-        if string.match(arg1, "%|cffffffff%|Hplayer:" .. charName .. "%|h%[" .. charName .. "%]%|h%|r%'s Fly Mode on") then
+        local plainMessage = GMGenieForever.PlainText(arg1);
+        if plainMessage:find("[" .. charName .. "]'s Fly Mode on", 1, true) then
             GMGenie.Hud.flyStatus(true);
-        elseif string.match(arg1, "%|cffffffff%|Hplayer:" .. charName .. "%|h%[" .. charName .. "%]%|h%|r%'s Fly Mode off") then
+        elseif plainMessage:find("[" .. charName .. "]'s Fly Mode off", 1, true) then
             GMGenie.Hud.flyStatus(false);
         elseif arg1 == "Accepting Whisper: ON" or arg1 == "Accepting Whisper: on" then
             GMGenie.Hud.whisperStatus(true);
@@ -319,8 +341,5 @@ function ChatFrame_MessageEventHandler(self, event, ...)
         end
     end
 
-    -- if nothing was done, just display the message
-    if not ActionTaken then
-        ORIG_ChatFrame_MessageEventHandler(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-    end
+    return ActionTaken;
 end

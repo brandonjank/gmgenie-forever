@@ -1,0 +1,15 @@
+GM Genie Forever
+
+Based on Game Master Genie 0.7.3 by Chocochaos.
+Original project: https://github.com/chocochaos/GMGenie
+Copyright 2011-2014 Chocochaos.
+Forever modifications copyright 2026 Brandon Jank.
+
+Modified on 2026-10-10 for the WoW Forever client and TrinityCore Forever:
+modern UI compatibility, command transport, report/player-info parsing,
+saved-variable migration, error diagnostics and bundled starter macros.
+Public starter messages use server-neutral wording.
+
+Distributed under the GNU General Public License, version 3 (see LICENSE).
+Original copyright/license notices and Chronos source notices are retained.
+The upstream README is preserved in docs/README.upstream.md.

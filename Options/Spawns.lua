@@ -10,7 +10,7 @@ function GMGenie.Spawns.optionsOnLoad()
     panel.name = "Builder";
     panel.parent = "GM Genie";
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal(panel:GetName() .. "_Title"):SetText("Builder Presets");
     getglobal(panel:GetName() .. "_SubText"):SetText("Here you add and update preset NPCs and objects, which will be available from the builder interface.");
@@ -20,7 +20,7 @@ function GMGenie.Spawns.optionsOnLoad()
 end
 
 function GMGenie.Spawns.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("Builder");
+    GMGenieForever.OpenOptions("Builder");
 end
 
 GMGenie.Spawns.Objects = {};

@@ -13,11 +13,11 @@ GMGenie.Macros.Discipline.IpBan = {};
 
 function GMGenie.Macros.Discipline.Mute.run(name, title)
     if GMGenie_SavedVars.mute[title]["announceToServer"] then
-        SendChatMessage('.name ' .. name .. ' has been muted for ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' minutes. Reason: ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.name ' .. name .. ' has been muted for ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' minutes. Reason: ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
     else
-        SendChatMessage('.gmname ' .. name .. ' has been muted for ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' minutes. Reason: ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.gmname ' .. name .. ' has been muted for ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' minutes. Reason: ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
     end
-    SendChatMessage('.mute ' .. name .. ' ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
+    GMGenieForever.SendChatMessage('.mute ' .. name .. ' ' .. GMGenie_SavedVars.mute[title]["duration"] .. ' ' .. GMGenie_SavedVars.mute[title]["reason"], "GUILD");
 end
 
 function GMGenie.Macros.Discipline.Mute.runFromSpy(self)
@@ -28,15 +28,15 @@ function GMGenie.Macros.Discipline.Mute.runFromSpy(self)
 end
 
 function GMGenie.Macros.Discipline.Mute.addToUnitMenu()
-    UnitPopupMenus["GMGenie_Mute"] = {};
+    GMGenieForever.popupMenus["GMGenie_Mute"] = {};
     local MuteTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.mute);
     for _, name in pairs(MuteTemp) do
-        table.insert(UnitPopupMenus["GMGenie_Mute"], "GMGenie_Mute_" .. name);
-        UnitPopupButtons["GMGenie_Mute_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_Mute"], "GMGenie_Mute_" .. name);
+        GMGenieForever.popupButtons["GMGenie_Mute_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_Mute"], "GMGenie_DisciplineOptions");
-    UnitPopupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Mute"], "GMGenie_DisciplineOptions");
+    GMGenieForever.popupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Discipline.Mute.loadDropdown(_, level)
@@ -70,11 +70,11 @@ end
 
 function GMGenie.Macros.Discipline.CharBan.run(name, title)
     if GMGenie_SavedVars.charBan[title]["announceToServer"] then
-        SendChatMessage('.name ' .. name .. ' has been banned for ' .. GMGenie_SavedVars.charBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.name ' .. name .. ' has been banned for ' .. GMGenie_SavedVars.charBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
     else
-        SendChatMessage('.gmname ' .. name .. ' has been banned for ' .. GMGenie_SavedVars.charBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.gmname ' .. name .. ' has been banned for ' .. GMGenie_SavedVars.charBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
     end
-    SendChatMessage('.ban char ' .. name .. ' ' .. GMGenie_SavedVars.charBan[title]["duration"] .. ' ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
+    GMGenieForever.SendChatMessage('.ban char ' .. name .. ' ' .. GMGenie_SavedVars.charBan[title]["duration"] .. ' ' .. GMGenie_SavedVars.charBan[title]["reason"], "GUILD");
 end
 
 function GMGenie.Macros.Discipline.CharBan.runFromSpy(self)
@@ -85,15 +85,15 @@ function GMGenie.Macros.Discipline.CharBan.runFromSpy(self)
 end
 
 function GMGenie.Macros.Discipline.CharBan.addToUnitMenu()
-    UnitPopupMenus["GMGenie_CharBan"] = {};
+    GMGenieForever.popupMenus["GMGenie_CharBan"] = {};
     local CharBanTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.charBan);
     for _, name in pairs(CharBanTemp) do
-        table.insert(UnitPopupMenus["GMGenie_CharBan"], "GMGenie_CharBan_" .. name);
-        UnitPopupButtons["GMGenie_CharBan_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_CharBan"], "GMGenie_CharBan_" .. name);
+        GMGenieForever.popupButtons["GMGenie_CharBan_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_CharBan"], "GMGenie_DisciplineOptions");
-    UnitPopupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_CharBan"], "GMGenie_DisciplineOptions");
+    GMGenieForever.popupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Discipline.CharBan.loadDropdown(_, level)
@@ -127,11 +127,11 @@ end
 
 function GMGenie.Macros.Discipline.AccBan.run(name, title)
     if GMGenie_SavedVars.accBan[title]["announceToServer"] then
-        SendChatMessage('.name ' .. name .. ' has been account banned for ' .. GMGenie_SavedVars.accBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.name ' .. name .. ' has been account banned for ' .. GMGenie_SavedVars.accBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
     else
-        SendChatMessage('.gmname ' .. name .. ' has been account banned for ' .. GMGenie_SavedVars.accBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
+        GMGenieForever.SendChatMessage('.gmname ' .. name .. ' has been account banned for ' .. GMGenie_SavedVars.accBan[title]["duration"] .. '. Reason: ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
     end
-    SendChatMessage('.ban playeraccount ' .. name .. ' ' .. GMGenie_SavedVars.accBan[title]["duration"] .. ' ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
+    GMGenieForever.SendChatMessage('.ban playeraccount ' .. name .. ' ' .. GMGenie_SavedVars.accBan[title]["duration"] .. ' ' .. GMGenie_SavedVars.accBan[title]["reason"], "GUILD");
 end
 
 function GMGenie.Macros.Discipline.AccBan.runFromSpy(self)
@@ -142,15 +142,15 @@ function GMGenie.Macros.Discipline.AccBan.runFromSpy(self)
 end
 
 function GMGenie.Macros.Discipline.AccBan.addToUnitMenu()
-    UnitPopupMenus["GMGenie_AccBan"] = {};
+    GMGenieForever.popupMenus["GMGenie_AccBan"] = {};
     local AccBanTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.accBan);
     for _, name in pairs(AccBanTemp) do
-        table.insert(UnitPopupMenus["GMGenie_AccBan"], "GMGenie_AccBan_" .. name);
-        UnitPopupButtons["GMGenie_AccBan_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_AccBan"], "GMGenie_AccBan_" .. name);
+        GMGenieForever.popupButtons["GMGenie_AccBan_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_AccBan"], "GMGenie_DisciplineOptions");
-    UnitPopupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_AccBan"], "GMGenie_DisciplineOptions");
+    GMGenieForever.popupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Discipline.AccBan.loadDropdown(_, level)
@@ -198,11 +198,11 @@ function GMGenie.Macros.Discipline.IpBan.processPin(ip)
     GMGenie.Macros.Discipline.IpBan.waitingForPin = false;
 
     if GMGenie.Macros.Discipline.IpBan.announceToServer then
-        SendChatMessage('.name ' .. GMGenie.Macros.Discipline.IpBan.name .. ' has been ip banned for ' .. GMGenie.Macros.Discipline.IpBan.duration .. '. Reason: ' .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
+        GMGenieForever.SendChatMessage('.name ' .. GMGenie.Macros.Discipline.IpBan.name .. ' has been ip banned for ' .. GMGenie.Macros.Discipline.IpBan.duration .. '. Reason: ' .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
     end
-    SendChatMessage('.gmname ' .. GMGenie.Macros.Discipline.IpBan.name .. ' has been ip banned (' .. ip .. ') for ' .. GMGenie.Macros.Discipline.IpBan.duration .. '. Reason: ' .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
+    GMGenieForever.SendChatMessage('.gmname ' .. GMGenie.Macros.Discipline.IpBan.name .. ' has been ip banned (' .. ip .. ') for ' .. GMGenie.Macros.Discipline.IpBan.duration .. '. Reason: ' .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
 
-    SendChatMessage('.ban ip ' .. ip .. " " .. GMGenie.Macros.Discipline.IpBan.duration .. " " .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
+    GMGenieForever.SendChatMessage('.ban ip ' .. ip .. " " .. GMGenie.Macros.Discipline.IpBan.duration .. " " .. GMGenie.Macros.Discipline.IpBan.reason, "GUILD");
     Chronos.unscheduleByName('ipbanprotection');
 end
 
@@ -213,7 +213,7 @@ end
 
 function GMGenie.Macros.Discipline.IpBan.run(name, title)
     GMGenie.Macros.Discipline.IpBan.waitingForPin = true;
-    SendChatMessage('.pin ' .. name, "GUILD");
+    GMGenieForever.SendChatMessage('.pin ' .. name, "GUILD");
     GMGenie.Macros.Discipline.IpBan.name = name;
     GMGenie.Macros.Discipline.IpBan.duration = GMGenie_SavedVars.ipBan[title]["duration"];
     GMGenie.Macros.Discipline.IpBan.reason = GMGenie_SavedVars.ipBan[title]["reason"];
@@ -230,15 +230,15 @@ function GMGenie.Macros.Discipline.IpBan.runFromSpy(self)
 end
 
 function GMGenie.Macros.Discipline.IpBan.addToUnitMenu()
-    UnitPopupMenus["GMGenie_IpBan"] = {};
+    GMGenieForever.popupMenus["GMGenie_IpBan"] = {};
     local IpBanTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.ipBan);
     for _, name in pairs(IpBanTemp) do
-        table.insert(UnitPopupMenus["GMGenie_IpBan"], "GMGenie_IpBan_" .. name);
-        UnitPopupButtons["GMGenie_IpBan_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_IpBan"], "GMGenie_IpBan_" .. name);
+        GMGenieForever.popupButtons["GMGenie_IpBan_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_IpBan"], "GMGenie_DisciplineOptions");
-    UnitPopupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_IpBan"], "GMGenie_DisciplineOptions");
+    GMGenieForever.popupButtons["GMGenie_DisciplineOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Discipline.IpBan.loadDropdown(_, level)

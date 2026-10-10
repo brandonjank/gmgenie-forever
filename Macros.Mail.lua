@@ -16,13 +16,13 @@ function GMGenie.Macros.Mail.run(name, title)
     local lines = { strsplit("\n", text) };
     local subject = GMGenie_SavedVars.mail[title].subject;
 
-    for index, line in pairs(lines) do
+    for index, line in ipairs(lines) do
         local command = '.send mail ' .. name .. ' "' .. subject;
         if #lines > 1 then
             command = command .. ' ' .. index .. '/' .. (#lines);
         end
         local command = command .. '" "' .. line .. '"';
-        SendChatMessage(command, "GUILD");
+        GMGenieForever.SendChatMessage(command, "GUILD");
     end
 end
 
@@ -34,15 +34,15 @@ function GMGenie.Macros.Mail.runFromSpy(self)
 end
 
 function GMGenie.Macros.Mail.addToUnitMenu()
-    UnitPopupMenus["GMGenie_Mail"] = {};
+    GMGenieForever.popupMenus["GMGenie_Mail"] = {};
     local MailTemp = GMGenie.pairsByKeys2(GMGenie_SavedVars.mail);
     for _, name in pairs(MailTemp) do
-        table.insert(UnitPopupMenus["GMGenie_Mail"], "GMGenie_Mail_" .. name);
-        UnitPopupButtons["GMGenie_Mail_" .. name] = { text = name, dist = 0, };
+        table.insert(GMGenieForever.popupMenus["GMGenie_Mail"], "GMGenie_Mail_" .. name);
+        GMGenieForever.popupButtons["GMGenie_Mail_" .. name] = { text = name, dist = 0, };
     end
 
-    table.insert(UnitPopupMenus["GMGenie_Mail"], "GMGenie_MailOptions");
-    UnitPopupButtons["GMGenie_MailOptions"] = { text = "Manage macros", dist = 0, };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Mail"], "GMGenie_MailOptions");
+    GMGenieForever.popupButtons["GMGenie_MailOptions"] = { text = "Manage macros", dist = 0, };
 end
 
 function GMGenie.Macros.Mail.loadDropdown(_, level)

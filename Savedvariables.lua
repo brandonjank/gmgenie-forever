@@ -7,15 +7,15 @@
 
 GMGenie.defaultSettings = {
     ["GMSyncChannel"] = "GM_Sync_Channel",
-    ["whispers"] = {},
-    ["mail"] = {},
-    ["tele"] = {},
+    ["whispers"] = GMGenie.starterMacros.whispers,
+    ["mail"] = GMGenie.starterMacros.mail,
+    ["tele"] = GMGenie.starterMacros.tele,
     ['objects'] = {},
     ['npcs'] = {},
-    ['mute'] = {},
-    ['charBan'] = {},
-    ['accBan'] = {},
-    ['ipBan'] = {},
+    ['mute'] = GMGenie.starterMacros.mute,
+    ['charBan'] = GMGenie.starterMacros.charBan,
+    ['accBan'] = GMGenie.starterMacros.accBan,
+    ['ipBan'] = GMGenie.starterMacros.ipBan,
     ["WIMIntegration"] = false,
     ["useSpy"] = true,
     ["swapTicketWindows"] = false,
@@ -23,18 +23,28 @@ GMGenie.defaultSettings = {
     ["minimapPos"] = 45,
     ['hudClosed'] = false,
     ['ticketsDone'] = 0,
+    ['ticketType'] = 'bug',
 }
 
 function GMGenie.loadSettings()
+    -- Seed existing installations too, once. Later edits/deletions survive reloads.
+    if (GMGenie_SavedVars.starterMacrosVersion or 0) < 1 then
+        GMGenie.installStarterMacros();
+    end
+    local kind = GMGenie_SavedVars.ticketType;
+    if kind ~= "bug" and kind ~= "complaint" and kind ~= "suggestion" then
+        GMGenie_SavedVars.ticketType = "bug";
+    end
     for name, value in pairs(GMGenie.defaultSettings) do
-        if not GMGenie_SavedVars[name] then
-            GMGenie_SavedVars[name] = value;
+        if GMGenie_SavedVars[name] == nil then
+            GMGenie_SavedVars[name] = type(value) == "table" and CopyTable(value) or value;
         end
     end
 end
 
 function GMGenie.setDefault(names)
     for _, name in ipairs(names) do
-        GMGenie_SavedVars[name] = GMGenie.defaultSettings[name];
+        local value = GMGenie.defaultSettings[name];
+        GMGenie_SavedVars[name] = type(value) == "table" and CopyTable(value) or value;
     end
 end

@@ -10,7 +10,7 @@ function GMGenie.Macros.Whispers.optionsOnLoad()
     panel.name = "Whisper Macros";
     panel.parent = "GM Genie";
 
-    InterfaceOptions_AddCategory(panel);
+    GMGenieForever.RegisterOptions(panel);
 
     getglobal(panel:GetName() .. "_Title"):SetText("Whisper Macros");
     getglobal(panel:GetName() .. "_SubText"):SetText("Here you add and update whisper macros, which will be available from the ticket interface and the player context menus.");
@@ -22,7 +22,7 @@ function GMGenie.Macros.Whispers.optionsOnLoad()
 end
 
 function GMGenie.Macros.Whispers.updateMacroText()
-    ScrollingEdit_OnTextChanged(getglobal("GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame_Text"), getglobal("GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame"));
+    GMGenieForever.TextChanged(GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame_Text);
     GMGenie.Macros.Whispers.checkMacroLength();
 end
 
@@ -31,13 +31,13 @@ function GMGenie.Macros.Whispers.checkMacroLength()
     local macro = string.gsub(macro, "NAME", "abcdefghijkl");
     local lines = { strsplit("\n", macro) };
 
-    for _, line in pairs(lines) do
+    local tooLong = false;
+    for _, line in ipairs(lines) do
         if string.len(line) > 255 then
-            GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame_Text:SetTextColor(255, 0, 0);
-        else
-            GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame_Text:SetTextColor(255, 255, 255);
+            tooLong = true;
         end
     end
+    GMGenie_Macros_Whispers_OptionsWindow_Macro_Frame_Text:SetTextColor(1, tooLong and 0 or 1, tooLong and 0 or 1);
 end
 
 
@@ -102,7 +102,7 @@ function GMGenie.Macros.Whispers.cleanForm()
 end
 
 function GMGenie.Macros.Whispers.showOptions()
-    InterfaceOptionsFrame_OpenToCategory("Whisper Macros");
+    GMGenieForever.OpenOptions("Whisper Macros");
 end
 
 function GMGenie.Macros.Whispers.test()

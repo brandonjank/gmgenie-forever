@@ -10,81 +10,72 @@ GMGenie.Macros = {};
 function GMGenie.Macros.onLoad()
     GMGenie.Macros.menuItems = {};
 
-    UnitPopupButtons["GMGenie_Commands"] = { text = "Quick Commands", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Commands"] = { text = "Quick Commands", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Commands");
-    UnitPopupMenus["GMGenie_Commands"] = {};
+    GMGenieForever.popupMenus["GMGenie_Commands"] = {};
 
-    UnitPopupButtons["GMGenie_Revive"] = { text = "Revive", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Revive");
-    UnitPopupButtons["GMGenie_Appear"] = { text = "Appear", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Appear");
-    UnitPopupButtons["GMGenie_Summon"] = { text = "Summon", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Summon");
-    UnitPopupButtons["GMGenie_Freeze"] = { text = "Freeze", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Freeze");
-    UnitPopupButtons["GMGenie_Unfreeze"] = { text = "Unfreeze", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Unfreeze");
-    UnitPopupButtons["GMGenie_Spy"] = { text = "Spy", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Commands"], "GMGenie_Spy");
+    GMGenieForever.popupButtons["GMGenie_Revive"] = { text = "Revive", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Revive");
+    GMGenieForever.popupButtons["GMGenie_Appear"] = { text = "Appear", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Appear");
+    GMGenieForever.popupButtons["GMGenie_Summon"] = { text = "Summon", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Summon");
+    GMGenieForever.popupButtons["GMGenie_Freeze"] = { text = "Freeze", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Freeze");
+    GMGenieForever.popupButtons["GMGenie_Unfreeze"] = { text = "Unfreeze", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Unfreeze");
+    GMGenieForever.popupButtons["GMGenie_Spy"] = { text = "Spy", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Commands"], "GMGenie_Spy");
 
-    UnitPopupButtons["GMGenie_Character"] = { text = "Character", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Character"] = { text = "Character", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Character");
-    UnitPopupMenus["GMGenie_Character"] = {};
+    GMGenieForever.popupMenus["GMGenie_Character"] = {};
 
-    UnitPopupButtons["GMGenie_Character_Rename"] = { text = "Rename", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Character"], "GMGenie_Character_Rename");
-    UnitPopupButtons["GMGenie_Character_Customize"] = { text = "Customize", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Character"], "GMGenie_Character_Customize");
-    UnitPopupButtons["GMGenie_Character_Changerace"] = { text = "Change Race", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Character"], "GMGenie_Character_Changerace");
-    UnitPopupButtons["GMGenie_Character_Changefaction"] = { text = "Change Faction", dist = 0 };
-    table.insert(UnitPopupMenus["GMGenie_Character"], "GMGenie_Character_Changefaction");
+    GMGenieForever.popupButtons["GMGenie_Character_Rename"] = { text = "Rename", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Character"], "GMGenie_Character_Rename");
+    GMGenieForever.popupButtons["GMGenie_Character_Customize"] = { text = "Customize", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Character"], "GMGenie_Character_Customize");
+    GMGenieForever.popupButtons["GMGenie_Character_Changerace"] = { text = "Change Race", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Character"], "GMGenie_Character_Changerace");
+    GMGenieForever.popupButtons["GMGenie_Character_Changefaction"] = { text = "Change Faction", dist = 0 };
+    table.insert(GMGenieForever.popupMenus["GMGenie_Character"], "GMGenie_Character_Changefaction");
 
-    UnitPopupButtons["GMGenie_Whispers"] = { text = "Whisper Macros", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Whispers"] = { text = "Whisper Macros", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Whispers");
     GMGenie.Macros.Whispers.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_Mail"] = { text = "Mail Macros", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Mail"] = { text = "Mail Macros", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Mail");
     GMGenie.Macros.Mail.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_Tele"] = { text = "Teleport Macros", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Tele"] = { text = "Teleport Macros", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Tele");
     GMGenie.Macros.Tele.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_Mute"] = { text = "Mutes", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_Mute"] = { text = "Mutes", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "Mute");
     GMGenie.Macros.Discipline.Mute.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_CharBan"] = { text = "Character Bans", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_CharBan"] = { text = "Character Bans", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "CharBan");
     GMGenie.Macros.Discipline.CharBan.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_AccBan"] = { text = "Account Bans", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_AccBan"] = { text = "Account Bans", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "AccBan");
     GMGenie.Macros.Discipline.AccBan.addToUnitMenu();
 
-    UnitPopupButtons["GMGenie_IpBan"] = { text = "Ip Bans", dist = 0, nested = 1 };
+    GMGenieForever.popupButtons["GMGenie_IpBan"] = { text = "Ip Bans", dist = 0, nested = 1 };
     table.insert(GMGenie.Macros.menuItems, "IpBan");
     GMGenie.Macros.Discipline.IpBan.addToUnitMenu();
 
-    for _, button in ipairs(GMGenie.Macros.menuItems) do
-        table.insert(UnitPopupMenus["PLAYER"], #UnitPopupMenus["PLAYER"] - 1, "GMGenie_" .. button);
-        table.insert(UnitPopupMenus["FRIEND"], #UnitPopupMenus["FRIEND"] - 1, "GMGenie_" .. button);
-        table.insert(UnitPopupMenus["PARTY"], #UnitPopupMenus["PARTY"] - 1, "GMGenie_" .. button);
-        table.insert(UnitPopupMenus["RAID_PLAYER"], #UnitPopupMenus["RAID_PLAYER"] - 1, "GMGenie_" .. button);
-        table.insert(UnitPopupMenus["TEAM"], #UnitPopupMenus["TEAM"] - 1, "GMGenie_" .. button);
-        table.insert(UnitPopupMenus["CHAT_ROSTER"], #UnitPopupMenus["CHAT_ROSTER"] - 1, "GMGenie_" .. button);
-    end
-
-    hooksecurefunc("UnitPopup_OnClick", GMGenie.Macros.contextMenuClick);
+    GMGenieForever.RegisterUnitMenus();
     UIDropDownMenu_Initialize(GMGenie_Spy_InfoWindow_DropdownbuttonsOne, GMGenie.Macros.loadDropdown, "MENU");
 end
 
-function GMGenie.Macros.contextMenuClick(self)
+function GMGenie.Macros.contextMenuClick(self, targetName)
     local dropdownFrame = UIDROPDOWNMENU_INIT_MENU;
     local button = self.value;
-    local name = dropdownFrame.name;
+    local name = targetName or (dropdownFrame and dropdownFrame.name);
     local startPos = string.find(button, "GMGenie_");
 
     if (startPos == 1) then
@@ -256,41 +247,41 @@ function GMGenie.Macros.loadDropdown(self, level)
 end
 
 function GMGenie.Macros.revive(name)
-    SendChatMessage(".revive " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".revive " .. name, "GUILD");
 end
 
 function GMGenie.Macros.appear(name)
-    SendChatMessage(".appear " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".appear " .. name, "GUILD");
 end
 
 function GMGenie.Macros.summon(name)
-    SendChatMessage(".summon " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".summon " .. name, "GUILD");
 end
 
 function GMGenie.Macros.freeze(name)
-    SendChatMessage(".freeze " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".freeze " .. name, "GUILD");
 end
 
 function GMGenie.Macros.unfreeze(name)
-    SendChatMessage(".unfreeze " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".unfreeze " .. name, "GUILD");
 end
 
 function GMGenie.Macros.antiCheatPlayer(name)
-    SendChatMessage(".anticheat player " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".anticheat player " .. name, "GUILD");
 end
 
 function GMGenie.Macros.rename(name)
-    SendChatMessage(".char rename " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".char rename " .. name, "GUILD");
 end
 
 function GMGenie.Macros.customize(name)
-    SendChatMessage(".char customize " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".char customize " .. name, "GUILD");
 end
 
 function GMGenie.Macros.changefaction(name)
-    SendChatMessage(".char changefaction " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".char changefaction " .. name, "GUILD");
 end
 
 function GMGenie.Macros.changerace(name)
-    SendChatMessage(".char changerace " .. name, "GUILD");
+    GMGenieForever.SendChatMessage(".char changerace " .. name, "GUILD");
 end
