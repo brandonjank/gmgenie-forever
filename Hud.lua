@@ -58,7 +58,7 @@ end
 function H.create()
     local window=GMGenie_Hud;
     window.genieNoEscape=true;
-    U.window(window,"GM Genie",300,498,function() window:Hide(); GMGenie_SavedVars.hudClosed=true; end);
+    U.window(window,"GM Genie",300,534,function() window:Hide(); GMGenie_SavedVars.hudClosed=true; end);
     H.search=U.edit(window,"GMGenie_Hud_Search",14,-62,272,32);
     local placeholder=U.label(H.search,"Search 619 commands...",10,-9,250,"GameFontHighlightSmall",true);
     H.search:SetScript("OnTextChanged",function(self) placeholder:SetShown(self:GetText()==""); end);
@@ -67,27 +67,28 @@ function H.create()
     U.button(window,"Reports",154,-110,132,H.reportMenu,"GMGenie_Hud_Tickets");
     U.button(window,"Builder",14,-146,132,function() GMGenie.Spawns.toggle(); end,"GMGenie_Hud_Builder");
     U.button(window,"Macro editors",154,-146,132,H.macroMenu);
-    U.label(window,"GM CONTROLS",14,-192,260,"GameFontHighlightSmall",true);
-    U.button(window,"GM mode: unknown",14,-210,132,H.toggleGm,"GMGenie_Hud_GM");
-    U.button(window,"Chat badge: unknown",154,-210,132,H.toggleChat,"GMGenie_Hud_Chat");
-    U.button(window,"Visibility: unknown",14,-244,132,H.toggleVisibility,"GMGenie_Hud_Visibility");
-    U.button(window,"Whispers: unknown",154,-244,132,H.toggleWhisper,"GMGenie_Hud_Whisper");
-    U.button(window,"Flight: click to set",14,-278,132,H.toggleFly,"GMGenie_Hud_Fly");
-    local speed=U.edit(window,"GMGenie_Hud_Speed",154,-278,52,28); speed:SetText("1");
+    U.button(window,"Item & creature catalog",14,-182,272,function() GMGenie.Catalog.open(); end,"GMGenie_Hud_Catalog");
+    U.label(window,"GM CONTROLS",14,-228,260,"GameFontHighlightSmall",true);
+    U.button(window,"GM mode: unknown",14,-246,132,H.toggleGm,"GMGenie_Hud_GM");
+    U.button(window,"Chat badge: unknown",154,-246,132,H.toggleChat,"GMGenie_Hud_Chat");
+    U.button(window,"Visibility: unknown",14,-280,132,H.toggleVisibility,"GMGenie_Hud_Visibility");
+    U.button(window,"Whispers: unknown",154,-280,132,H.toggleWhisper,"GMGenie_Hud_Whisper");
+    U.button(window,"Flight: click to set",14,-314,132,H.toggleFly,"GMGenie_Hud_Fly");
+    local speed=U.edit(window,"GMGenie_Hud_Speed",154,-314,52,28); speed:SetText("1");
     speed:SetScript("OnEnterPressed",H.setSpeed);
-    U.button(window,"Speed",212,-278,74,H.setSpeed);
+    U.button(window,"Speed",212,-314,74,H.setSpeed);
     U.tooltip(speed,"Movement speed","Enter a multiplier from 0.1 to 50. Target yourself or clear your target first.");
     for _,name in ipairs({"GM","Chat","Visibility","Whisper","Fly"}) do
         U.tooltip(_G["GMGenie_Hud_"..name],"Toggle "..name,"Click to change this setting. Unknown states stay unknown until the server reports them.");
     end
-    local target=U.panel(window,14,-326,272,118);
+    local target=U.panel(window,14,-362,272,118);
     U.label(target,"CURRENT TARGET",12,-11,248,"GameFontHighlightSmall",true);
     H.targetName=U.label(target,"",12,-31,248,"GameFontHighlight");
     H.targetDescription=U.label(target,"",12,-51,248,"GameFontHighlightSmall",true);
     H.inspect=U.button(target,"Inspect player",12,-81,118,H.inspectTarget);
     H.targetCommands=U.button(target,"Target commands",142,-81,118,H.browseTarget);
-    U.button(window,"Settings",14,-458,132,U.settingsMenu);
-    U.button(window,"Refresh status",154,-458,132,H.checkStatus);
+    U.button(window,"Settings",14,-494,132,U.settingsMenu);
+    U.button(window,"Refresh status",154,-494,132,H.checkStatus);
     window:RegisterEvent("PLAYER_TARGET_CHANGED");
     H.updateTarget();
 end

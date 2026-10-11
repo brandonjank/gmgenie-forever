@@ -10,6 +10,7 @@ files = [p for p in ROOT.iterdir() if p.is_file() and p.suffix in {".lua", ".xml
 for folder in ["Chronos", "Options", "Textures"]:
     files.extend(p for p in (ROOT / folder).rglob("*") if p.is_file())
 files.extend(ROOT / name for name in ["LICENSE", "NOTICE", "README.md", "README.Forever.md", "CHANGELOG.md"])
+files.extend(ROOT / "docs" / name for name in ["CATALOG.md", "catalog-sources.json"])
 output = ROOT / "dist" / f"GMGenie-{version}.zip"
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:

@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.6.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.7.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.6.zip** from the
+1. Download **GMGenie-0.7.3-forever.7.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -28,6 +28,9 @@ it inside another `GMGenie` folder.
 
 ## Included tools
 
+- **Forever-only offline catalog: 22,659 items and 15,205 NPCs/monsters**, with
+  search, type/quality/slot/rank filters, favorites, 3D previews and item/spawn
+  actions. Open **Item & creature catalog** or `/gmcatalog`.
 - Modern dashboard with command search, GM controls and a live target card.
 - Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.
@@ -67,6 +70,7 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | --- | --- |
 | `/gmgenie` | Toggle the HUD |
 | `/gmgenie commands [search words]` | Browse the complete Forever command reference |
+| `/gmgenie catalog [search]` / `/gmcatalog [search]` | Browse Forever items and creatures |
 | `/gmgenie options` | Open Settings |
 | `/gmgenie status` | Query badge, visibility and whisper status |
 | `/gmgenie debug` | Show initialization and captured addon error count |
@@ -74,6 +78,18 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | `/tickets bug`, `/tickets complaint`, `/tickets suggestion` | Select report type and toggle its list |
 | `/spy CharacterName` | Inspect a player |
 | `/builder` | Toggle the builder |
+
+## Item and creature catalog
+
+The list is restricted to [Wowhead’s Forever database](https://www.wowhead.com/forever/database).
+Equipment previews use your character; NPCs use creature displays. Drag to rotate
+and scroll to zoom. Entries without a 3D appearance show an icon/tooltip.
+**Add to my inventory** explicitly names your character, regardless of your target.
+Temporary spawns are not saved; persistent spawns require an in-window confirmation.
+
+Some official Forever entries are missing from the bundled reference core snapshot
+and are labeled accordingly. Previews also depend on the assets in your client.
+See [catalog data, availability and rebuild notes](docs/CATALOG.md).
 
 ## Move a selected NPC to your position
 
@@ -93,7 +109,7 @@ backdrops, Settings pages, scrolling editors, player context menus and chat
 links, rather than relying only on the TOC interface version. Commands use a
 self-whisper consumed by the core, which also works for unguilded GMs.
 
-The automated Lua 5.1 suite checks 222 Lua/XML chunks, manifest references,
+The automated Lua 5.1 suite checks 224 Lua/XML chunks, manifest references,
 command routing, synthetic report/player-info parsing, links, saved settings,
 all 28 starter macros, migration and macro editors. Network sends are mocked.
 Live checks covered login, HUD, Settings, report-type switching, player menus,
@@ -116,6 +132,7 @@ python -m pip install -r tests/requirements.txt
 python tests/test_gmgenie.py
 python tests/test_commands.py
 python tests/test_ui.py
+python tests/test_catalog.py
 python tools/package.py
 ```
 

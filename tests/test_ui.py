@@ -14,7 +14,7 @@ GMGenie.Spawns={toggle=function() builderOpened=true end}
 GMGenie.Tickets={setType=function(kind) reportKind=kind end}
 GMGenie.showGMMessage=function(message) warning=message end
 local H=GMGenie.Hud
-H.onLoad(); assert(GMGenie_Hud.width==300 and GMGenie_Hud.height==498)
+H.onLoad(); assert(GMGenie_Hud.width==300 and GMGenie_Hud.height==534)
 assert(not H.inspect.enabled and not H.targetCommands.enabled and #sent==0)
 H.inspectTarget(); H.browseTarget(); assert(not inspected and #sent==0)
 targetGuid='Creature-0-1-1-1-100-200'; targetName='Training Dummy'

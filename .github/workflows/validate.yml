@@ -18,6 +18,7 @@ jobs:
       - run: python tests/test_gmgenie.py
       - run: python tests/test_commands.py
       - run: python tests/test_ui.py
+      - run: python tests/test_catalog.py
       - run: python tools/package.py
       - uses: actions/upload-artifact@v4
         with:

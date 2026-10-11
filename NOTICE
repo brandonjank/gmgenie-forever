@@ -20,3 +20,11 @@ Source: https://github.com/advocaite/TrinityCore
 Revision: 9ed0d9eb5d442714177bebb58e6b2312add6ab46
 The core source is licensed GPL-2.0-or-later. These derived reference data are
 distributed with this addon under GPL-3.0, preserving upstream attribution.
+
+CatalogData.lua contains factual IDs, names, classifications and icon identifiers
+collected from Wowhead’s Forever tree (data tree 16), with per-entry links and
+source provenance in docs/catalog-sources.json. Source: https://www.wowhead.com/forever/database
+No Wowhead comments, images, guide text or tooltip prose are included. Creature
+display mappings and NPC flags are factual metadata from the reference Forever
+core/client inventory. World of Warcraft assets belong to Blizzard Entertainment
+and are loaded from the user’s installed client; no game assets are redistributed.

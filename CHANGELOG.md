@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.3-forever.7 — 2026-10-11
+
+- Bundle the complete verified Forever listing: 22,659 items and 15,205 creatures,
+  with no entries added solely from inherited Retail server data.
+- Add a catalog dashboard shortcut, `/gmcatalog`, text/ID search, type/quality/slot/
+  rank/role filters, favorites, recent history, paging and tooltips.
+- Preview equipment on your character and creatures in 3D, with rotation, zoom,
+  alternate appearances and explanatory fallbacks for missing assets.
+- Add items explicitly to the GM’s own inventory with validated quantities.
+- Offer temporary no-loot spawns and confirmed persistent spawns at the GM’s position.
+- Mark entries absent from the bundled reference core snapshot without removing
+  them from the official Forever whitelist.
+- Add reproducible range-checked collection, source hashes, compact lazy decoding
+  and Lua 5.1 regression tests for the catalog and action safeguards.
+
 ## 0.7.3-forever.6 — 2026-10-11
 
 - Redesign the HUD as a dark slate dashboard with teal status indicators,

@@ -1,19 +1,27 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.6**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.7**.
 
 ## Target
 
 - WoW Forever client 1.60.1, build 70338, interface 16001.
 - Tested server: `advocaite/TrinityCore` Forever revision
-  `f8712a6ad24ba8d921f9be8bf74502888d463723`.
+  `9ed0d9eb5d442714177bebb58e6b2312add6ab46`.
 - English server command responses. Other locales need parser changes.
 
 Forever combines Classic content with newer UI APIs. The
 [Questie Forever port discussion](https://github.com/Questie/Questie/pull/7848)
 also describes its Retail project ID and mixed API environment. This addon uses
 explicit compatibility adapters instead of selecting a branch from project ID.
+
+## Content catalog
+
+Version 0.7.3-forever.7 adds an offline Forever-only catalog with 22,659 items and
+15,205 NPCs/monsters, search/filters/favorites, guarded model previews, explicit
+self item delivery, temporary spawns and confirmed persistent spawns.
+See [catalog documentation](docs/CATALOG.md) for source coverage, reference-core
+availability and regeneration.
 
 ## Changes
 
@@ -41,6 +49,7 @@ explicit compatibility adapters instead of selecting a branch from project ID.
 | Command | Action |
 | --- | --- |
 | `/gmgenie` | Toggle the HUD |
+| `/gmgenie catalog [search]` / `/gmcatalog [search]` | Open the Forever content catalog |
 | `/gmgenie options` | Open Settings |
 | `/gmgenie status` | Query badge, visibility and whisper status |
 | `/gmgenie debug` | Show initialization and Lua error count |
@@ -129,7 +138,7 @@ check reported `initialized=true, errors=0` after cycling all report types.
 The live report list was empty; populated report parsing was checked with
 synthetic examples from the running core's public response templates.
 
-The 0.7.3-forever.6 dashboard and command library were also checked in an
+The 0.7.3-forever.7 dashboard and command library were also checked in an
 active Forever GM session: search, favorites, recent history, keyboard
 selection, category menus, source details, Builder, report shortcuts and
 100/110% scaling rendered and responded correctly. The live check found

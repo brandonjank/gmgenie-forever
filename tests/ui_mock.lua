@@ -31,6 +31,19 @@ function methods:SetFrameLevel(level) self.level=level; end
 function methods:GetCenter() return 200,100; end
 function methods:SetPoint(...) self.point={...}; end
 function methods:CreateFontString() return frame(); end
+function methods:CreateTexture() return frame(); end
+function methods:SetTexture(value) self.texture=value; end
+function methods:SetHyperlink(value) self.link=value; end
+function methods:ClearModel() self.modelID=0; end
+function methods:SetDisplayInfo(id) self.modelID=id; self:Fire("OnModelLoaded"); end
+function methods:SetCreature(id) self.modelID=id; self:Fire("OnModelLoaded"); end
+function methods:SetUnit(unit) self.unit=unit; self.modelID=42; return true; end
+function methods:Undress() self.item=nil; end
+function methods:TryOn(item) self.item=item; self:Fire("OnModelLoaded"); end
+function methods:GetModelFileID() return self.modelID or 0; end
+function methods:SetRotation(value) self.rotation=value; end
+function methods:SetCamDistanceScale(value) self.distance=value; end
+function methods:SetPortraitZoom(value) self.portraitZoom=value; end
 function methods:GetFontString() return self.fontString; end
 function methods:SetFontString(fontString) self.fontString=fontString; end
 function methods:SetBackdropColor(...) self.color={...}; end

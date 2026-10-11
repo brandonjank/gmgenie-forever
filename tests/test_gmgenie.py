@@ -25,8 +25,11 @@ for path in addon.rglob('*.xml'):
                 count += 1
     for script in root.findall('.//ui:Script[@file]', ns):
         assert (path.parent / script.attrib['file'].replace('\\', '/')).is_file(), script.attrib
+manifest_files = set()
 for line in (addon / 'GMGenie.toc').read_text().splitlines():
     if line.strip() and not line.startswith('#'):
+        assert line not in manifest_files, f'Duplicate addon load: {line}'
+        manifest_files.add(line)
         assert (addon / line.replace('\\', '/')).is_file(), line
 
 lua.execute('''
