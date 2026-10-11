@@ -65,24 +65,8 @@ for path in list(ROOT.glob('*.lua'))+list(ROOT.glob('*.xml'))+list((ROOT/'Option
         checked.add(command)
 
 lua=LuaRuntime(unpack_returned_tuples=True)
-lua.execute('''
-GMGenie={}; UISpecialFrames={}; UIParent={}; sent={}; SlashCmdList={}
-function frame()
- return setmetatable({scripts={},visible=false,text=''}, {__index=function(t,k)
-  if k=='SetText' then return function(self,v) self.text=v end end
-  if k=='GetText' then return function(self) return self.text end end
-  if k=='SetScript' then return function(self,n,f) self.scripts[n]=f end end
-  if k=='CreateFontString' then return function() return frame() end end
-  if k=='Show' then return function(self) self.visible=true end end
-  if k=='Hide' then return function(self) self.visible=false end end
-  if k=='IsShown' then return function(self) return self.visible end end
-  return function() end
- end})
-end
-function CreateFrame() return frame() end
-GMGenieForever={SetBackdrop=function() end,SendChatMessage=function(...) sent[#sent+1]={...} end}
-''')
-for file in ('CommandData.lua','Commands.lua'): lua.execute((ROOT/file).read_text())
+lua.execute((ROOT/'tests/ui_mock.lua').read_text())
+for file in ('UI.lua','CommandData.lua','Commands.lua'): lua.execute((ROOT/file).read_text(encoding='utf-8-sig'))
 lua.execute('''
 local C=GMGenie.Commands
 assert(#GMGenie.CommandData.entries==619)
@@ -100,6 +84,28 @@ C.previous.scripts.OnClick(); assert(C.page==34)
 C.refresh('does-not-exist'); assert(not C.detail.visible and not C.rows[1].visible)
 C.toggle(); assert(not C.window:IsShown()); C.toggle(); assert(C.window:IsShown())
 assert(#sent==1)
+C.resetFilters(); C.select(C.search('npc move')[1]); C.toggleFavorite(C.selected)
+C.setMode('favorites'); assert(#C.matches==1 and C.matches[1].name=='npc move')
+C.toggleFavorite(C.selected); assert(#C.matches==0 and not C.detail.visible)
+C.setMode('all'); C.select(C.search('go xyz')[1]); C.select(C.search('npc move')[1]);
+C.setMode('recent'); assert(C.matches[1].name=='npc move' and C.matches[2].name=='go xyz')
+C.resetFilters(); C.category='npc'; C.refresh('');
+for _,entry in ipairs(C.matches) do assert(entry.name:match('^npc[ %s]')) end
+C.category='all'; C.context='ingame'; C.refresh(''); assert(#C.matches==287)
+C.context='console'; C.refresh(''); assert(#C.matches==332)
+C.resetFilters(); C.select(C.matches[1]); C.stepSelection(18); assert(C.page==2 and C.selected.name==C.matches[19].name)
+C.stepSelection(-999); assert(C.page==1 and C.selected.name==C.matches[1].name)
+for index=1,25 do C.remember(GMGenie.CommandData.entries[index]); end
+assert(#C.preferences().recent==20 and C.preferences().recent[1]==GMGenie.CommandData.entries[25].name)
+C.categoryMenu(C.categoryButton); assert(lastMenu.scrollHeight==320)
+for _,item in ipairs(lastMenu.items) do if item.data=='npc' then item.callback(item.data); end end
+assert(C.category=='npc')
+GMGenieUI.setScale(1.1); assert(C.window.scale==1.1)
+GMGenieUI.savePosition(C.window); assert(math.abs(GMGenie_SavedVars.ui.positions.GMGenie_Commands.x-220)<0.001)
+GMGenieUI.restoreWindows(); assert(C.window.point[1]=='CENTER')
+GMGenieUI.settingsMenu(C.window)
+local macros=lastMenu.items[2]; macros.items[2].callback(); assert(openedOptions=='Mail Macros')
+assert(#sent==1) -- all new navigation and personalization remain local
 ''')
 lua.execute((ROOT/'Spawns.lua').read_text(encoding='utf-8'))
 lua.execute('''

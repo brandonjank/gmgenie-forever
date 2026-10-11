@@ -62,5 +62,7 @@ the existing server console (without the dot). No unknown-command responses were
 observed; eight commands lacked detailed help text. The source argument
 definitions remain available for those entries. No action commands were run.
 
-The browser's new UI is covered by Lua interaction tests. The installed update
-has not yet been visually checked in an active GM session.
+The redesigned browser is covered by Lua interaction tests and was visually
+checked in an active Forever GM session on 2026-10-11. Search, favorites, recent
+history, keyboard selection, native category menus and source details worked
+without further Lua error dialogs after fixing blank-button font initialization.

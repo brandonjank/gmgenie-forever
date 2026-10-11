@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.4**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.6**.
 
 ## Target
 
@@ -25,7 +25,7 @@ explicit compatibility adapters instead of selecting a branch from project ID.
 - Explicit command names replace old abbreviations. Startup queries wait until
   the character enters the world.
 - Tickets support Forever's **bug**, **complaint** and **suggestion** report
-  command trees. The selector cycles between them. Synchronization includes
+  command trees. The native menu selects the report type directly. Synchronization includes
   report type because each type has its own IDs.
 - Updated report and player-info parsing. Reports lack online status and last
   modification time: all reports are shown, and Modified displays a dash.
@@ -110,7 +110,7 @@ folder, outside the addon directory.
 
 ## Validation and limits
 
-`python tests/test_gmgenie.py` checks 229 Lua/XML script chunks in Lua 5.1,
+`python tests/test_gmgenie.py` checks 222 Lua/XML script chunks in Lua 5.1,
 manifest resources, cold-start report-type switching, synthetic report/player-info
 responses, saved settings, command routing, and hyperlink rewriting. Install
 the dependency with `python -m pip install -r tests/requirements.txt`.
@@ -128,6 +128,14 @@ self inspection, creature lookup links and spawn listing. The final fresh-reload
 check reported `initialized=true, errors=0` after cycling all report types.
 The live report list was empty; populated report parsing was checked with
 synthetic examples from the running core's public response templates.
+
+The 0.7.3-forever.6 dashboard and command library were also checked in an
+active Forever GM session: search, favorites, recent history, keyboard
+selection, category menus, source details, Builder, report shortcuts and
+100/110% scaling rendered and responded correctly. The live check found
+and fixed blank-button font-region initialization; no further Lua error
+dialog appeared during these interactions. Saved layouts and target
+guards are additionally covered by the Lua UI regression suite.
 
 Destructive GM actions (bans, deletion, report closure), cross-GM sync, WIM and
 legacy custom anticheat integrations were not exercised. Spawn, mail and
@@ -184,3 +192,35 @@ missing handlers, duplicate paths and unreachable tables. The regression suite
 checks real Lua search, selection, pagination, source links, help-only sends and
 all literal addon command prefixes against the catalog. Update the pinned count
 assertions deliberately when a newer core adds or removes commands.
+
+
+## Modern interface
+
+The dashboard provides command search, GM controls, report-type menus, macro
+editor shortcuts and a target card. The card updates on target changes; player
+inspection is enabled only for players, and target commands are enabled for
+players/NPCs. Selecting or changing targets sends no commands. Status values
+remain unknown until received from the server; controls do not guess that a
+command succeeded. Speed input accepts a finite multiplier from 0.1 to 50.
+
+The command library has **All commands**, **Favorites** and **Recent** views.
+Use the native category/context menus to narrow results, or type search words.
+Press Up/Down in the search field to select results; use the mouse wheel over
+the list to change pages. Click **+** beside a row or **Save favorite** to save
+a command locally. Recent keeps up to 20 unique commands selected or queried
+for help. Filtering and browsing do not pollute the recent list.
+
+Command details show the parameter outline; **Source details** opens the exact
+C++ arguments, permission name and pinned source link in a separate window.
+**Server help** requests usage in chat. It does not execute the selected action.
+
+Drag a window to reposition it. Its position is restored after reload. Open
+**Settings** on the dashboard for interface scale (90%, 100%, 110%, 125%),
+macro editors or resetting window positions. These preferences, favorites and
+recent history are saved in GMGenie's existing SavedVariables and preserved
+when upgrading the addon.
+
+The UI uses BackdropTemplate and native MenuUtil descriptions, following the
+[Blizzard menu implementation guide](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua).
+Legacy tool layouts retain their existing workflows under the shared theme.
+Run `python tests/test_ui.py` for dashboard/menu/target/layout checks.

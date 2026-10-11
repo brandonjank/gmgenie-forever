@@ -36,9 +36,14 @@ function GMGenie.Tickets.onLoad()
     button:SetSize(108, 18);
     button:SetPoint("TOPLEFT", GMGenie_Tickets_Main, "TOPLEFT", 5, -18);
     button:SetText(GMGenie_SavedVars.ticketType);
-    button:SetScript("OnClick", function()
-        local nextType = { bug = "complaint", complaint = "suggestion", suggestion = "bug" };
-        GMGenie.Tickets.setType(nextType[GMGenie_SavedVars.ticketType] or "bug");
+    GMGenieUI.skinButton(button);
+    button:SetScript("OnClick", function(self)
+        MenuUtil.CreateContextMenu(self,function(_,root)
+            root:CreateTitle("Report type");
+            for _,kind in ipairs({"bug","complaint","suggestion"}) do
+                root:CreateRadio(kind,function(value) return GMGenie_SavedVars.ticketType==value; end,GMGenie.Tickets.setType,kind);
+            end
+        end);
     end);
     Chronos.scheduleRepeating('ticketrefresh', 60, GMGenie.Tickets.refresh);
     GMGenie.Tickets.done = GMGenie_SavedVars.ticketsDone;

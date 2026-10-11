@@ -40,6 +40,7 @@ end
 
 function GMGenie.onLoad()
     GMGenie.loadSettings();
+    GMGenieUI.restoreWindows();
 
     GMGenie.Hud.onLoad();
 
@@ -63,7 +64,7 @@ function GMGenie.onLoad()
     GMGenieForever.initialized = true;
 
     -- Please do not remove the copyright notice, it would be a violation of the gpl.
-    GMGenie.showGMMessage("GMGenie 0.7.3-forever.4 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
+    GMGenie.showGMMessage("GMGenie 0.7.3-forever.6 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
 end
 
 local frame = CreateFrame("FRAME");
@@ -121,6 +122,11 @@ function GMGenie.loadWindow(window, title, refresh, refreshScript)
 
     getglobal(name .. '_Main'):SetWidth(window:GetWidth());
     getglobal(name .. '_Main'):SetHeight(window:GetHeight() - 14);
+    GMGenieUI.trackWindow(window);
+    GMGenieUI.paint(getglobal(name .. '_Main'), "window");
+    GMGenieUI.paint(getglobal(name .. '_Title'), "panel");
+    GMGenieUI.tooltip(getglobal(name .. '_Close'), "Close window", "Drag the window to reposition it. Positions are remembered.");
+    if refresh then GMGenieUI.tooltip(getglobal(name .. '_Refresh'), "Refresh", "Request current information from the server."); end
 end
 
 function GMGenie.loadEditBox(window)

@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/  http://wowprogramming.com/FrameXML/UI.xsd">
     <Font name="GenieFontNormalSmall" inherits="SystemFont_Shadow_Small" virtual="true">
-        <Color r="0.75" g="0.75" b="1" a="1" />
+        <Color r="0.65" g="0.73" b="0.83" a="1" />
     </Font>
     <Font name="GenieFontDisabledSmall" inherits="SystemFont_Shadow_Small" virtual="true">
-        <Color r="0.75" g="0.75" b="1" a="0.5" />
+        <Color r="0.65" g="0.73" b="0.83" a="0.5" />
     </Font>
     <Font name="GenieFontHighlightSmall" inherits="SystemFont_Shadow_Small" virtual="true">
         <Color r="1" g="1" b="1" a="1" />
@@ -29,7 +29,7 @@
                         <FontString name="$parent_Text" inherits="GenieFontHighlightSmall" text="" justifyH="CENTER" />
                     </Layer>
                 </Layers>
-            <Scripts><OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=3,top=3,bottom=3}}, 0,0,0.5,1);
+            <Scripts><OnLoad>GMGenieUI.paint(self,"panel");
 </OnLoad></Scripts></Frame>
             <Button name="$parent_Close" inherits="GMGenie_Button" text="X">
                 <Size>
@@ -76,12 +76,12 @@
                         </Offset>
                     </Anchor>
                 </Anchors>
-                <Scripts><OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=1,insets={left=3,right=3,top=3,bottom=3}}, 0,0,0,0.9);
+                <Scripts><OnLoad>GMGenieUI.paint(self,"window");
 </OnLoad></Scripts></Frame>
         </Frames>
         <Scripts>
-            <OnMouseDown>self:StartMoving();</OnMouseDown>
-            <OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+
+
             <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
         </Scripts>
     </Button>
@@ -118,7 +118,7 @@
                 <Anchor point="CENTER" />
             </Anchors>
         </ButtonText>
-    <Scripts><OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=2,top=3,bottom=3}}, 0,0,1,1);
+    <Scripts><OnLoad>GMGenieUI.skinButton(self);
 </OnLoad></Scripts></Button>
 
     <Button name="GMGenie_LeftButton" inherits="GMGenie_Button" virtual="true">
@@ -145,7 +145,7 @@
         <NormalTexture />
         <PushedTexture />
         <HighlightTexture />
-    <Scripts><OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=2,top=3,bottom=3}}, 0,0,1,1);
+    <Scripts><OnLoad>GMGenieUI.skinButton(self);
 </OnLoad></Scripts></CheckButton>
 
     <EditBox name="GMGenie_Input_Text" enableMouse="true" virtual="true" autoFocus="false">
@@ -153,10 +153,10 @@
             <AbsDimension x="100" y="18" />
         </Size>
         <Scripts>
-            <OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=3,top=3,bottom=3}}, 0,0,0,1);
+            <OnLoad>GMGenieUI.skinInput(self);
 
                 self:SetTextInsets(5, 5, 0, 2);
-                self:SetBackdropColor(0,0,0);
+
             </OnLoad>
             <OnEnterPressed>
                 self:ClearFocus();
@@ -175,9 +175,9 @@
                     <Anchor point="CENTER" />
                 </Anchors>
                 <Scripts>
-                    <OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=3,top=3,bottom=3}}, 0,0,0,1);
+                    <OnLoad>GMGenieUI.paint(self,"input");
 
-                        self:SetBackdropColor(0,0,0);
+
                     </OnLoad>
                 </Scripts>
                 <ScrollChild>
@@ -205,9 +205,9 @@
 
     <Button name="GMGenie_Dropdown" virtual="true">
         <Scripts>
-            <OnLoad>GMGenieForever.SetBackdrop(self, {bgFile="Interface\\Tooltips\\UI-Tooltip-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,edgeSize=12,tileSize=12,insets={left=3,right=3,top=3,bottom=3}}, 0,0,0,1);
+            <OnLoad>GMGenieUI.skinButton(self);
 
-                self:SetBackdropColor(0,0,0);
+
             </OnLoad>
             <OnHide>CloseDropDownMenus();</OnHide>
         </Scripts>

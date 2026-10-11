@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.5.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.6.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.5.zip** from the
+1. Download **GMGenie-0.7.3-forever.6.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -28,12 +28,14 @@ it inside another `GMGenie` folder.
 
 ## Included tools
 
-- HUD for GM status, visibility, whispers, speed, reports and builder access.
+- Modern dashboard with command search, GM controls and a live target card.
+- Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.
 - Spy/player information, player context menus and common GM actions.
 - Creature/gameobject lookup links and the original spawning/builder tools.
 - **619-command searchable reference**, with argument order, RBAC permissions,
-  console availability, source links and a Server help button.
+  console availability, source links and a Server help button. Favorites, recent
+  history and category/context filters help you find commands quickly.
 - **28 editable starter macros**, installed automatically and preserved across
   reloads alongside your custom macros.
 
@@ -91,12 +93,15 @@ backdrops, Settings pages, scrolling editors, player context menus and chat
 links, rather than relying only on the TOC interface version. Commands use a
 self-whisper consumed by the core, which also works for unguilded GMs.
 
-The automated Lua 5.1 suite checks 226 Lua/XML chunks, manifest references,
+The automated Lua 5.1 suite checks 222 Lua/XML chunks, manifest references,
 command routing, synthetic report/player-info parsing, links, saved settings,
 all 28 starter macros, migration and macro editors. Network sends are mocked.
 Live checks covered login, HUD, Settings, report-type switching, player menus,
 Spy, lookup links and starter editors; the final diagnostic reported
-`initialized=true, errors=0`.
+`initialized=true, errors=0` before the dashboard redesign. The redesigned
+command library, search, favorites, recent history, native menus, Builder,
+report shortcuts and interface scaling were then checked in game with no
+further Lua error dialog after fixing button font-region initialization.
 
 Live report lists were empty; populated reports were checked with synthetic
 responses. Bans, deletion, report closure, cross-GM synchronization, WIM and
@@ -109,6 +114,8 @@ locales may need changes. See [port notes](README.Forever.md) for details.
 ```sh
 python -m pip install -r tests/requirements.txt
 python tests/test_gmgenie.py
+python tests/test_commands.py
+python tests/test_ui.py
 python tools/package.py
 ```
 

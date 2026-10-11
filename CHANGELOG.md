@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.3-forever.6 — 2026-10-11
+
+- Redesign the HUD as a dark slate dashboard with teal status indicators,
+  command search, native report/macro menus and a live target card.
+- Rebuild the command library with category/context filters, saved favorites,
+  the 20 most recently used commands, selected rows and a separate source view.
+- Add keyboard Up/Down navigation, mouse-wheel paging and clear empty states.
+- Remember dragged window positions and add 90/100/110/125% interface scaling.
+- Apply a shared theme to the existing Builder, Spy, report and macro controls.
+- Validate speed input and keep GM state unknown until the server acknowledges it.
+- Test dashboard creation, menu callbacks, target changes and saved layouts in
+  Lua 5.1, alongside the existing command and macro regression suites.
+
 ## 0.7.3-forever.5 — 2026-10-11
 
 - Add a searchable offline reference for all 619 commands registered in Forever
