@@ -33,7 +33,7 @@ it inside another `GMGenie` folder.
   actions. Open **Catalog** or `/gmcatalog`.
 - **Online players with current zones**, name/zone search and compact **TP** / **SUM**
   buttons and an **Actions** menu for confirmed Kick/Ban/Kill. Native Who searches
-  refresh every 15 seconds while visible. Open **Online players** or `/gmplayers`;
+  refresh with Enter or Refresh. Open **Online players** or `/gmplayers`;
   press Enter to search the server. Who visibility and result limits apply.
 - Modern dashboard with command search, GM controls and a live target card.
 - Native report/macro menus, remembered window positions and interface scaling.

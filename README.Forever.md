@@ -20,7 +20,7 @@ explicit compatibility adapters instead of selecting a branch from project ID.
 Open **Online players**, `/gmplayers [search]`, or `/gmgenie players [search]`.
 Each row shows a character, their zone and compact **TP**, **SUM** and **Actions**
 controls. Typing filters loaded player/zone names; **Enter** or **Refresh** queries
-the server. Automatic refresh uses the current search every 15 seconds while visible.
+the server. Refresh is manual because Forever requires a hardware action for Who searches.
 
 - **TP** uses `.appear PlayerName` to move you to that player.
 - **SUM** uses `.summon PlayerName` to bring that player to you.
@@ -32,9 +32,12 @@ the server. Automatic refresh uses the current search every 15 seconds while vis
   Confirmation rechecks their name and target GUID before sending `.die`.
   Forever's kill command has no player-name argument; target changes cancel execution.
 
-Kick, Ban and Kill require a confirmation click. The action forms pause automatic
-refresh while open, block stale/changed roster entries and reject repeated submits.
+Kick, Ban and Kill require a confirmation click. The action forms block
+stale/changed roster entries and reject repeated submits.
 TP/SUM/Kick/Ban name the row's character and do not change your selected target.
+Full Forever names (first name plus surname) remain visible in rows and forms;
+GM commands use the unique first name stored in `characters.name`. For example,
+Ben Hacks sends `.appear Ben`, `.kick Ben Reason` or `.ban character Ben 1h Reason`.
 Your own row and foreign-realm action targets are disabled. Server permissions
 and instance restrictions remain authoritative; actions report requests, not success.
 
@@ -51,9 +54,8 @@ the player/zone search and press Enter. It cannot promise an uncapped realm rost
 Who shares the native client result buffer with `/who` and other addons.
 
 Pending searches and snapshots older than 45 seconds disable actions. Incomplete
-searches time out after 10 seconds and pause polling until manual refresh. Toggle
-**Auto: 15s** to disable polling. No server permission or configuration changes
-are required by this fix.
+searches time out after 10 seconds; use **Refresh** to retry. Searches never run
+from a timer. No server permission or configuration changes are required by this fix.
 
 ## Content catalog
 

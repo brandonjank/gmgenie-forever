@@ -48,7 +48,8 @@ assert(whoSent[3]=='1-255 NewPlayer')
 whoRows={row('NewPlayer','Unknown Land')}; P.onWhoResults()
 assert(#P.entries==1 and P.entries[1].zone=='Unknown Land' and not P.byName.alpha)
 P.travel({name='Alpha'},'sum'); assert(#sent==2)
-now=216; P.tick(); assert(P.pending and #whoSent==4)
+now=216; P.tick(); assert(not P.pending and #whoSent==3)
+P.refresh:Fire('OnClick'); assert(P.pending and #whoSent==4)
 whoRows={}; P.onWhoResults(); assert(#P.entries==0 and P.fresh and not P.pending)
 P.window:Hide(); now=240; P.tick(); assert(#whoSent==4)
 P.query:SetText(''); P.open(); assert(#whoSent==5)
@@ -73,7 +74,7 @@ C_FriendList=api
 now=290; P.request(); P.window:Hide(); now=301; P.tick(); assert(P.error and not P.pending)
 assert(#sent==2)
 ''')
-print('PASS: native Who searches, zones, response limits, self/foreign/stale guards, paging, API errors, timeouts and visible-only polling')
+print('PASS: native Who searches, zones, response limits, self/foreign/stale guards, paging, API errors, timeouts and hardware-triggered refreshes')
 
 lua.execute('''
 local P=GMGenie.Players
@@ -114,3 +115,25 @@ P.beginAction(entry,'ban'); now=418; P.confirmAction(); assert(#sent==5)
 P.cancelAction(); P.beginAction(P.entries[2],'ban'); assert(not P.action)
 ''')
 print('PASS: Kick/Ban/Kill menus, reasons and durations, confirmations, cancellations, duplicate submits, exact selected-player GUID and stale-snapshot guards')
+
+# Forever full display names retain their surname; GM commands use characters.name.
+lua.execute("""
+local P=GMGenie.Players
+now=500; P.cancelAction(); whoRows={{fullName='Ben Hacks',area='Elwynn Forest'},{fullName='Tester Surname-TestRealm',area='City'}}
+P.query:SetText(''); P.open(); P.onWhoResults()
+assert(P.fresh and not P.error and #P.entries==2 and P.entries[1].name=='Ben Hacks')
+assert(P.rows[1].actions.enabled and not P.rows[2].actions.enabled and P.rows[2].name.text=='Tester Surname (you)')
+local entry=P.entries[1]; local count=#sent
+P.travel(entry,'tp'); P.travel(entry,'sum')
+assert(sent[count+1][1]=='.appear Ben' and sent[count+2][1]=='.summon Ben')
+P.beginAction(entry,'kick'); assert(P.actionTitle.text=='Kick Ben Hacks')
+P.reason:SetText('Test reason'); P.confirmAction(); assert(sent[count+3][1]=='.kick Ben Test reason')
+P.beginAction(entry,'ban'); P.reason:SetText('Test reason'); P.confirmAction()
+assert(sent[count+4][1]=='.ban character Ben 1h Test reason')
+targetName='Ben Hacks'; targetPlayer=true; targetGuid='Player-1-32'; P.beginAction(entry,'kill')
+assert(P.action); P.confirmAction(); assert(sent[count+5][1]=='.die')
+assert(P.commandName('Ben Hacks')=='Ben' and P.commandName('Ben Hacks-OtherRealm')==nil)
+for _,name in ipairs({' Ben Hacks','Ben  Hacks','Ben Hacks ','Ben|Hplayer:Other|h','Ben; Hacks'}) do assert(not P.commandName(name)) end
+now=515; P.tick(); assert(not P.pending)
+""")
+print('PASS: Forever surnames, canonical first-name command arguments, full-name confirmations, self/realm checks and selected-player matching')

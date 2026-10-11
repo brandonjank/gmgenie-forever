@@ -7,10 +7,13 @@
 - Search the server with Enter/Refresh, and warn when Who results may be capped.
 - Add per-player Actions menus with confirmed Kick, character Ban and Kill.
 - Validate reasons and positive ban durations; block self/foreign/stale entries
-  and repeated submissions. Pause polling while a confirmation form is open.
+  and repeated submissions.
 - Require the matching selected player and unchanged GUID for `.die`, which
   cannot accept a named-player argument in this Forever build.
-- Test native API errors, timeouts, caps and all action safeguards in Lua 5.1.
+- Keep Forever first-name/surname display names, using the unique first name for
+  GM commands and self/target matching.
+- Refresh Who only from user actions; timer searches are blocked by this client.
+- Test native API errors, timeouts, caps, surnames and action safeguards in Lua 5.1.
 
 ## 0.7.3-forever.8 — 2026-10-11
 

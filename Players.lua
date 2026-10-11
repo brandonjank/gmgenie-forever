@@ -1,5 +1,5 @@
 -- Online roster for TrinityCore Forever. GPL-3.0.
-GMGenie.Players = { entries={}, byName={}, page=1, pageSize=12, auto=true };
+GMGenie.Players = { entries={}, byName={}, page=1, pageSize=12 };
 local P=GMGenie.Players;
 local U=GMGenieUI;
 local F=GMGenieForever;
@@ -9,15 +9,30 @@ function P.validName(name)
     return type(name)=="string" and #name>0 and #name<=48 and not name:find("[^%a\128-\255]");
 end
 
+-- Forever displays first name + surname, but character lookup/GM handlers use
+-- the unique first name (characters.name). Never pass the surname as arguments.
+function P.commandName(name)
+    if type(name)~="string" or #name==0 or #name>96 or name:find("[^%a\128-\255 ]")
+        or name:find("^ ") or name:find(" $") or name:find("  ") then return; end
+    local first=name:match("^([^ ]+)");
+    return P.validName(first) and first or nil;
+end
+
+function P.isSelf(entry)
+    local own=P.commandName(P.characterName(UnitName("player")));
+    local name=entry and P.commandName(entry.name);
+    return own and name and own:lower()==name:lower();
+end
+
 -- Read character/zone data from the native Who buffer, never account administration output.
 function P.characterName(fullName)
-    if type(fullName)~="string" or fullName:find("[%c|]") then return; end
+    if type(fullName)~="string" or #fullName==0 or #fullName>96 or fullName:find("[%c|]") then return; end
     local name,realm=fullName:match("^([^-]+)%-(.+)$");
-    if not name then return P.validName(fullName) and fullName or nil; end
-    if not P.validName(name) then return; end
+    if not name then return fullName; end -- Non-command names still belong in the roster.
+    if not P.commandName(name) then return; end
     local current=GetNormalizedRealmName and GetNormalizedRealmName() or GetRealmName and GetRealmName();
     if current and realm:gsub("%s",""):lower()==current:gsub("%s",""):lower() then return name; end
-    return fullName; -- Display foreign realms, but validName prevents GM commands to them.
+    return fullName; -- Display foreign realms, but commandName blocks their actions.
 end
 
 function P.finish(errorMessage,entries,byName,total,limited)
@@ -60,23 +75,23 @@ function P.onWhoResults()
 end
 
 function P.usable(entry)
-    return entry and P.validName(entry.name) and IsLoggedIn() and P.fresh and not P.pending
+    return entry and P.commandName(entry.name) and IsLoggedIn() and P.fresh and not P.pending
         and P.updated and GetTime()-P.updated<45
-        and P.byName[entry.name:lower()]==entry and entry.name:lower()~=(UnitName("player") or ""):lower();
+        and P.byName[entry.name:lower()]==entry and not P.isSelf(entry);
 end
 
 function P.travel(entry,kind)
     if (kind~="tp" and kind~="sum") or not P.usable(entry) then return; end
-    F.SendChatMessage((kind=="tp" and ".appear " or ".summon ")..entry.name,"GUILD");
+    F.SendChatMessage((kind=="tp" and ".appear " or ".summon ")..P.commandName(entry.name),"GUILD");
     P.notice=(kind=="tp" and "Teleport to " or "Summon ")..entry.name.." requested; check the server response.";
     P.render();
 end
 
 function P.targetMatches(entry,guid)
-    local target=UnitName("target");
+    local target=P.commandName(P.characterName(UnitName("target")));
     local current=UnitGUID("target");
     return entry and target and current and UnitIsPlayer("target")
-        and target:lower()==entry.name:lower() and (not guid or guid==current);
+        and target:lower()==(P.commandName(entry.name) or ""):lower() and (not guid or guid==current);
 end
 
 function P.validReason(reason)
@@ -105,11 +120,11 @@ function P.confirmAction()
     elseif action.kind=="kick" or action.kind=="ban" then
         local reason=trim(P.reason:GetText() or "");
         if not P.validReason(reason) then P.actionStatus:SetText("Enter a short, single-line reason without chat links."); return; end
-        if action.kind=="kick" then command=".kick "..action.entry.name.." "..reason;
+        if action.kind=="kick" then command=".kick "..P.commandName(action.entry.name).." "..reason;
         else
             local duration=trim(P.duration:GetText() or "");
             if not P.validDuration(duration) then P.actionStatus:SetText("Use a positive duration such as 30m, 1h or 7d."); return; end
-            command=".ban character "..action.entry.name.." "..duration.." "..reason;
+            command=".ban character "..P.commandName(action.entry.name).." "..duration.." "..reason;
         end
     else return; end
     P.cancelAction(); -- Clear confirmation before sending; repeated clicks cannot repeat the command.
@@ -123,6 +138,7 @@ function P.createActionWindow()
     local window=CreateFrame("Frame","GMGenie_PlayerAction",UIParent,"BackdropTemplate"); P.actionWindow=window;
     window:SetPoint("CENTER"); window:SetFrameLevel(window:GetFrameLevel()+100);
     U.window(window,"Player action",480,340,P.cancelAction);
+    window:SetFrameStrata("FULLSCREEN_DIALOG"); -- Roster rows must never cover a confirmation.
     window:HookScript("OnHide",function() P.action=nil; P.reason:ClearFocus(); P.duration:ClearFocus(); end);
     P.actionTitle=U.label(window,"",16,-65,448,"GameFontNormalLarge");
     P.actionDetail=U.label(window,"",16,-95,448,"GameFontHighlightSmall",true); P.actionDetail:SetHeight(38);
@@ -195,7 +211,7 @@ function P.render()
         local entry=matches[(P.page-1)*P.pageSize+index]; row.entry=entry;
         row:SetShown(entry~=nil);
         if entry then
-            row.name:SetText(entry.name..(entry.name==UnitName("player") and " (you)" or ""));
+            row.name:SetText(entry.name..(P.isSelf(entry) and " (you)" or ""));
             row.zone:SetText(entry.zone);
             row.tp:SetEnabled(P.usable(entry)); row.sum:SetEnabled(P.usable(entry));
             row.actions:SetEnabled(P.usable(entry));
@@ -206,7 +222,6 @@ function P.render()
     P.previous:SetEnabled(P.page>1); P.next:SetEnabled(P.page<pages);
     P.pageLabel:SetText("Page "..P.page.." / "..pages.."   •   "..#matches.." / "..#P.entries.." players");
     P.refresh:SetEnabled(not P.pending and (not P.lastRequest or GetTime()-P.lastRequest>=5));
-    P.autoButton:SetText(P.auto and "Auto: 15s" or "Auto: off");
     local age=P.updated and math.floor(GetTime()-P.updated);
     P.status:SetText(P.pending and "Searching online players through Who..." or P.error or (age and age>=45 and "Roster is stale; refresh to enable actions.") or P.notice or (P.limited and "Who result limit reached; narrow the search and press Enter.") or
         (age and ("Updated "..age.."s ago"..(age>=45 and " — stale; refresh to enable TP / SUM." or "  •  TP: go to player   /   SUM: bring player to you")) or "Refresh to load online players."));
@@ -218,7 +233,6 @@ function P.tick()
         P.finish("Who search timed out. Refresh to retry; another addon or /who may be using the shared search.");
     end
     if P.window and P.window:IsShown() then
-        if P.auto and not P.action and not P.error and not P.pending and (not P.lastRequest or now-P.lastRequest>=15) then P.request(); end
         P.render();
     end
 end
@@ -233,7 +247,7 @@ function P.create()
     P.query:SetMaxLetters(128);
     P.query:SetScript("OnEnterPressed",function(self) self:ClearFocus(); P.request(); end);
     P.query:SetScript("OnTextChanged",function(self) placeholder:SetShown(self:GetText()==""); P.page=1; P.render(); end);
-    P.autoButton=U.button(window,"Auto: 15s",466,-62,120,function() P.auto=not P.auto; P.render(); end);
+    U.label(window,"Native Who",478,-72,108,"GameFontHighlightSmall",true);
     P.refresh=U.button(window,"Refresh",598,-62,148,P.request);
     P.status=U.label(window,"",14,-106,732,"GameFontHighlightSmall",true); P.status:SetHeight(28);
     U.label(window,"PLAYER",26,-141,190,"GameFontHighlightSmall",true);
