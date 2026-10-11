@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.7.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.8.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.7.zip** from the
+1. Download **GMGenie-0.7.3-forever.8.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -30,7 +30,10 @@ it inside another `GMGenie` folder.
 
 - **Forever-only offline catalog: 22,659 items and 15,205 NPCs/monsters**, with
   search, type/quality/slot/rank filters, favorites, 3D previews and item/spawn
-  actions. Open **Item & creature catalog** or `/gmcatalog`.
+  actions. Open **Catalog** or `/gmcatalog`.
+- **Online players with current zones**, name/zone search and compact **TP** / **SUM**
+  buttons. Automatic refresh runs every 15 seconds while visible. Open **Online
+  players** or `/gmplayers`. Requires `.account onlinelist` permission (RBAC 224).
 - Modern dashboard with command search, GM controls and a live target card.
 - Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.
@@ -71,6 +74,7 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | `/gmgenie` | Toggle the HUD |
 | `/gmgenie commands [search words]` | Browse the complete Forever command reference |
 | `/gmgenie catalog [search]` / `/gmcatalog [search]` | Browse Forever items and creatures |
+| `/gmgenie players [search]` / `/gmplayers [search]` | Online players, zones and quick TP/SUM |
 | `/gmgenie options` | Open Settings |
 | `/gmgenie status` | Query badge, visibility and whisper status |
 | `/gmgenie debug` | Show initialization and captured addon error count |

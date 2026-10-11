@@ -67,7 +67,9 @@ function H.create()
     U.button(window,"Reports",154,-110,132,H.reportMenu,"GMGenie_Hud_Tickets");
     U.button(window,"Builder",14,-146,132,function() GMGenie.Spawns.toggle(); end,"GMGenie_Hud_Builder");
     U.button(window,"Macro editors",154,-146,132,H.macroMenu);
-    U.button(window,"Item & creature catalog",14,-182,272,function() GMGenie.Catalog.open(); end,"GMGenie_Hud_Catalog");
+    U.button(window,"Catalog",14,-182,132,function() GMGenie.Catalog.open(); end,"GMGenie_Hud_Catalog");
+    U.button(window,"Online players",154,-182,132,function() GMGenie.Players.open(); end,"GMGenie_Hud_Players");
+    U.tooltip(GMGenie_Hud_Catalog,"Item & creature catalog","Search Forever items and creatures, preview models and add items or spawn NPCs.");
     U.label(window,"GM CONTROLS",14,-228,260,"GameFontHighlightSmall",true);
     U.button(window,"GM mode: unknown",14,-246,132,H.toggleGm,"GMGenie_Hud_GM");
     U.button(window,"Chat badge: unknown",154,-246,132,H.toggleChat,"GMGenie_Hud_Chat");

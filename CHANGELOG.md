@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.3-forever.8 — 2026-10-11
+
+- Add an online-player window with zone names, player/zone search and paging.
+- Add compact TP (`.appear`) and SUM (`.summon`) buttons scoped to each named row,
+  leaving the selected target unchanged and disabling actions for self/stale rows.
+- Read the uncapped Forever online session list; resolve zone names with the
+  modern client API instead of using last-saved database locations.
+- Refresh every 15 seconds while visible, with manual refresh, an auto toggle,
+  atomic response handling and clear timeout/permission guidance.
+- Discard account/IP fields, filter recognized roster tables from chat, preserve
+  server errors, and keep all roster data out of saved variables.
+- Cover parsing, filtering, paging, polling and travel safeguards in Lua 5.1.
+
 ## 0.7.3-forever.7 — 2026-10-11
 
 - Bundle the complete verified Forever listing: 22,659 items and 15,205 creatures,

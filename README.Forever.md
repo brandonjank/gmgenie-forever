@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.7**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.8**.
 
 ## Target
 
@@ -14,6 +14,35 @@ Forever combines Classic content with newer UI APIs. The
 [Questie Forever port discussion](https://github.com/Questie/Questie/pull/7848)
 also describes its Retail project ID and mixed API environment. This addon uses
 explicit compatibility adapters instead of selecting a branch from project ID.
+
+## Online players
+
+Open **Online players** on the dashboard, `/gmplayers [search]`, or
+`/gmgenie players [search]`. Search matches player names, zone names, zone IDs
+and map IDs. Each row shows the character and current zone, with compact actions:
+
+- **TP** runs `.appear PlayerName` to move you to that player.
+- **SUM** runs `.summon PlayerName` to bring that player to you.
+
+Actions use the row's name and leave your selected target unchanged. Your own
+row is disabled. Server security, instance and teleport restrictions still apply;
+the addon reports a request, with the server response remaining authoritative.
+
+The roster uses Forever's uncapped `.account onlinelist` command (RBAC permission
+224), which reads online sessions and current zone IDs directly. It does not use
+saved database coordinates or the capped native `/who` list. Zone names resolve
+through the client's `C_Map.GetAreaInfo`, falling back to the numeric zone ID.
+
+Refresh runs when opening the window and every 15 seconds while visible. Toggle
+**Auto: 15s** to disable polling, or use **Refresh**. Pending requests and snapshots
+older than 45 seconds disable travel. Incomplete responses time out after 10
+seconds, discard partial rows and pause automatic retries until manual refresh.
+English command messages and the standard Forever table format are required.
+
+Only character names, map IDs and zone IDs are retained in memory. Account names
+and IP addresses in the command response are discarded; recognized roster table
+lines are filtered out of chat during the request. Permission errors and unrelated
+system messages remain visible. Rosters are never written to addon saved variables.
 
 ## Content catalog
 
@@ -50,6 +79,7 @@ availability and regeneration.
 | --- | --- |
 | `/gmgenie` | Toggle the HUD |
 | `/gmgenie catalog [search]` / `/gmcatalog [search]` | Open the Forever content catalog |
+| `/gmgenie players [search]` / `/gmplayers [search]` | Online roster with zones and TP/SUM |
 | `/gmgenie options` | Open Settings |
 | `/gmgenie status` | Query badge, visibility and whisper status |
 | `/gmgenie debug` | Show initialization and Lua error count |
@@ -119,7 +149,7 @@ folder, outside the addon directory.
 
 ## Validation and limits
 
-`python tests/test_gmgenie.py` checks 222 Lua/XML script chunks in Lua 5.1,
+`python tests/test_gmgenie.py` checks 225 Lua/XML script chunks in Lua 5.1,
 manifest resources, cold-start report-type switching, synthetic report/player-info
 responses, saved settings, command routing, and hyperlink rewriting. Install
 the dependency with `python -m pip install -r tests/requirements.txt`.
@@ -138,7 +168,7 @@ check reported `initialized=true, errors=0` after cycling all report types.
 The live report list was empty; populated report parsing was checked with
 synthetic examples from the running core's public response templates.
 
-The 0.7.3-forever.7 dashboard and command library were also checked in an
+The dashboard and command library were previously checked in an
 active Forever GM session: search, favorites, recent history, keyboard
 selection, category menus, source details, Builder, report shortcuts and
 100/110% scaling rendered and responded correctly. The live check found
@@ -152,8 +182,16 @@ teleport commands retain their original behavior with updated transport/names;
 they still depend on server permissions. This is a community compatibility port,
 not certification of every original addon feature or future Forever build.
 
+The 0.7.3-forever.8 roster parser was checked against the running server's
+public response templates and a read-only console request returning two players.
+`tests/test_players.py` covers transactions, field exclusion, chat filter ordering,
+named travel, self/stale guards, search, paging and visible-only polling in Lua 5.1.
+In-game rendering and teleport/summon actions have not yet been exercised live.
+
 ## References
 
+- [Forever roster command source](https://github.com/advocaite/TrinityCore/blob/9ed0d9eb5d442714177bebb58e6b2312add6ab46/src/server/scripts/Commands/cs_account.cpp)
+- [Blizzard Classic beta map API](https://github.com/Gethe/wow-ui-source/blob/classic_beta/Interface/AddOns/Blizzard_APIDocumentationGenerated/MapDocumentation.lua)
 - [Original GM Genie](https://github.com/chocochaos/GMGenie)
 - [Blizzard backdrop implementation](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_SharedXML/Backdrop.lua)
 - [Blizzard modern menu guide](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua)

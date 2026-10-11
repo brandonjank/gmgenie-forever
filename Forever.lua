@@ -183,6 +183,8 @@ SlashCmdList.GMGENIEFOREVER = function(command)
         GMGenie.Commands.open(strtrim(command:sub(9)));
     elseif command == "catalog" or command:match("^catalog%s") then
         GMGenie.Catalog.open(strtrim(command:sub(8)));
+    elseif command == "players" or command:match("^players%s") then
+        GMGenie.Players.open(strtrim(command:sub(8)));
     elseif command == "options" then F.OpenOptions("GM Genie");
     elseif command == "status" then GMGenie.Hud.checkStatus();
     elseif command == "debug" then
