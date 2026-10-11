@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.3-forever.9 — 2026-10-11
+
+- Fix roster loading for in-game GMs: replace `.account onlinelist`, which can be
+  absent from their RBAC permissions, with the native Who API and zone results.
+- Search the server with Enter/Refresh, and warn when Who results may be capped.
+- Add per-player Actions menus with confirmed Kick, character Ban and Kill.
+- Validate reasons and positive ban durations; block self/foreign/stale entries
+  and repeated submissions. Pause polling while a confirmation form is open.
+- Require the matching selected player and unchanged GUID for `.die`, which
+  cannot accept a named-player argument in this Forever build.
+- Test native API errors, timeouts, caps and all action safeguards in Lua 5.1.
+
 ## 0.7.3-forever.8 — 2026-10-11
 
 - Add an online-player window with zone names, player/zone search and paging.

@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.8.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.9.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.8.zip** from the
+1. Download **GMGenie-0.7.3-forever.9.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -32,8 +32,9 @@ it inside another `GMGenie` folder.
   search, type/quality/slot/rank filters, favorites, 3D previews and item/spawn
   actions. Open **Catalog** or `/gmcatalog`.
 - **Online players with current zones**, name/zone search and compact **TP** / **SUM**
-  buttons. Automatic refresh runs every 15 seconds while visible. Open **Online
-  players** or `/gmplayers`. Requires `.account onlinelist` permission (RBAC 224).
+  buttons and an **Actions** menu for confirmed Kick/Ban/Kill. Native Who searches
+  refresh every 15 seconds while visible. Open **Online players** or `/gmplayers`;
+  press Enter to search the server. Who visibility and result limits apply.
 - Modern dashboard with command search, GM controls and a live target card.
 - Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.

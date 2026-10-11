@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.8**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.9**.
 
 ## Target
 
@@ -17,32 +17,43 @@ explicit compatibility adapters instead of selecting a branch from project ID.
 
 ## Online players
 
-Open **Online players** on the dashboard, `/gmplayers [search]`, or
-`/gmgenie players [search]`. Search matches player names, zone names, zone IDs
-and map IDs. Each row shows the character and current zone, with compact actions:
+Open **Online players**, `/gmplayers [search]`, or `/gmgenie players [search]`.
+Each row shows a character, their zone and compact **TP**, **SUM** and **Actions**
+controls. Typing filters loaded player/zone names; **Enter** or **Refresh** queries
+the server. Automatic refresh uses the current search every 15 seconds while visible.
 
-- **TP** runs `.appear PlayerName` to move you to that player.
-- **SUM** runs `.summon PlayerName` to bring that player to you.
+- **TP** uses `.appear PlayerName` to move you to that player.
+- **SUM** uses `.summon PlayerName` to bring that player to you.
+- **Actions > Kick** asks for a reason, then confirms `.kick PlayerName Reason`.
+- **Actions > Ban character** asks for a reason and a positive duration such as
+  `30m`, `1h` or `7d`, then confirms `.ban character PlayerName Duration Reason`.
+  This form bans the selected character; it does not ban their whole account.
+- **Actions > Kill** requires that exact player to be your current target.
+  Confirmation rechecks their name and target GUID before sending `.die`.
+  Forever's kill command has no player-name argument; target changes cancel execution.
 
-Actions use the row's name and leave your selected target unchanged. Your own
-row is disabled. Server security, instance and teleport restrictions still apply;
-the addon reports a request, with the server response remaining authoritative.
+Kick, Ban and Kill require a confirmation click. The action forms pause automatic
+refresh while open, block stale/changed roster entries and reject repeated submits.
+TP/SUM/Kick/Ban name the row's character and do not change your selected target.
+Your own row and foreign-realm action targets are disabled. Server permissions
+and instance restrictions remain authoritative; actions report requests, not success.
 
-The roster uses Forever's uncapped `.account onlinelist` command (RBAC permission
-224), which reads online sessions and current zone IDs directly. It does not use
-saved database coordinates or the capped native `/who` list. Zone names resolve
-through the client's `C_Map.GetAreaInfo`, falling back to the numeric zone ID.
+The roster uses `C_FriendList.SendWho`, `WHO_LIST_UPDATE` and `GetWhoInfo` to read
+native player/zone data. It never sends `.account onlinelist`: that command can
+be unavailable to in-game GMs even when it works from the server console.
+No account names or IP addresses are queried or retained, and roster data is not
+saved to addon variables. Other addon features still require English server messages.
 
-Refresh runs when opening the window and every 15 seconds while visible. Toggle
-**Auto: 15s** to disable polling, or use **Refresh**. Pending requests and snapshots
-older than 45 seconds disable travel. Incomplete responses time out after 10
-seconds, discard partial rows and pause automatic retries until manual refresh.
-English command messages and the standard Forever table format are required.
+Who visibility follows your server's faction and GM visibility permissions.
+Forever normally returns at most 50 results and may report that truncated count
+as its total. The addon warns at 50 results (or when total exceeds shown); narrow
+the player/zone search and press Enter. It cannot promise an uncapped realm roster.
+Who shares the native client result buffer with `/who` and other addons.
 
-Only character names, map IDs and zone IDs are retained in memory. Account names
-and IP addresses in the command response are discarded; recognized roster table
-lines are filtered out of chat during the request. Permission errors and unrelated
-system messages remain visible. Rosters are never written to addon saved variables.
+Pending searches and snapshots older than 45 seconds disable actions. Incomplete
+searches time out after 10 seconds and pause polling until manual refresh. Toggle
+**Auto: 15s** to disable polling. No server permission or configuration changes
+are required by this fix.
 
 ## Content catalog
 
@@ -182,16 +193,17 @@ teleport commands retain their original behavior with updated transport/names;
 they still depend on server permissions. This is a community compatibility port,
 not certification of every original addon feature or future Forever build.
 
-The 0.7.3-forever.8 roster parser was checked against the running server's
-public response templates and a read-only console request returning two players.
-`tests/test_players.py` covers transactions, field exclusion, chat filter ordering,
-named travel, self/stale guards, search, paging and visible-only polling in Lua 5.1.
-In-game rendering and teleport/summon actions have not yet been exercised live.
+Version 0.7.3-forever.9 replaces the roster's account-command dependency after
+live use exposed its missing in-game RBAC permission. Lua 5.1 checks cover native
+Who results, response caps, timeouts, paging, confirmations, reason/duration
+validation, stale entries and exact target GUID checks. Kick, Ban, Kill and
+teleport/summon commands were tested with mocked sends, not on real players.
 
 ## References
 
 - [Forever roster command source](https://github.com/advocaite/TrinityCore/blob/9ed0d9eb5d442714177bebb58e6b2312add6ab46/src/server/scripts/Commands/cs_account.cpp)
-- [Blizzard Classic beta map API](https://github.com/Gethe/wow-ui-source/blob/classic_beta/Interface/AddOns/Blizzard_APIDocumentationGenerated/MapDocumentation.lua)
+- [Blizzard Classic beta FriendList API](https://github.com/Gethe/wow-ui-source/blob/classic_beta/Interface/AddOns/Blizzard_APIDocumentationGenerated/FriendListDocumentation.lua)
+- [Forever Who handler](https://github.com/advocaite/TrinityCore/blob/9ed0d9eb5d442714177bebb58e6b2312add6ab46/src/server/game/Handlers/MiscHandler.cpp)
 - [Original GM Genie](https://github.com/chocochaos/GMGenie)
 - [Blizzard backdrop implementation](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_SharedXML/Backdrop.lua)
 - [Blizzard modern menu guide](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua)
