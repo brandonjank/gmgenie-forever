@@ -5,12 +5,12 @@ local U=GMGenieUI;
 local data=GMGenie.CatalogData;
 C.kind="items"; C.mode="all"; C.page=1; C.pageSize=16;
 C.loaded={}; C.loading={}; C.entries={}; C.byID={};
-local types={items={[0]="Consumables",[1]="Containers",[2]="Weapons",[3]="Gems",[4]="Armor",[5]="Reagents",[6]="Projectiles",[7]="Trade goods",[9]="Recipes",[11]="Quivers",[12]="Quest items",[13]="Keys",[15]="Miscellaneous",[16]="Glyphs",[19]="Profession tools"},
-    creatures={[1]="Beasts",[2]="Dragonkin",[3]="Demons",[4]="Elementals",[5]="Giants",[6]="Undead",[7]="Humanoids",[8]="Critters",[9]="Mechanical",[10]="Unspecified",[11]="Totems",[12]="Non-combat pets",[13]="Gas clouds"}};
-local qualities={[0]="Poor",[1]="Common",[2]="Uncommon",[3]="Rare",[4]="Epic",[5]="Legendary",[6]="Artifact",[7]="Heirloom"};
+local types={items={[0]="Consumables",[1]="Containers",[2]="Weapons",[3]="Gems",[4]="Armor",[5]="Reagents",[6]="Projectiles",[7]="Trade goods",[9]="Recipes",[10]="Money",[11]="Quivers",[12]="Quest items",[13]="Keys",[15]="Miscellaneous",[16]="Glyphs",[18]="WoW tokens",[19]="Profession tools"},
+    creatures={[0]="Unknown",[1]="Beasts",[2]="Dragonkin",[3]="Demons",[4]="Elementals",[5]="Giants",[6]="Undead",[7]="Humanoids",[8]="Critters",[9]="Mechanical",[10]="Unspecified",[11]="Totems",[12]="Non-combat pets",[13]="Gas clouds"}};
+local qualities={[0]="Poor",[1]="Common",[2]="Uncommon",[3]="Rare",[4]="Epic",[5]="Legendary",[6]="Artifact",[7]="Heirloom",[8]="WoW token"};
 local ranks={[0]="Normal",[1]="Elite",[2]="Rare elite",[3]="Boss",[4]="Rare"};
 local slots={[0]="No equipment slot",[1]="Head",[2]="Neck",[3]="Shoulder",[4]="Shirt",[5]="Chest",[6]="Waist",[7]="Legs",[8]="Feet",[9]="Wrist",[10]="Hands",[11]="Finger",[12]="Trinket",[13]="One-hand",[14]="Shield",[15]="Ranged",[16]="Back",[17]="Two-hand",[18]="Bag",[19]="Tabard",[20]="Robe",[21]="Main hand",[22]="Off hand",[23]="Held in off-hand",[24]="Ammo",[25]="Thrown",[26]="Ranged",[28]="Relic"};
-local colors={[0]="9d9d9d",[1]="ffffff",[2]="1eff00",[3]="0070dd",[4]="a335ee",[5]="ff8000",[6]="e6cc80",[7]="00ccff"};
+local colors={[0]="9d9d9d",[1]="ffffff",[2]="1eff00",[3]="0070dd",[4]="a335ee",[5]="ff8000",[6]="e6cc80",[7]="00ccff",[8]="00ccff"};
 
 function C.preferences()
     GMGenie_SavedVars.catalog=GMGenie_SavedVars.catalog or {favorites={},recent={}};

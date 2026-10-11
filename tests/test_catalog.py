@@ -35,6 +35,13 @@ local C=GMGenie.Catalog
 C.open(); assert(C.loading.items and #sent==0); flushTimers()
 assert(C.loaded.items and #C.entries.items==22659 and #C.matches==22659)
 assert(C.window.width==1050 and C.window.height==750)
+assert(C.window.level>40) -- catalog must sit above the persistent HUD
+for _,which in ipairs({'type','rank','slot'}) do
+ C.filterMenu(C.typeButton,which); local values={}
+ for _,item in ipairs(lastMenu.items) do if item.data~=nil then values[item.data]=true end end
+ local field=which=='type' and 'type' or which=='rank' and 'quality' or 'slot'
+ for _,entry in ipairs(C.entries.items) do assert(values[entry[field]],'Missing filter for '..field..' '..entry[field]) end
+end
 local seen={}; for _,entry in ipairs(C.entries.items) do assert(not seen[entry.id]); seen[entry.id]=true end
 assert(C.byID.items[25] and C.byID.items[19019] and not C.byID.items[190001]) -- classic content is allowed; an unrelated retail ID is absent
 C.query:SetText('25'); flushTimers(); assert(#C.matches==1 and C.selected.id==25)
@@ -58,6 +65,9 @@ C.typeFilter=2; C.rankFilter=1; C.refresh(); assert(#C.matches>0)
 for _,entry in ipairs(C.matches) do assert(entry.type==2 and entry.quality==1) end
 C.setKind('creatures'); flushTimers()
 assert(#C.entries.creatures==15205 and #C.matches==15205 and #sent==2)
+C.filterMenu(C.typeButton,'type'); local creatureTypes={}
+for _,item in ipairs(lastMenu.items) do if item.data~=nil then creatureTypes[item.data]=true end end
+for _,entry in ipairs(C.entries.creatures) do assert(creatureTypes[entry.type]) end
 seen={}; for _,entry in ipairs(C.entries.creatures) do assert(not seen[entry.id]); seen[entry.id]=true end
 C.query:SetText('5807'); flushTimers(); assert(C.selected.name=='The Rake')
 assert(C.creatureModel.visible and C.creatureModel.modelID==1973)
