@@ -13,3 +13,10 @@ Public starter messages use server-neutral wording.
 Distributed under the GNU General Public License, version 3 (see LICENSE).
 Original copyright/license notices and Chronos source notices are retained.
 The upstream README is preserved in docs/README.upstream.md.
+
+CommandData.lua and docs/commands.json are generated from command registrations
+and handler declarations by TrinityCore contributors and advocaite Forever.
+Source: https://github.com/advocaite/TrinityCore
+Revision: 9ed0d9eb5d442714177bebb58e6b2312add6ab46
+The core source is licensed GPL-2.0-or-later. These derived reference data are
+distributed with this addon under GPL-3.0, preserving upstream attribution.

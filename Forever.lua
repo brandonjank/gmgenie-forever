@@ -179,7 +179,9 @@ end);
 SLASH_GMGENIEFOREVER1 = "/gmgenie";
 SlashCmdList.GMGENIEFOREVER = function(command)
     command = strtrim(command or ""):lower();
-    if command == "options" then F.OpenOptions("GM Genie");
+    if command == "commands" or command:match("^commands%s") then
+        GMGenie.Commands.open(strtrim(command:sub(9)));
+    elseif command == "options" then F.OpenOptions("GM Genie");
     elseif command == "status" then GMGenie.Hud.checkStatus();
     elseif command == "debug" then
         print("GM Genie Forever: initialized=" .. tostring(F.initialized) .. ", errors=" .. #F.errors);

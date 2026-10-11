@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.4.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.5.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.4.zip** from the
+1. Download **GMGenie-0.7.3-forever.5.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -32,6 +32,8 @@ it inside another `GMGenie` folder.
 - Bug, complaint and suggestion report lists using Forever's report commands.
 - Spy/player information, player context menus and common GM actions.
 - Creature/gameobject lookup links and the original spawning/builder tools.
+- **619-command searchable reference**, with argument order, RBAC permissions,
+  console availability, source links and a Server help button.
 - **28 editable starter macros**, installed automatically and preserved across
   reloads alongside your custom macros.
 
@@ -62,6 +64,7 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | Command | Action |
 | --- | --- |
 | `/gmgenie` | Toggle the HUD |
+| `/gmgenie commands [search words]` | Browse the complete Forever command reference |
 | `/gmgenie options` | Open Settings |
 | `/gmgenie status` | Query badge, visibility and whisper status |
 | `/gmgenie debug` | Show initialization and captured addon error count |

@@ -247,7 +247,7 @@ end
 function GMGenie.Spawns.initiateMove(option)
     GMGenie.Spawns.currentSpawnOption = option;
     if not (GMGenie.Spawns.currentCoords.x and GMGenie.Spawns.currentCoords.y and GMGenie.Spawns.currentCoords.z and GMGenie.Spawns.currentCoords.o and GMGenie.Spawns.currentCoords.map) then
-        GMGenieForever.SendChatMessage(".gps", "GUILD");
+        GMGenieForever.SendChatMessage(".gps " .. UnitName("player"), "GUILD");
         GMGenie.Spawns.waitingForGps = 1;
     else
         GMGenie.Spawns.move(GMGenie.Spawns.currentCoords.x, GMGenie.Spawns.currentCoords.y, GMGenie.Spawns.currentCoords.z, GMGenie.Spawns.currentCoords.o);

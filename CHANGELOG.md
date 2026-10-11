@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.3-forever.5 — 2026-10-11
+
+- Add a searchable offline reference for all 619 commands registered in Forever
+  revision `9ed0d9eb5d442714177bebb58e6b2312add6ab46`, across 46 command scripts.
+- Open it from HUD **Commands** or `/gmgenie commands [search words]`.
+- Show argument order, parameter outlines, RBAC IDs, console availability and
+  pinned source links. **Server help** sends only `.help <command>`.
+- Include a reproducible, fail-closed generator and machine-readable catalog.
+- Request the GM's own GPS coordinates when Builder moves the GM, even with an
+  NPC selected. Explain the unsupported legacy custom anticheat action.
+- Add parser, command-prefix and Lua browser interaction regression checks.
+
 ## 0.7.3-forever.4 — 2026-10-10
 
 - Add **Move NPC here** to Builder: target an NPC, stand at its new location,

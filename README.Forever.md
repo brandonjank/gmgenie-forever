@@ -110,7 +110,7 @@ folder, outside the addon directory.
 
 ## Validation and limits
 
-`python tests/test_gmgenie.py` checks 226 Lua/XML script chunks in Lua 5.1,
+`python tests/test_gmgenie.py` checks 229 Lua/XML script chunks in Lua 5.1,
 manifest resources, cold-start report-type switching, synthetic report/player-info
 responses, saved settings, command routing, and hyperlink rewriting. Install
 the dependency with `python -m pip install -r tests/requirements.txt`.
@@ -141,3 +141,46 @@ not certification of every original addon feature or future Forever build.
 - [Blizzard backdrop implementation](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_SharedXML/Backdrop.lua)
 - [Blizzard modern menu guide](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua)
 - [Addon hyperlink callback example](https://github.com/NumyAddon/AddonProfiler/blob/master/AddonProfiler.lua)
+
+
+## Exhaustive command reference
+
+Click **Commands** on the HUD, or use `/gmgenie commands`.
+`/gmgenie commands npc move` opens with a search already applied. Search matches
+command names, handler arguments and RBAC permission names; all words must match.
+The catalog is available offline and lists all 619 handler registrations in
+Forever commit `9ed0d9eb5d442714177bebb58e6b2312add6ab46`, including `legacy`,
+`discord` and `armory` commands outside the usual Commands folder. Disabled/commented
+commands and server-local additions are excluded. Group headings are represented
+by their executable children, including bare commands with default handlers.
+
+Details preserve C++ argument definitions and show a parameter outline. These
+outlines describe order and optional parameters, not every handler validation.
+Legacy free-form parsers explicitly direct you to **Server help** instead of
+guessing syntax. The source link opens the exact registration revision when
+copied into a browser. The reference itself executes no actions; its help button
+requests only `.help <command>` from your current server. In-game-only commands
+are invisible to console help even when they exist. RBAC grants and enabled
+modules vary between servers; catalog inclusion is not a grant of permission.
+
+The upstream fork point is TrinityCore **master** commit
+[`85d3c25180a89f889294d54d855efccae0945f20`](https://github.com/TrinityCore/TrinityCore/commit/85d3c25180a89f889294d54d855efccae0945f20),
+dated September 25, 2026. Forever's first descendant added Classic 1.60.1.70009
+client support. Older TrinityCore 3.3.5 command guides are not authoritative for
+this core. The general [TrinityCore command reference](https://trinitycore.info/how-to/gm-commands)
+is useful background; the pinned handlers are the authority for this snapshot.
+
+To regenerate after a core update, check out the desired clean
+`advocaite/TrinityCore` Forever revision, then run:
+
+```sh
+python tools/generate_commands.py --source-root /path/to/TrinityCore
+python tests/test_commands.py
+```
+
+Review the generated `CommandData.lua` and `docs/commands.json` diff before
+shipping. The generator rejects unparsed entries, unknown permissions,
+missing handlers, duplicate paths and unreachable tables. The regression suite
+checks real Lua search, selection, pagination, source links, help-only sends and
+all literal addon command prefixes against the catalog. Update the pinned count
+assertions deliberately when a newer core adds or removes commands.

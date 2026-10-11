@@ -9,13 +9,15 @@
 ## Title: GM Genie Forever
 ## Notes: GM tools for WoW Forever and TrinityCore: reports, player tools, builder and starter macros.
 ## Author: Chocochaos; Forever port maintained by brandonjank
-## Version: 0.7.3-forever.4
+## Version: 0.7.3-forever.5
 ## DefaultState: Enabled
 ## SavedVariables: GMGenie_SavedVars, GMGenie_ForeverDiagnostics
 Forever.lua
 GMGenie.xml
 Chronos\Chronos.xml
 GMGenie.lua
+CommandData.lua
+Commands.lua
 StarterMacros.lua
 Savedvariables.lua
 Chatreader.lua
@@ -34,6 +36,8 @@ Spy.lua
 Spy.xml
 Macros.Whispers.xml
 Options\GMGenie.lua
+CommandData.lua
+Commands.lua
 Options\GMGenie.xml
 Options\Tickets.lua
 Options\Tickets.xml

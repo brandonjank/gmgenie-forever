@@ -267,7 +267,7 @@ function GMGenie.Macros.unfreeze(name)
 end
 
 function GMGenie.Macros.antiCheatPlayer(name)
-    GMGenieForever.SendChatMessage(".anticheat player " .. name, "GUILD");
+    GMGenie.showGMMessage("The legacy .anticheat player integration is not registered in Forever.");
 end
 
 function GMGenie.Macros.rename(name)
