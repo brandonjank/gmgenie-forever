@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.12**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.13**.
 
 ## Target
 

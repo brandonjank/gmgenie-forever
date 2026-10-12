@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.3-forever.13 — 2026-10-12
+
+- Add original brass genie lamp and violet infinity artwork, a client-compatible
+  TGA icon declared in the TOC, and repository branding assets.
+- Include `.previews/GMGenie-Forever.png` on the release branch for WowUpHub
+  image previews. Document the separate default-thumbnail/social-preview setup
+  and the direct GitHub importer limitation.
+
 ## 0.7.3-forever.12 — 2026-10-12
 
 - Name release packages `GMGenie-Forever-<gameversion>-<build>.zip`, deriving
