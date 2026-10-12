@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.3-forever.14 — 2026-10-12
+
+- Keep the addon hidden and inactive until a matching TrinityCore addon ping
+  acknowledgement arrives. Preserve the existing single-folder install.
+- Defer initialization, Settings, unit menus, chat integrations, roster listeners
+  and the bundled Chronos timer driver until server compatibility is confirmed.
+- Guard feature entry points, slash shortcuts and outgoing message transport;
+  reject echoes, foreign replies, mismatched tokens and late acknowledgements.
+- Check afresh on login/reload with a five-second timeout and no automatic retry.
+  Add `/gmgenie check` for explicit retry and server check state to debug output.
+- Add automated coverage for incompatible servers, correct activation, spaced
+  names, timeout/retry isolation, missing APIs and initialization failures.
+
+
 ## 0.7.3-forever.13 — 2026-10-12
 
 - Add original brass genie lamp and violet infinity artwork, a client-compatible

@@ -216,6 +216,7 @@ function C.create()
 end
 
 function C.open(query)
+    if not GMGenieForever.RequireActive() then return; end
     if not C.window then C.create(); end
     if query and query~="" then C.mode="all"; C.category="all"; C.context="all"; end
     local text=query~=nil and query or C.preferences().query or "";

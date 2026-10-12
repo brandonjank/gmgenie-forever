@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Frame name="GMGenie_Hud" parent="UIParent" inherits="BackdropTemplate" hidden="false">
+    <Frame name="GMGenie_Hud" parent="UIParent" inherits="BackdropTemplate" hidden="true">
         <Size><AbsDimension x="300" y="498" /></Size>
         <Anchors><Anchor point="TOPRIGHT" relativeTo="MinimapCluster" relativePoint="BOTTOMLEFT" x="-12" y="-12" /></Anchors>
     </Frame>

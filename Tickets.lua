@@ -492,20 +492,22 @@ end
 
 -- add slash command to open.close ticket widnow
 SLASH_TICKETS1 = "/tickets";
-SlashCmdList["TICKETS"] = function(command)
+GMGenieForever.RegisterSlash("TICKETS", function(command)
     command = strtrim(command or ""):lower();
     if command ~= "" then GMGenie.Tickets.setType(command); end
     GMGenie.Tickets.toggle();
-end;
+end);
 
-local frame = CreateFrame("FRAME");
-frame:RegisterEvent("CHAT_MSG_ADDON");
+GMGenieForever.WhenCompatible(function()
+    local frame = CreateFrame("FRAME");
+    frame:RegisterEvent("CHAT_MSG_ADDON");
 
-function frame:OnEvent(event, arg1, arg2, arg3, arg4)
-    if event == "CHAT_MSG_ADDON" and arg1 == "GMGenie_FVR" and arg3 == "GUILD" then
-        local kind, id = arg2:match("^(%a+):(%d+)$");
-        if kind == GMGenie_SavedVars.ticketType then GMGenie.Tickets.syncMessage(arg4, tonumber(id)); end
+    function frame:OnEvent(event, arg1, arg2, arg3, arg4)
+        if GMGenieForever.initialized and event == "CHAT_MSG_ADDON" and arg1 == "GMGenie_FVR" and arg3 == "GUILD" then
+            local kind, id = arg2:match("^(%a+):(%d+)$");
+            if kind == GMGenie_SavedVars.ticketType then GMGenie.Tickets.syncMessage(arg4, tonumber(id)); end
+        end
     end
-end
 
-frame:SetScript("OnEvent", frame.OnEvent);
+    frame:SetScript("OnEvent", frame.OnEvent);
+end);

@@ -107,10 +107,6 @@ function GMGenie.Hud.onLoad()
     GMGenie_Hud_Whisper:SetScript("OnClick", function() GMGenie.Hud.toggleWhisper(); end);
     GMGenie_Hud_Fly:SetScript("OnClick", function() GMGenie.Hud.toggleFly(); end);
 
-    if GMGenie_SavedVars.hudClosed then
-        GMGenie.Hud.toggle();
-    end
-
     GMGenie_Hud_GM:SetText("GM mode: unknown");
     GMGenie_Hud_Chat:SetText("Chat badge: unknown");
     GMGenie_Hud_Visibility:SetText("Visibility: unknown");
@@ -120,6 +116,7 @@ function GMGenie.Hud.onLoad()
 end
 
 function GMGenie.Hud.toggle()
+    if not GMGenieForever.RequireActive() then return; end
     if GMGenie_Hud:IsVisible() then
         GMGenie_Hud:Hide();
         GMGenie_SavedVars.hudClosed = true;

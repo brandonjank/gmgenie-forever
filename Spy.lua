@@ -17,6 +17,7 @@ function GMGenie.Spy.antiCheat(name)
 end
 
 function GMGenie.Spy.spy(name)
+    if not GMGenieForever.RequireActive() then return; end
     if not name or string.len(name) < 1 or name == "%t" then
         name = UnitName("target");
     end
@@ -217,7 +218,7 @@ function GMGenie.Spy.loadDropdown(_, level)
 end
 
 SLASH_SPY1 = "/spy";
-SlashCmdList["SPY"] = GMGenie.Spy.spy;
+GMGenieForever.RegisterSlash("SPY", GMGenie.Spy.spy);
 
 function GMGenie.Spy.copyPin()
     GMGenie.showGMMessage(GMGenie.Spy.pinCache);

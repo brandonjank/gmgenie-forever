@@ -7,14 +7,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.13.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.14.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-Forever-1.60.1-13.zip** from the
+1. Download **GMGenie-Forever-1.60.1-14.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -54,6 +54,25 @@ for its list thumbnail; `release.json` selects compatible ZIPs and does not
 provide an icon override. WowUpHub documents using the repository social
 preview for the default image. See [branding setup](docs/branding/README.md)
 and [WowUpHub documentation](https://wowup.io/guide/wowup/hub).
+
+### Server compatibility
+
+GMGenie stays hidden and inactive until the server answers TrinityCore's hidden
+addon-message ping. It checks once after login/reload, accepts only the matching
+acknowledgement from your own character, and times out after five seconds.
+Unsupported servers receive no visible dot commands. Settings, menus, listeners,
+repeating timers and normal message transport activate only after verification.
+Compatibility is never saved across sessions.
+
+Use `/gmgenie debug` to see the check status and `/gmgenie check` to retry
+explicitly. Disabled addon channels, muted characters, missing client APIs or
+servers without TrinityCore's addon protocol leave the tools inactive. The
+handshake confirms the protocol; individual commands still require the correct
+core version and GM permissions.
+
+Installation remains one `GMGenie/` folder. WoW reads its Lua/XML and data into
+memory at startup; this gate delays activation rather than unloading those files.
+The new gate has automated Lua coverage; live client validation is still pending.
 
 ## Included tools
 
@@ -195,6 +214,7 @@ locales may need changes. See [port notes](README.Forever.md) for details.
 
 ```sh
 python -m pip install -r tests/requirements.txt
+python tests/test_server.py
 python tests/test_gmgenie.py
 python tests/test_commands.py
 python tests/test_ui.py

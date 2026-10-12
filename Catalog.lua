@@ -370,6 +370,7 @@ function C.create()
 end
 
 function C.open(query,kind)
+    if not GMGenieForever.RequireActive() then return; end
     if not C.window then C.create(); end
     if kind then C.kind=kind; C.resetFilters(); end
     C.window:Show(); C.load(C.kind);
@@ -378,4 +379,4 @@ function C.open(query,kind)
 end
 
 SLASH_GMGENIECATALOG1="/gmcatalog";
-SlashCmdList.GMGENIECATALOG=function(query) C.open(query); end;
+GMGenieForever.RegisterSlash("GMGENIECATALOG",function(query) C.open(query); end);

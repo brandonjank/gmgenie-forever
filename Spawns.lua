@@ -423,6 +423,7 @@ function GMGenie.Spawns.runMacro()
 end
 
 function GMGenie.Spawns.toggle()
+    if not GMGenieForever.RequireActive() then return; end
     local frame = GMGenie_Spawns_Main;
     if frame:IsVisible() then
         frame:Hide();
@@ -619,4 +620,4 @@ end
 -- add slash command to open/close builder widnow
 SLASH_SPAWNS1 = "/builder";
 SLASH_SPAWNS2 = "/spawns";
-SlashCmdList["SPAWNS"] = GMGenie.Spawns.toggle;
+GMGenieForever.RegisterSlash("SPAWNS", GMGenie.Spawns.toggle);

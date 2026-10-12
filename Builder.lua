@@ -363,10 +363,12 @@ function B.create()
 end
 
 function B.open(spawn,name)
+    if not GMGenieForever.RequireActive() then return; end
     B.create(); B.window:Show();
     if spawn then B.selectId(spawn,name); else B.update(); end
 end
 function B.toggle()
+    if not GMGenieForever.RequireActive() then return; end
     B.create(); if B.window:IsShown() then B.window:Hide(); else B.open(); end
 end
 
@@ -374,7 +376,7 @@ end
 -- Normal entry points now open the remote, never the old delete-nearest flow.
 S.toggle=B.toggle;
 S.targetObject=function() B.open(); B.selectNearest(); end;
-SlashCmdList.SPAWNS=B.toggle;
+GMGenieForever.RegisterSlash("SPAWNS",B.toggle);
 local oldMenu=S.Hyperlink.loadMenu;
 S.Hyperlink.loadMenu=function(self,level)
     if S.Hyperlink.type=="gameobject" then

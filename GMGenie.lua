@@ -39,6 +39,7 @@ function GMGenie.pairsByKeys2(t, f)
 end
 
 function GMGenie.onLoad()
+    if not GMGenieForever.IsCompatible() or GMGenieForever.initialized then return; end
     GMGenie.loadSettings();
     GMGenieUI.restoreWindows();
 
@@ -62,21 +63,12 @@ function GMGenie.onLoad()
 
     GMGenieForever.StartChatReader();
     GMGenieForever.initialized = true;
+    GMGenie_Minimap:Show();
+    GMGenie_Hud:SetShown(not GMGenie_SavedVars.hudClosed);
 
     -- Please do not remove the copyright notice, it would be a violation of the gpl.
-    GMGenie.showGMMessage("GMGenie 0.7.3-forever.9 by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
+    GMGenie.showGMMessage("GMGenie Forever by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
 end
-
-local frame = CreateFrame("FRAME");
-frame:RegisterEvent("ADDON_LOADED");
-
-function frame:OnEvent(event, arg1)
-    if event == "ADDON_LOADED" and arg1 == "GMGenie" then
-        GMGenie.onLoad();
-    end
-end
-
-frame:SetScript("OnEvent", frame.OnEvent);
 
 GMGenie.minimap = {};
 

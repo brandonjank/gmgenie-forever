@@ -839,22 +839,27 @@ if (not isBetterInstanceLoaded) then
     --[[ Frame Script Assignment ]] --
     ------------------------------------------------------------------------------
 
-    Chronos.OnUpdate_Quick();
+    GMGenieForever.WhenCompatible(function()
+        Chronos.OnUpdate_Quick();
 
-    --Event Driver
-    if (not ChronosFrame) then
-        CreateFrame("Frame", "ChronosFrame");
-    end
-    ChronosFrame:Hide();
-    --Event Registration
-    ChronosFrame:RegisterEvent("ADDON_LOADED");
-    ChronosFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
-    ChronosFrame:RegisterEvent("PLAYER_LEAVING_WORLD");
-    ChronosFrame:RegisterEvent("UPDATE_CHAT_COLOR");
-    --Frame Scripts
-    ChronosFrame:SetScript("OnEvent", Chronos.OnEvent);
-    ChronosFrame:SetScript("OnUpdate", Chronos.OnUpdate_Quick);
-    --OnLoad Call
-    Chronos.OnLoad();
+        --Event Driver
+        if (not ChronosFrame) then
+            CreateFrame("Frame", "ChronosFrame");
+        end
+        ChronosFrame:Hide();
+        --Event Registration
+        ChronosFrame:RegisterEvent("ADDON_LOADED");
+        ChronosFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+        ChronosFrame:RegisterEvent("PLAYER_LEAVING_WORLD");
+        ChronosFrame:RegisterEvent("UPDATE_CHAT_COLOR");
+        --Frame Scripts
+        ChronosFrame:SetScript("OnEvent", Chronos.OnEvent);
+        ChronosFrame:SetScript("OnUpdate", Chronos.OnUpdate_Quick);
+        --OnLoad Call
+        Chronos.OnLoad();
+        -- Initial login events have already fired by the time verification succeeds.
+        Chronos.OnEvent(ChronosFrame, "ADDON_LOADED");
+        Chronos.OnEvent(ChronosFrame, "PLAYER_ENTERING_WORLD");
+    end);
 end
 

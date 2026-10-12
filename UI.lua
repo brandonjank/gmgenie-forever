@@ -85,6 +85,11 @@ function U.savePosition(window)
 end
 
 function U.trackWindow(window)
+    if not GMGenieForever.IsCompatible() then
+        window:Hide();
+        GMGenieForever.WhenCompatible(function() U.trackWindow(window); end);
+        return;
+    end
     if window.genieTracked then return; end
     window.genieTracked=true; U.windows[#U.windows+1]=window;
     window:SetMovable(true); window:SetClampedToScreen(true); window:EnableMouse(true);

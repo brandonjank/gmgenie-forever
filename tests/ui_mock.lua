@@ -60,7 +60,10 @@ function getglobal(name) return _G[name]; end
 unpack=unpack or table.unpack;
 UIParent=frame("UIParent"); GameTooltip=frame("GameTooltip"); UISpecialFrames={};
 GMGenie={}; GMGenie_SavedVars={}; SlashCmdList={}; sent={};
-GMGenieForever={SetBackdrop=function(f,_,...) f:SetBackdropColor(...); end,
+GMGenieForever={IsCompatible=function() return true end, RequireActive=function() return true end,
+    WhenCompatible=function(callback) callback(); end,
+    RegisterSlash=function(name,callback) SlashCmdList[name]=callback; end,
+    SetBackdrop=function(f,_,...) f:SetBackdropColor(...); end,
     SendChatMessage=function(...) sent[#sent+1]={...}; end,
     OpenOptions=function(name) openedOptions=name; end};
 local menuMethods={};

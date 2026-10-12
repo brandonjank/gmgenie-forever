@@ -181,6 +181,7 @@ function P.actionMenu(owner,entry)
 end
 
 function P.request()
+    if not GMGenieForever.RequireActive() then return; end
     if P.pending then return; end
     if P.lastRequest and GetTime()-P.lastRequest<5 then return; end
     if not IsLoggedIn() then return; end
@@ -281,15 +282,18 @@ function P.create()
 end
 
 function P.open(query)
+    if not GMGenieForever.RequireActive() then return; end
     P.create();
     if query then P.query:SetText(query); end
     P.window:Show(); P.render(); P.request();
 end
 
-local listener=CreateFrame("Frame");
-listener:RegisterEvent("WHO_LIST_UPDATE");
-listener:SetScript("OnEvent",P.onWhoResults);
-local elapsed=0;
-listener:SetScript("OnUpdate",function(_,delta) elapsed=elapsed+delta; if elapsed>=1 then elapsed=0; P.tick(); end end);
+F.WhenCompatible(function()
+    local listener=CreateFrame("Frame");
+    listener:RegisterEvent("WHO_LIST_UPDATE");
+    listener:SetScript("OnEvent",P.onWhoResults);
+    local elapsed=0;
+    listener:SetScript("OnUpdate",function(_,delta) elapsed=elapsed+delta; if elapsed>=1 then elapsed=0; P.tick(); end end);
+end);
 SLASH_GMGENIEPLAYERS1="/gmplayers";
-SlashCmdList.GMGENIEPLAYERS=function(query) P.open(query); end;
+F.RegisterSlash("GMGENIEPLAYERS",function(query) P.open(query); end);

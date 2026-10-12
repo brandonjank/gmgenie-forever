@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.13**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.14**.
 
 ## Target
 
@@ -14,6 +14,22 @@ Forever combines Classic content with newer UI APIs. The
 [Questie Forever port discussion](https://github.com/Questie/Questie/pull/7848)
 also describes its Retail project ID and mixed API environment. This addon uses
 explicit compatibility adapters instead of selecting a branch from project ID.
+
+## Server activation
+
+The single-folder addon now waits for TrinityCore's hidden addon ping/acknowledgement
+protocol before activating its UI, integrations or normal message transport.
+It does not detect servers by realm name, MOTD or client project ID. A self-whisper
+with prefix `TrinityCore` and payload `p` plus a four-byte token must receive `a`
+plus that token from the same character within five seconds. No match means the
+addon stays inactive. `/gmgenie check` retries explicitly; `/gmgenie debug` shows
+state. No compatibility decision is persisted. The Lua/XML files still load into
+memory, and GM command permissions remain server-controlled.
+
+Protocol reference: `AddonChannelCommandHandler::ParseCommands` and `SendAck`
+in `src/server/game/Chat/Chat.cpp`, with prefix dispatch in
+`src/server/game/Handlers/ChatHandler.cpp` from the locally inspected Forever
+source. Automated tests cover the handshake; live validation is pending.
 
 ## Online players
 

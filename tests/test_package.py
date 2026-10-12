@@ -28,6 +28,8 @@ with zipfile.ZipFile(ROOT/'dist'/filename) as archive:
     assert archive.read('GMGenie/GMGenie.toc')==(ROOT/'GMGenie.toc').read_bytes()
     assert 'release.json' not in names  # a separate GitHub release asset
     assert 'GMGenie/Builder.lua' in names
+    assert 'GMGenie/Server.lua' in names
+    assert toc.index('Forever.lua') < toc.index('Server.lua') < toc.index('UI.lua')
     icon_path=re.search(r'^## IconTexture: (.+)$',toc,re.MULTILINE).group(1)
     assert icon_path.startswith('Interface\\AddOns\\GMGenie\\')
     icon_name=icon_path.removeprefix('Interface\\AddOns\\').replace('\\','/')+'.tga'

@@ -82,6 +82,8 @@ def load(name):
     lua.execute((addon / name).read_text(encoding='utf-8-sig'))
 
 load('Forever.lua')
+load('Server.lua')
+lua.execute("GMGenieForever.server.status='compatible'; GMGenieForever.initialized=true")
 lua.execute('''
 GMGenieForever.SendChatMessage('.gm chat','GUILD')
 assert(sent[1]=='.gm chat' and sent[2]=='WHISPER' and sent[4]=='Tester')

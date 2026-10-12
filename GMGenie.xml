@@ -301,7 +301,7 @@
     </GameTooltip>
 
 
-    <Button name="GMGenie_Minimap" parent="Minimap" enableMouse="true" movable="true" hidden="false">
+    <Button name="GMGenie_Minimap" parent="Minimap" enableMouse="true" movable="true" hidden="true">
         <Size>
             <AbsDimension x="33" y="33" />
         </Size>
