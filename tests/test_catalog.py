@@ -71,9 +71,21 @@ for _,entry in ipairs(C.entries.creatures) do assert(creatureTypes[entry.type]) 
 seen={}; for _,entry in ipairs(C.entries.creatures) do assert(not seen[entry.id]); seen[entry.id]=true end
 C.query:SetText('5807'); flushTimers(); assert(C.selected.name=='The Rake')
 assert(C.creatureModel.visible and C.creatureModel.modelID==1973)
+local fit=1.25*564/240
+assert(math.abs(C.creatureModel.distance-fit)<0.0001) -- initial wide viewport fits the full body
+local portrait=C.creatureModel.SetPortraitZoom
+C.creatureModel.SetPortraitZoom=function(self,value) portrait(self,value); self.distance=1 end
+C.camera(); assert(math.abs(C.creatureModel.distance-fit)<0.0001) -- fit is applied after portrait reset
 C.rotate(0.5); assert(C.creatureModel.rotation==1)
 C.zoom(-99); assert(C.distance==0.25); C.zoom(99); assert(C.distance==3)
 C.resetCamera(); assert(C.distance==1 and C.facing==0.5)
+assert(math.abs(C.creatureModel.distance-fit)<0.0001 and C.creatureModel.position[3]==0)
+C.zoom(0.5); C.creatureModel:Fire('OnModelLoaded')
+assert(math.abs(C.creatureModel.distance-fit*1.5)<0.0001) -- async asset loading preserves user zoom
+C.creatureModel:SetSize(240,480); C.creatureModel:Fire('OnSizeChanged')
+assert(math.abs(C.creatureModel.distance-1.25*1.5)<0.0001) -- portrait viewport does not overcompensate
+C.creatureModel:SetSize(564,240); C.resetCamera()
+C.creatureModel.SetPortraitZoom=portrait
 C.spawnTemporary(); assert(sent[3][1]=='.npc add temp noloot 5807')
 C.askPersistent(); assert(C.confirm.visible and #sent==3)
 C.query:SetText('25'); flushTimers(); C.spawnPersistent(); assert(#sent==3 and not C.confirm.visible)

@@ -51,6 +51,9 @@ function methods:SetBackdropBorderColor(...) self.border={...}; end
 function methods:SetSize(width,height) self.width=width; self.height=height; end
 function methods:SetWidth(width) self.width=width; end
 function methods:SetHeight(height) self.height=height; end
+function methods:GetWidth() return self.width or 0; end
+function methods:GetHeight() return self.height or 0; end
+function methods:SetPosition(x,y,z) self.position={x,y,z}; end
 function methods:ClearFocus() self:Fire("OnEditFocusLost"); end
 function methods:SetFocus() self:Fire("OnEditFocusGained"); end
 function methods:SetPassword(value) self.password=value; end

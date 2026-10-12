@@ -164,14 +164,27 @@ local function modelCall(model,method,...)
     local ok,result=pcall(model[method],model,...); return ok and result~=false;
 end
 
-function C.camera()
-    local model=C.activeModel; if not model then return; end
-    if not modelCall(model,"SetRotation",C.facing or 0.5) then modelCall(model,"SetFacing",C.facing or 0.5); end
-    modelCall(model,"SetCamDistanceScale",C.distance or 1);
-    modelCall(model,"SetPortraitZoom",0);
+function C.fitDistance(model)
+    -- The native model camera needs extra distance in a wide, short viewport.
+    -- Keep a little space around the silhouette, including idle animations.
+    local width,height=model:GetWidth(),model:GetHeight();
+    if not width or not height or width<=0 or height<=0 then return 1.25; end
+    return 1.25*math.max(1,width/height);
 end
 
-function C.resetCamera() C.facing=0.5; C.distance=1; C.camera(); end
+function C.camera()
+    local model=C.activeModel; if not model then return; end
+    -- Portrait zoom can reset camera state; apply it before our full-body fit.
+    modelCall(model,"SetPortraitZoom",0);
+    if not modelCall(model,"SetRotation",C.facing or 0.5) then modelCall(model,"SetFacing",C.facing or 0.5); end
+    modelCall(model,"SetCamDistanceScale",C.fitDistance(model)*(C.distance or 1));
+end
+
+function C.resetCamera()
+    C.facing=0.5; C.distance=1;
+    modelCall(C.activeModel,"SetPosition",0,0,0);
+    C.camera();
+end
 function C.rotate(delta) C.facing=(C.facing or 0.5)+delta; C.camera(); end
 function C.zoom(delta) C.distance=math.max(0.25,math.min(3,(C.distance or 1)+delta)); C.camera(); end
 
@@ -332,6 +345,7 @@ function C.create()
         model:SetScript("OnUpdate",function(self) if self.dragging then local x=GetCursorPosition(); C.rotate((x-C.dragX)*0.015); C.dragX=x; end end);
         model:SetScript("OnMouseWheel",function(_,delta) C.zoom(-delta*0.1); end);
         model:SetScript("OnModelLoaded",function(self) if self==C.activeModel then C.modelLoaded=true; C.camera(); end end);
+        model:SetScript("OnSizeChanged",function(self) if self==C.activeModel then C.camera(); end end);
         C[kind]=model; model:Hide();
     end
     C.viewButtons={

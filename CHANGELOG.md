@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.3-forever.17 — 2026-10-12
+
+- Fit catalog models to the preview viewport's aspect ratio with extra headroom,
+  instead of using a fixed camera distance in the wide, shallow panel.
+- Apply full-body distance after portrait camera reset, and reapply it after
+  model loading or viewport resizing. Scroll zoom stays relative to the fitted
+  view; Reset view restores the fit and clears model position offsets.
+
 ## 0.7.3-forever.16 — 2026-10-12
 
 - Replace the command reference with inline argument forms, descriptions, exact
