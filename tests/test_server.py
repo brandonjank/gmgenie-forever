@@ -154,6 +154,35 @@ emit('CHAT_MSG_ADDON','TrinityCore','a'..token,'WHISPER','First Last')
 assert(GMGenieForever.initialized and not GMGenie_Hud.shown and GMGenie_Minimap.shown)
 ''')
 
+# Forever returns first name/surname from both native name APIs. Only its
+# display-name helper combines them; the surname must never become the realm.
+for sender in ('First Last', 'First Last-TestRealm', 'First'):
+    lua = session()
+    lua.execute('''
+    function UnitName() return 'First','Last' end
+    function UnitFullName() return 'First','Last' end
+    function GetUnitName() return 'First Last' end
+    GMGenie_SavedVars.ticketType='bug'
+    GMGenieForever.server.check()
+    local token=GMGenieForever.server.token
+    for _,sender in ipairs({'First Different','First Last-Foreign','First Last-Last'}) do
+      emit('CHAT_MSG_ADDON','TrinityCore','a'..token,'WHISPER',sender)
+      assert(not GMGenieForever.initialized)
+    end
+    ''')
+    lua.execute(f"emit('CHAT_MSG_ADDON','TrinityCore','a'..GMGenieForever.server.token,'WHISPER','{sender}'); assert(GMGenieForever.initialized)")
+
+# Retail's helper uses a hyphenated realm, which is still accepted exactly.
+lua = session()
+lua.execute('''
+function UnitName() return 'First' end
+function GetUnitName() return 'First-TestRealm' end
+GMGenie_SavedVars.ticketType='bug'
+GMGenieForever.server.check()
+emit('CHAT_MSG_ADDON','TrinityCore','a'..GMGenieForever.server.token,'WHISPER','First-TestRealm')
+assert(GMGenieForever.initialized)
+''')
+
 for setup, status in [
     ('C_ChatInfo=nil', 'unavailable'),
     ('C_ChatInfo.RegisterAddonMessagePrefix=function() return false end', 'unavailable'),

@@ -33,13 +33,19 @@ local function isSelf(sender)
     if type(sender) ~= "string" then return false; end
     local name, realm = sender:match("^(.-)%-(.+)$");
     name = name or sender;
-    local ownName, ownRealm;
-    if UnitFullName then ownName, ownRealm = UnitFullName("player"); end
-    ownName = ownName or UnitName("player");
-    ownRealm = ownRealm or (GetRealmName and GetRealmName());
-    -- Preserve Forever surnames/spaces in the character's display name.
-    return ownName and name:lower() == ownName:lower()
-        and (not realm or realmKey(realm) == realmKey(ownRealm));
+    local ownName = UnitName("player");
+    local displayName = GetUnitName and GetUnitName("player", true) or ownName;
+    local displayRealm;
+    if displayName then
+        local qualifiedName, qualifiedRealm = displayName:match("^(.-)%-(.+)$");
+        displayName, displayRealm = qualifiedName or displayName, qualifiedRealm;
+    end
+    local ownRealm = displayRealm or (GetRealmName and GetRealmName());
+    -- Forever's second UnitName/UnitFullName return is a surname, not a realm.
+    -- GetUnitName formats that surname correctly; retail formats a realm suffix.
+    local matchesName = (ownName and name:lower() == ownName:lower())
+        or (displayName and name:lower() == displayName:lower());
+    return matchesName and (not realm or realmKey(realm) == realmKey(ownRealm));
 end
 
 local function finish(status)

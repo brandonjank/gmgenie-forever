@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.3-forever.15 — 2026-10-12
+
+- Fix TrinityCore handshake replies being rejected for Forever characters with
+  surnames. Forever's native name APIs return the surname as their second value;
+  use the display-name helper and the actual realm name for sender matching.
+- Preserve exact token, sender and realm checks, including foreign-realm rejection.
+- Add regression coverage for Forever's actual first-name/surname API returns
+  and the standard realm-qualified name format.
+
 ## 0.7.3-forever.14 — 2026-10-12
 
 - Keep the addon hidden and inactive until a matching TrinityCore addon ping
