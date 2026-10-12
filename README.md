@@ -83,16 +83,18 @@ The new gate has automated Lua coverage; live client validation is still pending
   buttons and an **Actions** menu for confirmed Kick/Ban/Kill. Native Who searches
   refresh with Enter or Refresh. Open **Online players** or `/gmplayers`;
   press Enter to search the server. Who visibility and result limits apply.
-- Modern dashboard with command search, GM controls and a live target card.
+- Modern dashboard with command search, GM controls, a live target card and a
+  persistent Compact mode that shrinks it to a small bar.
 - Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.
 - Spy/player information, player context menus and common GM actions.
 - **Compact Builder remote** with safe gameobject selection, a directional pad,
   height/rotation steps, Move here, Face me, one-step undo and confirmed spawn/delete.
 - Creature/gameobject lookup links and saved spawning presets.
-- **619-command searchable reference**, with argument order, RBAC permissions,
-  console availability, source links and a Server help button. Favorites, recent
-  history and category/context filters help you find commands quickly.
+- **619-command workspace** with descriptions, inline argument fields, live
+  command previews and Run. Includes 298 pinned help responses, World building,
+  Favorites and Recent views, target/position helpers and destructive-action
+  confirmation. Source details and Server help remain available.
 - **28 editable starter macros**, installed automatically and preserved across
   reloads alongside your custom macros.
 
@@ -210,6 +212,13 @@ custom anticheat integrations were not exercised. Commands require the
 appropriate server permissions. Other Forever builds, core forks and response
 locales may need changes. See [port notes](README.Forever.md) for details.
 
+Build 16's forms and compact HUD pass nine automated suites, including all 619
+form schemas, exact sends, confirmation cancellation and credential isolation.
+A fresh isolated Testing client failed with CASC archive initialization error
+134 before addon loading; visual and in-game confirmation of these changes
+remains pending. Its private addon fixture and client resources were cleaned up,
+and shared client/server state was preserved. No world edits were made by that test.
+
 ## Development
 
 ```sh
@@ -217,6 +226,7 @@ python -m pip install -r tests/requirements.txt
 python tests/test_server.py
 python tests/test_gmgenie.py
 python tests/test_commands.py
+python tests/test_command_forms.py
 python tests/test_ui.py
 python tests/test_players.py
 python tests/test_builder.py

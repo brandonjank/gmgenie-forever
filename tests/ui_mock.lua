@@ -5,7 +5,7 @@ function frame(name)
     if name then _G[name]=f; end
     return f;
 end
-function methods:SetScript(event,callback) self.scripts[event]=callback; end
+function methods:SetScript(event,callback) assert(self.kind~="FontString","FontStrings do not have scripts"); self.scripts[event]=callback; end
 function methods:HookScript(event,callback) self.hooks[event]=self.hooks[event] or {}; table.insert(self.hooks[event],callback); end
 function methods:Fire(event,...)
     if self.scripts[event] then self.scripts[event](self,...); end
@@ -30,7 +30,7 @@ function methods:GetFrameLevel() return self.level; end
 function methods:SetFrameLevel(level) self.level=level; end
 function methods:GetCenter() return 200,100; end
 function methods:SetPoint(...) self.point={...}; end
-function methods:CreateFontString() return frame(); end
+function methods:CreateFontString() local f=frame(); f.kind="FontString"; f.parent=self; return f; end
 function methods:CreateTexture() return frame(); end
 function methods:SetTexture(value) self.texture=value; end
 function methods:SetHyperlink(value) self.link=value; end
@@ -52,6 +52,9 @@ function methods:SetSize(width,height) self.width=width; self.height=height; end
 function methods:SetWidth(width) self.width=width; end
 function methods:SetHeight(height) self.height=height; end
 function methods:ClearFocus() self:Fire("OnEditFocusLost"); end
+function methods:SetFocus() self:Fire("OnEditFocusGained"); end
+function methods:SetPassword(value) self.password=value; end
+function methods:SetJustifyV(value) self.justifyV=value; end
 for _,name in ipairs({"SetJustifyH","SetTextColor","SetAutoFocus","SetFontObject","SetTextInsets","SetMaxLetters","SetBackdrop","RegisterForDrag","SetMovable","SetClampedToScreen","EnableMouse","SetFrameStrata","SetNormalFontObject","SetHighlightFontObject","SetDisabledFontObject","ClearAllPoints","HighlightText","EnableMouseWheel","StartMoving","StopMovingOrSizing","RegisterEvent","SetAlpha","SetOwner","AddLine"}) do
     methods[name]=function() end;
 end
@@ -84,3 +87,4 @@ function UnitGUID() return targetGuid; end
 function UnitIsPlayer() return targetPlayer; end
 function UnitLevel() return 25; end
 function UnitName(unit) return unit=="player" and "Tester" or targetName; end
+function GetTime() return 100 end

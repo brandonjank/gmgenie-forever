@@ -262,21 +262,35 @@ teleport/summon commands were tested with mocked sends, not on real players.
 
 Click **Commands** on the HUD, or use `/gmgenie commands`.
 `/gmgenie commands npc move` opens with a search already applied. Search matches
-command names, handler arguments and RBAC permission names; all words must match.
+command names, descriptions, handler arguments and RBAC permission names; all words must match.
 The catalog is available offline and lists all 619 handler registrations in
 Forever commit `9ed0d9eb5d442714177bebb58e6b2312add6ab46`, including `legacy`,
 `discord` and `armory` commands outside the usual Commands folder. Disabled/commented
 commands and server-local additions are excluded. Group headings are represented
 by their executable children, including bare commands with default handlers.
 
-Details preserve C++ argument definitions and show a parameter outline. These
-outlines describe order and optional parameters, not every handler validation.
-Legacy free-form parsers explicitly direct you to **Server help** instead of
-guessing syntax. The source link opens the exact registration revision when
-copied into a browser. The reference itself executes no actions; its help button
-requests only `.help <command>` from your current server. In-game-only commands
-are invisible to console help even when they exist. RBAC grants and enabled
-modules vary between servers; catalog inclusion is not a grant of permission.
+The workspace shows descriptions, labeled argument fields and a live command
+preview. Fill required fields (*) and click **Run command**. Enter clears focus
+without executing. Numeric ranges, required fields, optional positional order
+and the 255-byte chat limit are checked before sending. Hover over a field for
+its format or the description for its full text. **Source details** retains
+the exact C++ arguments and pinned registration link.
+
+Descriptions include 298 pinned server-help responses and dedicated guidance
+for world-building commands. Legacy handlers without a reviewed structured
+form use a full-width free-form argument field. **Server help** requests current
+usage in chat. Server customizations and RBAC permissions still apply.
+
+**Use target** fills a player field using Forever's unique first-name lookup key.
+**My position** fills all five `.go xyz` arguments, including map and radians.
+Spawn IDs identify individual placed NPCs/objects; template entries identify
+the kind to create. `.npc move` uses your selected NPC when its field is empty.
+Deleting, banning, kicking, killing and server/account administration require
+a second **Confirm run** click within ten seconds. Editing, changing targets,
+selecting another command or closing the window cancels confirmation. Check
+chat for the server result; a send alone does not prove success. Credentials
+are masked and redacted in the preview. Argument values are never saved, and
+closing the workspace clears credential fields.
 
 The upstream fork point is TrinityCore **master** commit
 [`85d3c25180a89f889294d54d855efccae0945f20`](https://github.com/TrinityCore/TrinityCore/commit/85d3c25180a89f889294d54d855efccae0945f20),
@@ -310,16 +324,20 @@ players/NPCs. Selecting or changing targets sends no commands. Status values
 remain unknown until received from the server; controls do not guess that a
 command succeeded. Speed input accepts a finite multiplier from 0.1 to 50.
 
-The command library has **All commands**, **Favorites** and **Recent** views.
+The command workspace has **All**, **World building**, **Favorites** and **Recent** views.
 Use the native category/context menus to narrow results, or type search words.
 Press Up/Down in the search field to select results; use the mouse wheel over
 the list to change pages. Click **+** beside a row or **Save favorite** to save
 a command locally. Recent keeps up to 20 unique commands selected or queried
 for help. Filtering and browsing do not pollute the recent list.
 
-Command details show the parameter outline; **Source details** opens the exact
+Command details show inline arguments and a Run button; **Source details** opens the exact
 C++ arguments, permission name and pinned source link in a separate window.
 **Server help** requests usage in chat. It does not execute the selected action.
+
+Click **Compact** in the HUD header to shrink it to a small bar, and **Expand**
+to restore it. The choice persists. The command workspace opens on demand and
+closes with Escape.
 
 Drag a window to reposition it. Its position is restored after reload. Open
 **Settings** on the dashboard for interface scale (90%, 100%, 110%, 125%),
@@ -331,3 +349,4 @@ The UI uses BackdropTemplate and native MenuUtil descriptions, following the
 [Blizzard menu implementation guide](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_Menu/11_0_0_MenuImplementationGuide.lua).
 Legacy tool layouts retain their existing workflows under the shared theme.
 Run `python tests/test_ui.py` for dashboard/menu/target/layout checks.
+Run `python tests/test_command_forms.py` for all form schemas and execution checks.

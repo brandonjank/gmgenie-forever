@@ -66,7 +66,7 @@ for path in list(ROOT.glob('*.lua'))+list(ROOT.glob('*.xml'))+list((ROOT/'Option
 
 lua=LuaRuntime(unpack_returned_tuples=True)
 lua.execute((ROOT/'tests/ui_mock.lua').read_text())
-for file in ('UI.lua','CommandData.lua','Commands.lua'): lua.execute((ROOT/file).read_text(encoding='utf-8-sig'))
+for file in ('UI.lua','CommandData.lua','CommandHelp.lua','CommandForms.lua','Commands.lua'): lua.execute((ROOT/file).read_text(encoding='utf-8-sig'))
 lua.execute('''
 local C=GMGenie.Commands
 assert(#GMGenie.CommandData.entries==619)

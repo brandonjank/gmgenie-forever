@@ -66,8 +66,12 @@ function GMGenie.onLoad()
     GMGenie_Minimap:Show();
     GMGenie_Hud:SetShown(not GMGenie_SavedVars.hudClosed);
 
-    -- Please do not remove the copyright notice, it would be a violation of the gpl.
-    GMGenie.showGMMessage("GMGenie Forever by Chocochaos ((c) 2011-2014), with WoW Forever compatibility. Original: https://github.com/chocochaos/GMGenie");
+    -- Keep attribution, with a one-time introduction instead of reload chatter.
+    -- Full copyright and license notices remain in the source and NOTICE.
+    if not GMGenie_SavedVars.welcomeShown then
+        GMGenie.showGMMessage("GM Genie Forever ready. Use /gmgenie for tools. Based on Game Master Genie by Chocochaos ((c) 2011-2014): https://github.com/chocochaos/GMGenie");
+        GMGenie_SavedVars.welcomeShown=true;
+    end
 end
 
 GMGenie.minimap = {};

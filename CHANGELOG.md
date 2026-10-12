@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.3-forever.16 — 2026-10-12
+
+- Replace the command reference with inline argument forms, descriptions, exact
+  previews and an explicit Run button. Include 298 pinned server-help entries.
+- Add a World building filter, description search and target/position helpers.
+- Validate required values, numeric ranges, argument order and chat length.
+  Confirm destructive actions; cancel confirmation on edits or target changes.
+- Mask credential fields and keep argument values out of SavedVariables.
+- Add a persistent compact HUD and preserve exact ticket command categories.
+- Show the introductory chat message once instead of on every reload/login.
+
 ## 0.7.3-forever.15 — 2026-10-12
 
 - Fix TrinityCore handshake replies being rejected for Forever characters with

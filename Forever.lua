@@ -57,7 +57,8 @@ function F.SendChatMessage(message, channel, language, target)
         message = message:gsub("^%.char ", ".character "):gsub("^%.ban char ", ".ban character ")
             :gsub("^%.name ", ".nameannounce "):gsub("^%.gmname ", ".gmnameannounce ")
             :gsub("^%.gobject del ", ".gobject delete ");
-        if message:match("^%.ticket ") then
+        if message:match("^%.ticket ") and not message:match("^%.ticket bug[ %s]")
+            and not message:match("^%.ticket complaint[ %s]") and not message:match("^%.ticket suggestion[ %s]") then
             message = message:gsub("^%.ticket viewid ", ".ticket view "):gsub("^%.ticket del ", ".ticket delete ");
             message = message:gsub("^%.ticket ", ".ticket " .. (GMGenie_SavedVars.ticketType or "bug") .. " ");
         end

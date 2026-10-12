@@ -3,10 +3,13 @@ GMGenie.Commands = { page=1, pageSize=18, matches={}, mode="all", category="all"
 local C=GMGenie.Commands;
 local data=GMGenie.CommandData;
 local U=GMGenieUI;
+local M=GMGenie.CommandForms;
 local categories,categoryCounts={},{};
 local byName={};
+local searchText={};
 for _,entry in ipairs(data.entries) do
     byName[entry.name]=entry;
+    searchText[entry.name]=(entry.name.." "..entry.arguments.." "..entry.permission.." "..M.description(entry)):lower();
     local category=entry.name:match("^%S+");
     if not categoryCounts[category] then categories[#categories+1]=category; categoryCounts[category]=0; end
     categoryCounts[category]=categoryCounts[category]+1;
@@ -29,9 +32,9 @@ function C.search(query)
     for word in (query or ""):lower():gmatch("%S+") do words[#words+1]=word; end
     for _,entry in ipairs(data.entries) do
         local found=(C.category=="all" or entry.name:match("^%S+")==C.category)
-            and (C.mode=="all" or (C.mode=="favorites" and prefs.favorites[entry.name]) or (C.mode=="recent" and recentOrder[entry.name]))
+            and (C.mode=="all" or (C.mode=="world" and M.isWorld(entry)) or (C.mode=="favorites" and prefs.favorites[entry.name]) or (C.mode=="recent" and recentOrder[entry.name]))
             and (C.context=="all" or (C.context=="console" and entry.console) or (C.context=="ingame" and not entry.console));
-        local text=(entry.name.." "..entry.arguments.." "..entry.permission):lower();
+        local text=searchText[entry.name];
         for _,word in ipairs(words) do if not text:find(word,1,true) then found=false; break; end end
         if found then matches[#matches+1]=entry; end
     end
@@ -79,20 +82,21 @@ end
 
 function C.select(entry,record)
     if not entry then return; end
+    local changed=not C.selected or C.selected.name~=entry.name;
     C.selected=entry;
     if record~=false then C.remember(entry); end
-    C.copy:SetText("."..entry.name); C.copy:ClearFocus();
     C.heading:SetText("."..entry.name);
     C.usage:SetText(entry.usage);
     C.arguments:SetText(entry.arguments=="" and "Arguments: none" or "C++ handler arguments, in order:\n\n"..entry.arguments);
-    C.note:SetText(entry.legacy and
-        "This command accepts free-form arguments. Request server help for its syntax and examples." or
-        "Values in <brackets> are required; [brackets] mark optional parameters. Replace the parameter names with your values. Server help can provide more detail.");
+    local description=M.description(entry):gsub("\n+"," ");
+    C.note:SetText(#description>310 and description:sub(1,307).."..." or description);
     C.access:SetText((entry.console and "CONSOLE + IN-GAME" or "IN-GAME ONLY").."    /    RBAC "..entry.permissionId);
     C.technical:SetText(entry.permission.."\n"..entry.handler.."\nForever "..data.revision:sub(1,12));
     C.source:SetText("https://github.com/advocaite/TrinityCore/blob/"..data.revision.."/"..entry.source.."#L"..entry.line);
     C.source:ClearFocus();
     C.favorite:SetText(C.preferences().favorites[entry.name] and "Remove favorite" or "Save favorite");
+    if changed or not C.fields then C.loadForm(entry); end
+    C.updateForm();
     C.updateRows();
 end
 
@@ -121,7 +125,7 @@ function C.refresh(query)
 end
 
 function C.setMode(mode)
-    if mode~="all" and mode~="favorites" and mode~="recent" then return; end
+    if mode~="all" and mode~="world" and mode~="favorites" and mode~="recent" then return; end
     C.mode=mode; C.refresh(C.query:GetText());
 end
 
@@ -157,13 +161,103 @@ function C.stepSelection(delta)
     C.page=math.ceil(index/C.pageSize); C.refresh(); C.select(C.matches[index]);
 end
 
+function C.values()
+    local values={}; for i in ipairs(C.fields or {}) do values[i]=C.inputs[i]:GetText(); end return values;
+end
+
+function C.loadForm(entry)
+    C.loading=true; C.confirmation=nil; C.fields=M.schema(entry);
+    for i,widget in ipairs(C.inputs) do
+        local f=C.fields[i]; widget:ClearFocus(); widget:SetText("");
+        widget:SetShown(f~=nil); widget.label:SetShown(f~=nil);
+        if f then
+            local columns=math.min(3,#C.fields); local width=(562-(columns-1)*8)/columns;
+            local x=18+((i-1)%columns)*(width+8); local y=-200-math.floor((i-1)/columns)*66;
+            widget:ClearAllPoints(); widget:SetPoint("TOPLEFT",x,y-20); widget:SetWidth(width);
+            widget.label:ClearAllPoints(); widget.label:SetPoint("TOPLEFT",x,y); widget.label:SetWidth(width); widget.label:SetHeight(18);
+            widget.placeholder:SetText(M.hint(f)); widget.placeholder:SetWidth(width-20);
+            widget:SetPassword(not not f.secret);
+            widget.label:SetText(M.label(entry,f)..(f.optional and " (optional)" or " *"));
+        end
+    end
+    C.noArguments:SetShown(#C.fields==0);
+    C.argumentHint:SetText(entry.legacy and not M.overrides[entry.name] and "Free-form arguments: use Server help for the exact syntax."
+        or "* Required. Leave trailing optional fields empty for server defaults.");
+    C.fill:SetText(entry.name=="go xyz" and "My position" or "Use target");
+    local hasPlayer=false; for _,f in ipairs(C.fields) do if f.kind=="player" then hasPlayer=true; end end
+    C.fill:SetShown(entry.name=="go xyz" or hasPlayer);
+    C.loading=false;
+end
+
+function C.updateForm()
+    if C.loading or not C.selected or not C.fields then return; end
+    local command,err=M.build(C.selected,C.fields,C.values());
+    if command and (C.selected.name=="npc move" or C.selected.name=="npc delete") and C.inputs[1]:GetText():match("^%s*$") then
+        local guid=UnitGUID("target");
+        if not guid or not guid:match("^Creature%-") or UnitIsPlayer("target") then command=nil; err="Target an NPC or enter its database spawn ID."; end
+    end
+    C.command=command;
+    for i in ipairs(C.fields) do C.inputs[i].placeholder:SetShown(C.inputs[i]:GetText()==""); end
+    C.copy:SetText(M.build(C.selected,C.fields,C.values(),true) or ("."..C.selected.name));
+    C.run:SetEnabled(command~=nil);
+    C.run:SetText(C.confirmation and "Confirm run" or "Run command");
+    C.status:SetText(err or (C.confirmation and "Click Confirm run to send this exact command. Changing a value or target cancels confirmation."
+        or "Ready. The server response appears in chat."));
+    local name=(GetUnitName and GetUnitName("target",true)) or UnitName("target");
+    C.target:SetText("Selected target: "..(name or "none"));
+end
+
+function C.editChanged()
+    if C.loading then return; end
+    C.confirmation=nil; C.updateForm();
+end
+
+function C.clearForm()
+    if C.selected then C.loadForm(C.selected); C.updateForm(); end
+end
+
+function C.fillContext()
+    if not C.selected then return; end
+    if C.selected.name=="go xyz" then
+        local x,y,z,map;
+        if UnitPosition then x,y,z,map=UnitPosition("player"); end
+        local facing=GetPlayerFacing and GetPlayerFacing();
+        if not x or not y or not z or not map or not facing then C.status:SetText("Current world position is unavailable."); return; end
+        for i,v in ipairs({x,y,z,map,facing}) do C.inputs[i]:SetText(i==4 and tostring(v) or string.format("%.6f",v):gsub(",",".")); end
+    else
+        local name=UnitIsPlayer("target") and UnitName("target");
+        if not name then C.status:SetText("Select a player first."); return; end
+        for i,f in ipairs(C.fields) do if f.kind=="player" then C.inputs[i]:SetText(name); break; end end
+    end
+    C.editChanged();
+end
+
+function C.execute()
+    if not C.selected or not GMGenieForever.RequireActive() then return; end
+    if IsLoggedIn and not IsLoggedIn() then C.status:SetText("Enter the world before running commands."); return; end
+    C.updateForm(); if not C.command then return; end
+    local command,err=M.build(C.selected,C.fields,C.values());
+    if not command then C.status:SetText(err); return; end
+    local guid=UnitGUID("target"); local now=GetTime();
+    if M.confirm(C.selected) then
+        local pending=C.confirmation;
+        if not pending or pending.command~=command or pending.guid~=guid or now>pending.deadline then
+            C.confirmation={command=command,guid=guid,deadline=now+10}; C.updateForm(); return;
+        end
+    end
+    C.confirmation=nil; C.remember(C.selected);
+    local ok,result=pcall(GMGenieForever.SendChatMessage,command,"GUILD");
+    C.updateForm();
+    C.status:SetText((not ok or result==false) and "Unable to send. Check server compatibility and try again." or "Command sent. Check chat for the server result.");
+end
+
 function C.create()
     local window=CreateFrame("Frame","GMGenie_Commands",UIParent,"BackdropTemplate"); C.window=window;
-    window:SetPoint("CENTER"); U.window(window,"Command library",1000,660);
-    U.label(window,"Browse, save favorites and check usage before acting.",18,-62,800,"GameFontHighlightSmall",true);
+    window:SetPoint("CENTER"); U.window(window,"Command workspace",1000,710);
+    U.label(window,"Find a command, fill in its arguments, then run it. Nothing runs while browsing.",18,-62,950,"GameFontHighlightSmall",true);
     C.tabs={};
-    for index,option in ipairs({{"all","All commands"},{"favorites","Favorites"},{"recent","Recent"}}) do
-        C.tabs[option[1]]=U.button(window,option[2],18+(index-1)*146,-88,136,function() C.setMode(option[1]); end);
+    for index,option in ipairs({{"all","All"},{"world","World building"},{"favorites","Favorites"},{"recent","Recent"}}) do
+        C.tabs[option[1]]=U.button(window,option[2],18+(index-1)*122,-88,114,function() C.setMode(option[1]); end);
     end
     C.categoryButton=U.button(window,"All categories",510,-88,220,C.categoryMenu);
     C.contextButton=U.button(window,"Any context",740,-88,242,C.contextMenu);
@@ -171,7 +265,7 @@ function C.create()
     C.query:SetScript("OnTextChanged",function(self) C.refresh(self:GetText()); end);
     C.query:SetScript("OnEnterPressed",function(self) if C.selected then C.remember(C.selected); end self:ClearFocus(); end);
     C.query:SetScript("OnKeyDown",function(_,key) if key=="DOWN" then C.stepSelection(1); elseif key=="UP" then C.stepSelection(-1); end end);
-    U.tooltip(C.query,"Search commands","Match names, argument names or permissions. Use Up/Down to select results. Search is plain text.");
+    U.tooltip(C.query,"Search commands","Match names, explanations, argument names or permissions. Use Up/Down to select results. Search is plain text.");
     U.button(window,"Reset",914,-130,68,C.resetFilters,nil,32);
     local list=U.panel(window,18,-176,350,430); list:EnableMouseWheel(true);
     list:SetScript("OnMouseWheel",function(_,delta) C.page=C.page+(delta>0 and -1 or 1); C.refresh(); end);
@@ -184,34 +278,78 @@ function C.create()
         C.rows[index]=row;
     end
     C.empty=U.label(window,"No matching commands.\n\nTry another search, save a favorite, or reset the filters.",48,-240,290,"GameFontHighlight",true);
-    C.count=U.label(window,"",18,-620,340,"GameFontHighlightSmall",true);
-    C.previous=U.button(window,"Previous",384,-618,98,function() C.page=C.page-1; C.refresh(); end);
-    C.pageLabel=U.label(window,"",500,-626,100,"GameFontHighlightSmall",true);
-    C.next=U.button(window,"Next",586,-618,98,function() C.page=C.page+1; C.refresh(); end);
-    U.label(window,"Forever "..data.revision:sub(1,12),754,-626,228,"GameFontHighlightSmall",true);
-    C.detail=U.panel(window,384,-176,598,430);
+    C.count=U.label(window,"",18,-670,340,"GameFontHighlightSmall",true);
+    C.previous=U.button(window,"Previous",384,-668,98,function() C.page=C.page-1; C.refresh(); end);
+    C.pageLabel=U.label(window,"",500,-676,100,"GameFontHighlightSmall",true);
+    C.next=U.button(window,"Next",586,-668,98,function() C.page=C.page+1; C.refresh(); end);
+    U.label(window,"Forever "..data.revision:sub(1,12),754,-676,228,"GameFontHighlightSmall",true);
+    C.detail=U.panel(window,384,-176,598,474);
     C.heading=U.label(C.detail,"",18,-18,562,"GameFontNormalLarge");
     C.access=U.label(C.detail,"",18,-50,562,"GameFontHighlightSmall",true);
-    U.label(C.detail,"COMMAND NAME  /  SELECT TO COPY",18,-84,562,"GameFontHighlightSmall",true);
-    C.copy=U.edit(C.detail,"GMGenie_Commands_Copy",18,-106,562,32);
+    local noteArea=CreateFrame("Frame",nil,C.detail); noteArea:SetPoint("TOPLEFT",18,-74); noteArea:SetSize(562,62); noteArea:EnableMouse(true);
+    C.note=U.label(noteArea,"",0,0,562,"GameFontHighlightSmall"); C.note:SetHeight(62); C.note:SetJustifyV("TOP");
+    noteArea:SetScript("OnEnter",function(self)
+        if not C.selected then return; end
+        GameTooltip:SetOwner(self,"ANCHOR_RIGHT"); GameTooltip:SetText("."..C.selected.name);
+        GameTooltip:AddLine(M.description(C.selected),0.65,0.73,0.83,true); GameTooltip:Show();
+    end);
+    noteArea:SetScript("OnLeave",function() GameTooltip:Hide(); end);
+    C.target=U.label(C.detail,"",18,-143,420,"GameFontHighlightSmall",true);
+    C.fill=U.button(C.detail,"Use target",454,-136,126,C.fillContext,nil,26);
+    C.argumentHint=U.label(C.detail,"",18,-176,562,"GameFontHighlightSmall",true);
+    C.inputs={};
+    for i=1,6 do
+        local x=18+((i-1)%3)*190; local y=-200-math.floor((i-1)/3)*66;
+        local edit=U.edit(C.detail,"GMGenie_Commands_Argument"..i,x,y-20,182,30);
+        edit.placeholder=U.label(edit,"",10,-9,162,"GameFontHighlightSmall",true); edit.placeholder:SetHeight(16);
+        edit.label=U.label(C.detail,"",x,y,182,"GameFontHighlightSmall");
+        edit:SetScript("OnTextChanged",C.editChanged);
+        edit:SetScript("OnEnterPressed",function(self) self:ClearFocus(); end);
+        edit:SetScript("OnTabPressed",function(self)
+            local backwards=IsShiftKeyDown and IsShiftKeyDown();
+            self:ClearFocus(); local nextIndex=i+(backwards and -1 or 1);
+            if #C.fields>0 then C.inputs[(nextIndex-1)%#C.fields+1]:SetFocus(); end
+        end);
+        edit:HookScript("OnEnter",function(self)
+            local f=C.fields and C.fields[i]; if not f then return; end
+            GameTooltip:SetOwner(self,"ANCHOR_RIGHT"); GameTooltip:SetText(M.label(C.selected,f));
+            GameTooltip:AddLine(M.hint(f),0.65,0.73,0.83,true); GameTooltip:Show();
+        end);
+        edit:HookScript("OnLeave",function() GameTooltip:Hide(); end);
+        C.inputs[i]=edit;
+    end
+    C.noArguments=U.label(C.detail,"This command takes no arguments. Check your selected target, then click Run command.",18,-222,550,"GameFontHighlight",true);
+    U.label(C.detail,"COMMAND PREVIEW  /  SELECT TO COPY",18,-340,562,"GameFontHighlightSmall",true);
+    C.copy=U.edit(C.detail,"GMGenie_Commands_Copy",18,-360,562,32);
+    C.copy:SetScript("OnTextChanged",function(self)
+        if C.previewLoading or not C.selected then return; end
+        C.previewLoading=true; self:SetText(M.build(C.selected,C.fields,C.values(),true) or ("."..C.selected.name)); C.previewLoading=false;
+    end);
     C.copy:SetScript("OnEditFocusGained",function(self) self:HighlightText(); end);
-    U.label(C.detail,"PARAMETER OUTLINE",18,-164,562,"GameFontHighlightSmall",true);
-    C.usage=U.label(C.detail,"",18,-188,562,"GameFontHighlight");
-    C.note=U.label(C.detail,"",18,-244,562,"GameFontHighlightSmall",true);
-    U.button(C.detail,"Server help",18,-322,128,function() C.help(C.selected); end);
-    C.favorite=U.button(C.detail,"Save favorite",156,-322,140,function() C.toggleFavorite(C.selected); end);
-    U.button(C.detail,"Source details",306,-322,140,function() C.sourceWindow:Show(); end);
-    U.label(C.detail,"Help responses appear in chat. Your server's RBAC grants determine access. Browsing and favorites execute no actions.",18,-372,562,"GameFontHighlightSmall",true);
+    C.run=U.button(C.detail,"Run command",18,-404,114,C.execute);
+    U.button(C.detail,"Clear",138,-404,64,C.clearForm);
+    U.button(C.detail,"Server help",208,-404,108,function() C.help(C.selected); end);
+    C.favorite=U.button(C.detail,"Save favorite",322,-404,126,function() C.toggleFavorite(C.selected); end);
+    U.button(C.detail,"Source details",454,-404,126,function() C.sourceWindow:Show(); end);
+    C.status=U.label(C.detail,"",18,-443,562,"GameFontHighlightSmall",true); C.status:SetHeight(27); C.status:SetJustifyV("TOP");
     local source=CreateFrame("Frame","GMGenie_Commands_SourceDetails",UIParent,"BackdropTemplate");
-    source:SetPoint("CENTER"); U.window(source,"Source details",620,360); source:SetFrameLevel(window:GetFrameLevel()+10);
+    source:SetPoint("CENTER"); U.window(source,"Source details",620,420); source:SetFrameLevel(window:GetFrameLevel()+10);
     C.sourceWindow=source;
-    C.arguments=U.label(source,"",18,-66,584,"GameFontHighlight");
-    C.technical=U.label(source,"",18,-208,584,"GameFontHighlightSmall",true);
-    U.label(source,"PINNED SOURCE LINK  /  SELECT TO COPY",18,-284,584,"GameFontHighlightSmall",true);
-    C.source=U.edit(source,"GMGenie_Commands_Source",18,-308,584,32);
+    C.usage=U.label(source,"",18,-66,584,"GameFontHighlightSmall",true); C.usage:SetHeight(42); C.usage:SetJustifyV("TOP");
+    C.arguments=U.label(source,"",18,-116,584,"GameFontHighlight"); C.arguments:SetHeight(126); C.arguments:SetJustifyV("TOP");
+    C.technical=U.label(source,"",18,-252,584,"GameFontHighlightSmall",true); C.technical:SetHeight(70); C.technical:SetJustifyV("TOP");
+    U.label(source,"PINNED SOURCE LINK  /  SELECT TO COPY",18,-344,584,"GameFontHighlightSmall",true);
+    C.source=U.edit(source,"GMGenie_Commands_Source",18,-368,584,32);
     C.source:SetScript("OnEditFocusGained",function(self) self:HighlightText(); end);
     source:Hide();
-    window:HookScript("OnHide",function() source:Hide(); end);
+    window:HookScript("OnHide",function()
+        source:Hide(); C.confirmation=nil;
+        if C.fields then
+            for i,f in ipairs(C.fields) do C.inputs[i]:ClearFocus(); if f.secret then C.inputs[i]:SetText(""); end end
+        end
+    end);
+    window:RegisterEvent("PLAYER_TARGET_CHANGED");
+    window:SetScript("OnEvent",function() C.confirmation=nil; if window:IsShown() then C.updateForm(); end end);
     window:Hide();
 end
 

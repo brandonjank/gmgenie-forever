@@ -4,7 +4,7 @@ from lupa.lua51 import LuaRuntime
 ROOT=Path(__file__).resolve().parents[1]
 lua=LuaRuntime(unpack_returned_tuples=True)
 lua.execute((ROOT/'tests/ui_mock.lua').read_text())
-for name in ('UI.lua','CommandData.lua','Commands.lua','Hud.lua'):
+for name in ('UI.lua','CommandData.lua','CommandHelp.lua','CommandForms.lua','Commands.lua','Hud.lua'):
     lua.execute((ROOT/name).read_text(encoding='utf-8-sig'))
 lua.execute('''
 GMGenie_Hud=frame('GMGenie_Hud'); GMGenie_Tickets_Main=frame('GMGenie_Tickets_Main')
@@ -17,6 +17,9 @@ GMGenie.Tickets={setType=function(kind) reportKind=kind end}
 GMGenie.showGMMessage=function(message) warning=message end
 local H=GMGenie.Hud
 H.onLoad(); assert(GMGenie_Hud.width==300 and GMGenie_Hud.height==534)
+H.toggleCompact(); assert(GMGenie_SavedVars.hudCompact and GMGenie_Hud.height==48 and not H.body.visible)
+H.toggleCompact(); assert(not GMGenie_SavedVars.hudCompact and GMGenie_Hud.height==534 and H.body.visible)
+assert(H.targetName.parent.parent==H.body) -- target card also collapses
 assert(not H.inspect.enabled and not H.targetCommands.enabled and #sent==0)
 H.inspectTarget(); H.browseTarget(); assert(not inspected and #sent==0)
 GMGenie_Hud_Players:Fire('OnClick'); assert(playersOpened)

@@ -93,6 +93,9 @@ GMGenieForever.SendChatMessage('.char rename Example','GUILD'); assert(sent[1]==
 GMGenie_SavedVars.ticketType='complaint'
 GMGenieForever.SendChatMessage('.ticket viewid 17','GUILD'); assert(sent[1]=='.ticket complaint view 17')
 GMGenieForever.SendChatMessage('.ticket del 17','GUILD'); assert(sent[1]=='.ticket complaint delete 17')
+GMGenieForever.SendChatMessage('.ticket bug view 17','GUILD'); assert(sent[1]=='.ticket bug view 17')
+GMGenieForever.SendChatMessage('.ticket suggestion list','GUILD'); assert(sent[1]=='.ticket suggestion list')
+GMGenieForever.SendChatMessage('.ticket complaint close 17','GUILD'); assert(sent[1]=='.ticket complaint close 17')
 GMGenieForever.SendChatMessage('.pin is literal text','WHISPER',nil,'Someone')
 assert(sent[1]=='.pin is literal text' and sent[4]=='Someone')
 loggedIn=false
