@@ -39,7 +39,9 @@ it inside another `GMGenie` folder.
 - Native report/macro menus, remembered window positions and interface scaling.
 - Bug, complaint and suggestion report lists using Forever's report commands.
 - Spy/player information, player context menus and common GM actions.
-- Creature/gameobject lookup links and the original spawning/builder tools.
+- **Compact Builder remote** with safe gameobject selection, a directional pad,
+  height/rotation steps, Move here, Face me, one-step undo and confirmed spawn/delete.
+- Creature/gameobject lookup links and saved spawning presets.
 - **619-command searchable reference**, with argument order, RBAC permissions,
   console availability, source links and a Server help button. Favorites, recent
   history and category/context filters help you find commands quickly.
@@ -86,7 +88,7 @@ GM-only announcements. An IP ban can affect players sharing an address.
 
 ## Item and creature catalog
 
-The list is restricted to [Wowhead’s Forever database](https://www.wowhead.com/forever/database).
+The list is restricted to [Wowheadâ€™s Forever database](https://www.wowhead.com/forever/database).
 Equipment previews use your character; NPCs use creature displays. Drag to rotate
 and scroll to zoom. Entries without a 3D appearance show an icon/tooltip.
 **Add to my inventory** explicitly names your character, regardless of your target.
@@ -96,16 +98,46 @@ Some official Forever entries are missing from the bundled reference core snapsh
 and are labeled accordingly. Previews also depend on the assets in your client.
 See [catalog data, availability and rebuild notes](docs/CATALOG.md).
 
-## Move a selected NPC to your position
+## Builder remote
 
-Open `/builder`, target the NPC, stand where it should be, face its desired
-direction and click **Move NPC here**. This saves the selected NPC's new position
-and orientation permanently and respawns it. It uses `.npc move`, so the target
-must be a persistent creature spawn and your GM account needs permission.
-Missing targets, players and pets are rejected before sending a command.
+Open `/builder` for the compact remote. In **Objects**, click **Nearest object**
+to select without changing anything, enter an existing **spawn ID** and click
+**Select ID**, or click a gameobject chat link and choose **Edit in Builder**.
+The selection card shows the exact object name and spawn ID. Gameobjects usually
+cannot be selected using the normal unit target; template entry IDs identify new
+objects to spawn, while spawn IDs identify existing objects to edit.
 
-**Move self** and **Move self back** move your character using Builder offsets.
-**Move NPC here** uses your character's current position and facing.
+- The directional pad moves the selected object relative to **your facing**.
+  Choose 0.1, 0.5, 1, 5 or 10 yards per click; Up/Down changes height.
+- Turn left/right uses 1, 5, 15, 45 or 90 degrees per click.
+- **Move here** copies your position; **Face me** separately copies your facing.
+- **Undo last edit** restores the position or yaw before the last acknowledged
+  edit. It is one level, for the selected object, and does not undo spawn/delete.
+- **Delete...** and **Spawn...** require confirmation. Spawning uses the template
+  entry field and your current position. Existing object/NPC presets still work.
+
+In **NPCs**, target a persistent NPC, stand where it belongs, face the desired
+direction and click **Move here**. `.npc move` saves position and facing and
+respawns the NPC. Missing targets, players and pets are rejected. This core has
+no direct XYZ/yaw NPC editing command, so the directional controls stay disabled
+in NPC mode. NPC deletion also rechecks that the target has not changed.
+
+Edits save permanently through the server's GM commands and need the appropriate
+RBAC permissions. Object movement waits for an acknowledgement, then reads live
+coordinates with `.gps`; it never moves your character. Selection expires after
+45 seconds and clears on world/location changes. Errors/timeouts require a fresh
+read; commands never retry automatically. Avoid concurrent manual `.gps` commands
+while a builder read is pending because server GPS replies lack request IDs.
+
+Forever's `.gobject turn` resets pitch and roll, including when matching your
+facing or undoing yaw. NPC spawning sends no success acknowledgement in this core;
+the remote reports only that the command was sent and asks you to verify it.
+Response parsing currently requires English server strings.
+
+Builder commands and response formats were checked against the running Forever
+revision `440d365e791baff1cdf555ed2179c71bd6ebd014`. Automated Lua 5.1 tests cover
+the remote, transforms, acknowledgements, undo and guards using those formats.
+This redesign has not yet been visually verified or used to edit a live spawn.
 
 ## Compatibility and validation
 
@@ -114,13 +146,13 @@ backdrops, Settings pages, scrolling editors, player context menus and chat
 links, rather than relying only on the TOC interface version. Commands use a
 self-whisper consumed by the core, which also works for unguilded GMs.
 
-The automated Lua 5.1 suite checks 224 Lua/XML chunks, manifest references,
+The automated Lua 5.1 suite checks the Lua/XML chunks, manifest references,
 command routing, synthetic report/player-info parsing, links, saved settings,
 all 28 starter macros, migration and macro editors. Network sends are mocked.
 Live checks covered login, HUD, Settings, report-type switching, player menus,
 Spy, lookup links and starter editors; the final diagnostic reported
 `initialized=true, errors=0` before the dashboard redesign. The redesigned
-command library, search, favorites, recent history, native menus, Builder,
+command library, search, favorites, recent history, native menus, the prior Builder,
 report shortcuts and interface scaling were then checked in game with no
 further Lua error dialog after fixing button font-region initialization.
 
@@ -137,6 +169,8 @@ python -m pip install -r tests/requirements.txt
 python tests/test_gmgenie.py
 python tests/test_commands.py
 python tests/test_ui.py
+python tests/test_players.py
+python tests/test_builder.py
 python tests/test_catalog.py
 python tools/package.py
 ```

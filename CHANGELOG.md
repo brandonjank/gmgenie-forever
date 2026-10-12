@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.3-forever.10 — 2026-10-11
+
+- Replace the default Builder with a compact remote using the shared modern UI.
+- Select a gameobject safely by nearest, spawn ID or chat link; remove the old
+  target-then-delete response handler.
+- Move the object with a directional pad and height steps relative to GM facing,
+  rotate in adjustable increments, match GM position/facing and undo one edit.
+- Wait for exact spawn acknowledgements and live GPS reads; block stale,
+  concurrent and cross-map edits and never retry mutations automatically.
+- Confirm persistent spawn/delete operations; guard NPC actions and target changes.
+- Preserve presets and existing scripted build helpers.
+- Verify command handlers and English response strings against the running core;
+  add Lua 5.1 regression coverage for the remote and error paths.
+
 ## 0.7.3-forever.9 — 2026-10-11
 
 - Fix roster loading for in-game GMs: replace `.account onlinelist`, which can be

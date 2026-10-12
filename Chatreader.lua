@@ -30,6 +30,7 @@ end
 
 -- Read from chat
 function GMGenie.readSystemMessage(arg1)
+    if GMGenie.Builder then GMGenie.Builder.readSystemMessage(arg1); end
     local event = "CHAT_MSG_SYSTEM";
     local ActionTaken = false;
 
@@ -293,22 +294,6 @@ function GMGenie.readSystemMessage(arg1)
             if read then
                 GMGenie.Spy.processPin18(read, total, arg1);
                 ActionTaken = true;
-            end
-        end
-
-        if GMGenie.Spawns.waitingForObject then
-            local name, guid, id = string.match(arg1, "%|cffffffff%|Hgameobject:.*%|h%[(.*)%]%|h%|r%sGUID:%s(.*)%sID:%s(.*)");
-            if name and guid and id then
-                GMGenie.Spawns.waitingForObject = false;
-                GMGenie.Spawns.deleteObject(name, guid, id);
-                ActionTaken = true;
-            elseif string.find(arg1, "X:%s.*%sY:%s.*%sZ:%s.*%sMapId:%s.*") or string.find(arg1, "Orientation:%s.*") or string.find(arg1, "Phasemask%s.*") then
-                ActionTaken = true;
-            elseif string.find(arg1, "SpawnTime:%sFull:.*%sRemain:.*") then
-                ActionTaken = true;
-                GMGenie.Spawns.waitingForObject = false;
-            elseif string.find(arg1, "Nothing found!") then
-                GMGenie.Spawns.waitingForObject = false;
             end
         end
 

@@ -1,7 +1,7 @@
 # GM Genie Forever port notes
 
 Community port of Chocochaos's GM Genie 0.7.3, licensed under GPL v3. Original
-copyright and LICENSE are retained. Port version: **0.7.3-forever.9**.
+copyright and LICENSE are retained. Port version: **0.7.3-forever.10**.
 
 ## Target
 
@@ -105,17 +105,47 @@ GM mode follows server notifications and self inspection; Forever has no
 read-only `.gm` query. Flight starts as unknown until its first command response.
 Guild report synchronization requires both GMs to be guilded and use this port.
 
-## Move an existing NPC
+## Builder remote
 
-Open `/builder`, target the NPC, stand at its new position and face the desired
-direction, then click **Move NPC here**. The command `.npc move` copies your
-current position and orientation, saves the spawn permanently and respawns it.
-The button rejects missing targets, players and pets. The core checks that the
-NPC is a persistent spawn on the same map and that you have command permission.
+Open `/builder` for the compact remote. In **Objects**, click **Nearest object**
+to select without changing anything, enter an existing **spawn ID** and click
+**Select ID**, or click a gameobject chat link and choose **Edit in Builder**.
+The selection card shows the exact object name and spawn ID. Gameobjects usually
+cannot be selected using the normal unit target; template entry IDs identify new
+objects to spawn, while spawn IDs identify existing objects to edit.
 
-The **Move self** and **Move self back** controls move your character using the
-Builder offsets. **Move NPC here** uses your live position rather than those
-offsets or cached coordinates.
+- The directional pad moves the selected object relative to **your facing**.
+  Choose 0.1, 0.5, 1, 5 or 10 yards per click; Up/Down changes height.
+- Turn left/right uses 1, 5, 15, 45 or 90 degrees per click.
+- **Move here** copies your position; **Face me** separately copies your facing.
+- **Undo last edit** restores the position or yaw before the last acknowledged
+  edit. It is one level, for the selected object, and does not undo spawn/delete.
+- **Delete...** and **Spawn...** require confirmation. Spawning uses the template
+  entry field and your current position. Existing object/NPC presets still work.
+
+In **NPCs**, target a persistent NPC, stand where it belongs, face the desired
+direction and click **Move here**. `.npc move` saves position and facing and
+respawns the NPC. Missing targets, players and pets are rejected. This core has
+no direct XYZ/yaw NPC editing command, so the directional controls stay disabled
+in NPC mode. NPC deletion also rechecks that the target has not changed.
+
+Edits save permanently through the server's GM commands and need the appropriate
+RBAC permissions. Object movement waits for an acknowledgement, then reads live
+coordinates with `.gps`; it never moves your character. Selection expires after
+45 seconds and clears on world/location changes. Errors/timeouts require a fresh
+read; commands never retry automatically. Avoid concurrent manual `.gps` commands
+while a builder read is pending because server GPS replies lack request IDs.
+
+Forever's `.gobject turn` resets pitch and roll, including when matching your
+facing or undoing yaw. NPC spawning sends no success acknowledgement in this core;
+the remote reports only that the command was sent and asks you to verify it.
+Response parsing currently requires English server strings.
+
+Builder commands and response formats were checked against the running Forever
+revision `440d365e791baff1cdf555ed2179c71bd6ebd014`. Automated Lua 5.1 tests cover
+the remote, transforms, acknowledgements, undo and guards using those formats.
+This redesign has not yet been visually verified or used to edit a live spawn.
+
 
 ## Bundled starter macros
 
