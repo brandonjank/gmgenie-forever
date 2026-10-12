@@ -5,14 +5,14 @@ TrinityCore Forever server. A community port of
 [Chocochaos's GM Genie 0.7.3](https://github.com/chocochaos/GMGenie), maintained by
 [brandonjank](https://github.com/brandonjank).
 
-**Current version: 0.7.3-forever.9.** Tested with WoW Forever **1.60.1, build
+**Current version: 0.7.3-forever.11.** Tested with WoW Forever **1.60.1, build
 70338, interface 16001** and the `forever` branch of
 [advocaite/TrinityCore](https://github.com/advocaite/TrinityCore/tree/forever).
 English command responses are currently required for parsing.
 
 ## Install
 
-1. Download **GMGenie-0.7.3-forever.9.zip** from the
+1. Download **GMGenie-0.7.3-forever.11-forever.zip** from the
    [latest release](https://github.com/brandonjank/gmgenie-forever/releases/latest).
 2. Close the client. Back up your existing `Interface/AddOns/GMGenie` folder
    and your GM Genie saved variables in the client's `WTF` folder if upgrading.
@@ -25,6 +25,19 @@ The folder must be named **GMGenie** because the addon references its textures
 and resources by that name. If using GitHub's **Code > Download ZIP**, rename
 the extracted repository folder to `GMGenie` before installing it. Do not nest
 it inside another `GMGenie` folder.
+
+### WowUp updates
+
+In the Forever client, use **Install from URL** with
+`https://github.com/brandonjank/gmgenie-forever` (the repository URL).
+WowUp tracks GitHub releases; it does not pull Git commits. A direct ZIP URL
+cannot track future updates.
+
+Releases include a ZIP ending in `-forever.zip` plus a separate `release.json`
+asset declaring flavor `forever` and interface `16001`. These identify the
+package to WowUp's Forever support. Keep the GitHub provider and automatic
+updates enabled. If the installed and latest release filenames match, the
+addon is already current. No reinstall is needed for existing GitHub imports.
 
 ## Included tools
 
@@ -173,10 +186,12 @@ python tests/test_players.py
 python tests/test_builder.py
 python tests/test_catalog.py
 python tools/package.py
+python tests/test_package.py
 ```
 
-The package script creates an installable `dist/GMGenie-<version>.zip` with a
-single `GMGenie/` directory. GitHub Actions runs the checks and builds the same
+The package script creates an installable `dist/GMGenie-<version>-forever.zip`
+with a single `GMGenie/` directory plus `dist/release.json` for WowUp. Upload
+both as assets of the tagged GitHub release. GitHub Actions runs the checks and builds the same
 ZIP. See [CONTRIBUTING.md](CONTRIBUTING.md) for bug reports and contributions.
 
 ## Credits and license

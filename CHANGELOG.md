@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.3-forever.11 — 2026-10-12
+
+- Identify release ZIPs with WowUp's required terminal `-forever.zip` suffix.
+- Generate and publish `release.json` with Forever flavor and interface 16001
+  so GitHub imports can verify client compatibility.
+- Validate the actual ZIP, manifest and WowUp release-selection contract in CI.
+- Document repository URL installation and tracked updates. Addon behavior is
+  unchanged from forever.10.
+
 ## 0.7.3-forever.10 — 2026-10-11
 
 - Replace the default Builder with a compact remote using the shared modern UI.

@@ -22,7 +22,10 @@ jobs:
       - run: python tests/test_players.py
       - run: python tests/test_catalog.py
       - run: python tools/package.py
+      - run: python tests/test_package.py
       - uses: actions/upload-artifact@v4
         with:
           name: GMGenie-Forever
-          path: dist/GMGenie-*.zip
+          path: |
+            dist/GMGenie-*.zip
+            dist/release.json
