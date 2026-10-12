@@ -8,6 +8,7 @@
 - Validate required values, numeric ranges, argument order and chat length.
   Confirm destructive actions; cancel confirmation on edits or target changes.
 - Mask credential fields and keep argument values out of SavedVariables.
+- Reject argument values that would make the core dispatch a different subcommand.
 - Add a persistent compact HUD and preserve exact ticket command categories.
 - Show the introductory chat message once instead of on every reload/login.
 

@@ -43,6 +43,10 @@ assert(build('npc say',{'Hello world!'})=='.npc say Hello world!')
 assert(not build('npc say',{'Hello\n.npc delete'}))
 assert(not build('npc say',{'|cfffffffftext'}))
 assert(not build('npc say',{string.rep('x',256)}))
+assert(not build('additem',{'set','123'})) -- would dispatch the item-set subcommand
+assert(not build('additem',{'s','123'})) -- core also accepts abbreviations
+assert(not build('tele',{'del'})) -- never run a different action than the selected form
+assert(build('tele',{'Stormwind'})=='.tele Stormwind')
 assert(build('appear',{'First Last'})=='.appear First')
 assert(build('npc whisper',{'First Last','Hello there'})=='.npc whisper First Hello there')
 assert(build('ban character',{'First Last','1h','Repeated spam'})=='.ban character First 1h Repeated spam')

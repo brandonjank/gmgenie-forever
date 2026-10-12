@@ -2,6 +2,15 @@
 GMGenie.CommandForms = {};
 local M=GMGenie.CommandForms;
 local function trim(value) return tostring(value or ""):match("^%s*(.-)%s*$"); end
+local childWords,registered={},{};
+for _,entry in ipairs(GMGenie.CommandData.entries) do registered[entry.name]=true; end
+for _,entry in ipairs(GMGenie.CommandData.entries) do
+    local parent="";
+    for word in entry.name:gmatch("%S+") do
+        if registered[parent] then childWords[parent]=childWords[parent] or {}; childWords[parent][word]=true; end
+        parent=parent=="" and word or (parent.." "..word);
+    end
+end
 
 M.guides={
     ["additem"]="Give an item to the selected player, or yourself when no player is selected. Count defaults to one; a negative count removes items. Use the Catalog for explicit delivery to yourself.",
@@ -222,6 +231,15 @@ function M.build(entry,fields,values,redact)
         end
     end
     local command=table.concat(parts," ");
+    -- The core chooses child commands before a group's default handler and
+    -- accepts abbreviations. Never label a different dispatched command as
+    -- the selected action (for example, .additem set <id>).
+    local first=parts[2] and parts[2]:match("^%S+"):lower();
+    if first then
+        for child in pairs(childWords[entry.name] or {}) do
+            if child:sub(1,#first)==first then return nil,"These values select ."..entry.name.." "..child..". Choose that subcommand in the list.",1; end
+        end
+    end
     if #command>255 then return nil,"Command exceeds the 255-byte chat limit."; end
     return command;
 end
