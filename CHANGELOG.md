@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.3-forever.12 — 2026-10-12
+
+- Name release packages `GMGenie-Forever-<gameversion>-<build>.zip`, deriving
+  the game version from the TOC interface and build from the addon release number.
+- Retain the separate `release.json` asset for WowUp compatibility and updates;
+  validate its exact match to the renamed ZIP in CI.
+
 ## 0.7.3-forever.11 — 2026-10-12
 
 - Identify release ZIPs with WowUp's required terminal `-forever.zip` suffix.

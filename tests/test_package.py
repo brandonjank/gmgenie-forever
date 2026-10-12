@@ -16,8 +16,9 @@ assert release['nolib'] is False
 assert release['metadata']==[{'flavor':'forever','interface':interface}]
 assert interface==16001  # never advertise a Retail or other Classic package
 filename=release['filename']
-assert re.search(r'[-_](forever|camelot)\.zip$',filename,re.IGNORECASE)
-assert version in filename and Path(filename).name==filename
+build=re.fullmatch(r'\d+\.\d+\.\d+-forever\.(\d+)',version).group(1)
+assert filename==f'GMGenie-Forever-1.60.1-{int(build)}.zip'
+assert Path(filename).name==filename
 with zipfile.ZipFile(ROOT/'dist'/filename) as archive:
     assert archive.testzip() is None
     names=archive.namelist()
@@ -36,4 +37,4 @@ matching=next(r for r in releases if r['nolib'] is False
 asset=next(a for a in assets if a['name']==matching['filename']
            and a['content_type']=='application/zip')
 assert asset['name']==filename
-print('PASS: release ZIP, TOC version/resources, Forever filename fallback and release.json compatibility selection')
+print('PASS: release ZIP, TOC version/resources, game-version/build filename and release.json compatibility selection')
