@@ -11,6 +11,7 @@ GMGenie_Hud=frame('GMGenie_Hud'); GMGenie_Tickets_Main=frame('GMGenie_Tickets_Ma
 GMGenie_SavedVars.hudClosed=false
 GMGenie.Players={open=function() playersOpened=true end}
 GMGenie.Catalog={open=function() catalogOpened=true end}
+GMGenie.Recipes={open=function() recipesOpened=true end,allowed=function() return false end}
 GMGenie.Spy={spy=function(name) inspected=name end}
 GMGenie.Spawns={toggle=function() builderOpened=true end}
 GMGenie.Tickets={setType=function(kind) reportKind=kind end}
@@ -24,6 +25,7 @@ assert(not H.inspect.enabled and not H.targetCommands.enabled and #sent==0)
 H.inspectTarget(); H.browseTarget(); assert(not inspected and #sent==0)
 GMGenie_Hud_Players:Fire('OnClick'); assert(playersOpened)
 GMGenie_Hud_Catalog:Fire('OnClick'); assert(catalogOpened)
+GMGenie_Hud_Recipes:Fire('OnClick'); assert(recipesOpened)
 targetGuid='Creature-0-1-1-1-100-200'; targetName='Training Dummy'
 H.readNotice(nil,'PLAYER_TARGET_CHANGED')
 assert(H.targetName.text=='Training Dummy' and H.targetCommands.enabled and not H.inspect.enabled)

@@ -19,6 +19,7 @@ jobs:
       - run: python tests/test_gmgenie.py
       - run: python tests/test_commands.py
       - run: python tests/test_command_forms.py
+      - run: python tests/test_recipes.py
       - run: python tests/test_ui.py
       - run: python tests/test_builder.py
       - run: python tests/test_players.py

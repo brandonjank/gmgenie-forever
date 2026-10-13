@@ -69,7 +69,8 @@ function UIDropDownMenu_Initialize() end
 def session():
     lua = LuaRuntime(unpack_returned_tuples=True)
     lua.execute(MOCK)
-    for name in ('Forever.lua', 'Server.lua', 'GMGenie.lua', 'Players.lua',
+    for name in ('Forever.lua', 'Server.lua', 'GMGenie.lua',
+                 'CommandData.lua','CommandHelp.lua','CommandForms.lua','Commands.lua','Recipes.lua','Players.lua',
                  'Tickets.lua', 'Spy.lua', 'Spawns.lua', 'Builder.lua', 'Catalog.lua',
                  'Chronos/Chronos.lua'):
         lua.execute((ROOT / name).read_text(encoding='utf-8-sig'))

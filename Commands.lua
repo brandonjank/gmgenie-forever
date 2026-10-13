@@ -95,6 +95,7 @@ function C.select(entry,record)
     C.source:SetText("https://github.com/advocaite/TrinityCore/blob/"..data.revision.."/"..entry.source.."#L"..entry.line);
     C.source:ClearFocus();
     C.favorite:SetText(C.preferences().favorites[entry.name] and "Remove favorite" or "Save favorite");
+    if C.saveRecipe then C.saveRecipe:SetEnabled(GMGenie.Recipes and GMGenie.Recipes.allowed(entry) or false); end
     if changed or not C.fields then C.loadForm(entry); end
     C.updateForm();
     C.updateRows();
@@ -282,6 +283,11 @@ function C.create()
     C.previous=U.button(window,"Previous",384,-668,98,function() C.page=C.page-1; C.refresh(); end);
     C.pageLabel=U.label(window,"",500,-676,100,"GameFontHighlightSmall",true);
     C.next=U.button(window,"Next",586,-668,98,function() C.page=C.page+1; C.refresh(); end);
+    U.button(window,"Recipes",18,-618,166,function() if GMGenie.Recipes then GMGenie.Recipes.open(); end end);
+    C.saveRecipe=U.button(window,"Save form...",192,-618,176,function(self)
+        if GMGenie.Recipes then GMGenie.Recipes.captureMenu(self,C.selected,C.values()); end
+    end);
+    U.tooltip(C.saveRecipe,"Save a world-building form","Create a named recipe or append this form to your open recipe. Saving never runs the command.");
     U.label(window,"Forever "..data.revision:sub(1,12),754,-676,228,"GameFontHighlightSmall",true);
     C.detail=U.panel(window,384,-176,598,474);
     C.heading=U.label(C.detail,"",18,-18,562,"GameFontNormalLarge");
@@ -355,6 +361,7 @@ end
 
 function C.open(query)
     if not GMGenieForever.RequireActive() then return; end
+    if GMGenie.Recipes and GMGenie.Recipes.window then GMGenie.Recipes.window:Hide(); end
     if not C.window then C.create(); end
     if query and query~="" then C.mode="all"; C.category="all"; C.context="all"; end
     local text=query~=nil and query or C.preferences().query or "";

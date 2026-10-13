@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.3-forever.18 — 2026-10-13
+
+- Add world-building recipes with nine guided vendor, patrol and placement examples.
+- Save filled command forms as named personal recipes, append/reorder/remove steps,
+  and keep recipe values across reloads without overwriting the bundled examples.
+- Share values such as Path ID across steps. Run one step explicitly, then manually
+  check its result; recipes never batch commands or infer success from a send.
+- Bind selected NPCs and recheck target, position, arguments and review expiry before
+  sending changes. New patrol allocation requires a clear target; path reload comes
+  before assignment, and vendor instructions explain shared template stock.
+- Add Recipes to the HUD, command workspace and `/gmrecipes` / `/gmgenie recipes`.
+  Macro editors remain available through Settings.
+
 ## 0.7.3-forever.17 — 2026-10-12
 
 - Fit catalog models to the preview viewport's aspect ratio with extra headroom,

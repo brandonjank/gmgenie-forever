@@ -97,6 +97,9 @@ The new gate has automated Lua coverage; live client validation is still pending
   confirmation. Source details and Server help remain available.
 - **28 editable starter macros**, installed automatically and preserved across
   reloads alongside your custom macros.
+- **Saved world-building recipes**, with nine guided vendor, patrol and placement
+  examples. Share values between steps, review one command at a time, and save
+  personal copies without changing the bundled examples. [Recipe guide](docs/RECIPES.md).
 
 | Starter category | Examples |
 | --- | --- |
@@ -126,6 +129,7 @@ GM-only announcements. An IP ban can affect players sharing an address.
 | --- | --- |
 | `/gmgenie` | Toggle the HUD |
 | `/gmgenie commands [search words]` | Browse the complete Forever command reference |
+| `/gmrecipes [search words]` or `/gmgenie recipes [search words]` | Open saved world-building recipes and examples |
 | `/gmgenie catalog [search]` / `/gmcatalog [search]` | Browse Forever items and creatures |
 | `/gmgenie players [search]` / `/gmplayers [search]` | Online players, zones and quick TP/SUM |
 | `/gmgenie options` | Open Settings |
@@ -227,6 +231,7 @@ python tests/test_server.py
 python tests/test_gmgenie.py
 python tests/test_commands.py
 python tests/test_command_forms.py
+python tests/test_recipes.py
 python tests/test_ui.py
 python tests/test_players.py
 python tests/test_builder.py

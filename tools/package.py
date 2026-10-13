@@ -17,7 +17,7 @@ files = [p for p in ROOT.iterdir() if p.is_file() and p.suffix in {".lua", ".xml
 for folder in ["Chronos", "Options", "Textures"]:
     files.extend(p for p in (ROOT / folder).rglob("*") if p.is_file())
 files.extend(ROOT / name for name in ["LICENSE", "NOTICE", "README.md", "README.Forever.md", "CHANGELOG.md"])
-files.extend(ROOT / "docs" / name for name in ["CATALOG.md", "catalog-sources.json"])
+files.extend(ROOT / "docs" / name for name in ["CATALOG.md", "catalog-sources.json", "RECIPES.md"])
 files.extend(ROOT / "docs" / "branding" / name for name in ["README.md", "icon.png", "social-preview.png"])
 # WowUp identifies this filename through the separate release.json asset.
 output = ROOT / "dist" / f"GMGenie-Forever-{game_version}-{build}.zip"

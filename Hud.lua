@@ -77,7 +77,7 @@ function H.create()
     U.button(content,"Commands",14,-110,132,function() GMGenie.Commands.open(); end,"GMGenie_Hud_Commands");
     U.button(content,"Reports",154,-110,132,H.reportMenu,"GMGenie_Hud_Tickets");
     U.button(content,"Builder",14,-146,132,function() GMGenie.Spawns.toggle(); end,"GMGenie_Hud_Builder");
-    U.button(content,"Macro editors",154,-146,132,H.macroMenu);
+    U.button(content,"Recipes",154,-146,132,function() if GMGenie.Recipes then GMGenie.Recipes.open(); end end,"GMGenie_Hud_Recipes");
     U.button(content,"Catalog",14,-182,132,function() GMGenie.Catalog.open(); end,"GMGenie_Hud_Catalog");
     U.button(content,"Online players",154,-182,132,function() GMGenie.Players.open(); end,"GMGenie_Hud_Players");
     U.tooltip(GMGenie_Hud_Catalog,"Item & creature catalog","Search Forever items and creatures, preview models and add items or spawn NPCs.");

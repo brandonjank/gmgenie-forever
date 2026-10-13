@@ -200,6 +200,8 @@ SlashCmdList.GMGENIEFOREVER = function(command)
     if command ~= "debug" and not F.RequireActive() then return; end
     if command == "commands" or command:match("^commands%s") then
         GMGenie.Commands.open(strtrim(command:sub(9)));
+    elseif command == "recipes" or command:match("^recipes%s") then
+        GMGenie.Recipes.open(strtrim(command:sub(8)));
     elseif command == "catalog" or command:match("^catalog%s") then
         GMGenie.Catalog.open(strtrim(command:sub(8)));
     elseif command == "players" or command:match("^players%s") then

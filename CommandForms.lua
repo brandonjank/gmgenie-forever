@@ -171,7 +171,8 @@ end
 
 function M.label(entry,f)
     if (entry.name=="npc add" or entry.name=="npc add temp") and f.name=="id" then return "Creature entry ID"; end
-    local labels={spawnid="Spawn ID",spawnId="Spawn ID",spawnIdArg="Spawn ID",guidLow="Spawn ID",lowGuid="Spawn ID",objectId="Object entry / name",xyz="X Y Z",o="Facing (radians)",oz="Z (radians)",oy="Y (radians)",ox="X (radians)"};
+    local labels={spawnid="Spawn ID",spawnId="Spawn ID",spawnIdArg="Spawn ID",guidLow="Spawn ID",lowGuid="Spawn ID",objectId="Object entry / name",xyz="X Y Z",o="Facing (radians)",oz="Z (radians)",oy="Y (radians)",ox="X (radians)",
+        item="Item ID",mc="Stock limit",it="Restock seconds",ec="Extended cost ID",bonusListIDs="Bonus IDs",pathid="Path ID"};
     if entry.name=="go xyz" and f.name=="id" then return "Map ID"; end
     return labels[f.name] or (f.name:gsub("Arg$",""):gsub("(%l)(%u)","%1 %2"):gsub("_"," "));
 end
