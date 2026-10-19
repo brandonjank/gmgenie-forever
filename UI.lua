@@ -107,8 +107,9 @@ function U.window(window,title,width,height,close)
     window:SetSize(width,height); window:SetFrameStrata("DIALOG"); U.paint(window,"window");
     U.trackWindow(window);
     local bar=U.panel(window,1,-1,width-2,47);
-    U.label(bar,title,16,-15,width-100,"GameFontNormalLarge");
+    window.genieTitle=U.label(bar,title,16,-15,width-100,"GameFontNormalLarge");
     U.button(bar,"Close",width-83,-9,66,close or function() window:Hide(); end,nil,28);
+    window.genieBack=U.button(bar,"Back",width-158,-9,66,U.back); window.genieBack:Hide();
     return window;
 end
 
@@ -146,4 +147,41 @@ function U.settingsMenu(owner)
         end
         root:CreateDivider(); root:CreateButton("Reset window positions",U.resetPositions);
     end);
+end
+
+
+-- Main workspaces share bounded Back history. Runtime drafts never enter SavedVariables.
+U.workspaces={}; U.history={};
+function U.workspace(key,window,capture,restore)
+    U.workspaces[key]={window=window,capture=capture,restore=restore};
+end
+function U.updateNavigation()
+    for key,space in pairs(U.workspaces) do
+        if space.window.genieBack then
+            local shown=key==U.current and #U.history>0;
+            space.window.genieBack:SetShown(shown);
+            if space.window.genieTitle then space.window.genieTitle:SetWidth(space.window:GetWidth()-(shown and 180 or 100)); end
+        end
+    end
+end
+function U.visit(key)
+    local space=U.workspaces[key]; if not space then return; end
+    local old=U.workspaces[U.current];
+    if key~=U.current and old and old.window:IsShown() then
+        U.history[#U.history+1]={key=U.current,state=old.capture()};
+        if #U.history>20 then table.remove(U.history,1); end
+    end
+    U.navigating=true;
+    for name,other in pairs(U.workspaces) do if name~=key then other.window:Hide(); end end
+    U.navigating=false; U.current=key; space.window:Show(); U.updateNavigation();
+end
+function U.back()
+    if not GMGenieForever.RequireActive() then return; end
+    local previous=table.remove(U.history); if not previous then return; end
+    local old=U.workspaces[U.current];
+    if old then old.capture(); end
+    U.navigating=true;
+    for _,space in pairs(U.workspaces) do space.window:Hide(); end
+    U.navigating=false; U.current=previous.key;
+    local space=U.workspaces[previous.key]; space.restore(previous.state); space.window:Show(); U.updateNavigation();
 end

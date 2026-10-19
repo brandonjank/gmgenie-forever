@@ -232,6 +232,7 @@ python tests/test_gmgenie.py
 python tests/test_commands.py
 python tests/test_command_forms.py
 python tests/test_recipes.py
+python tests/test_navigation.py
 python tests/test_ui.py
 python tests/test_players.py
 python tests/test_builder.py
@@ -252,3 +253,5 @@ copyright **2026 Brandon Jank**. Distributed under **GNU GPL version 3**;
 the original license and copyright notices are retained. Chronos retains its
 original source notices. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the
 [original README and changelog](docs/README.upstream.md).
+
+Use **Find** beside supported creature/item entry fields to choose from the Forever catalog. **Use selection** returns only the ID; **Back** restores the previous workspace. Command drafts and recipe progress stay in memory during browsing. Save recipe edits before reloading; credential fields and target bindings are never restored automatically.

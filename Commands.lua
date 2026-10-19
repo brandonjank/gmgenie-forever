@@ -1,6 +1,7 @@
 -- Modern command workspace for GM Genie Forever. GPL-3.0.
 GMGenie.Commands = { page=1, pageSize=18, matches={}, mode="all", category="all", context="all" };
 local C=GMGenie.Commands;
+C.drafts={};
 local data=GMGenie.CommandData;
 local U=GMGenieUI;
 local M=GMGenie.CommandForms;
@@ -83,6 +84,7 @@ end
 function C.select(entry,record)
     if not entry then return; end
     local changed=not C.selected or C.selected.name~=entry.name;
+    if changed then C.cacheForm(); end
     C.selected=entry;
     if record~=false then C.remember(entry); end
     C.heading:SetText("."..entry.name);
@@ -166,17 +168,25 @@ function C.values()
     local values={}; for i in ipairs(C.fields or {}) do values[i]=C.inputs[i]:GetText(); end return values;
 end
 
+function C.cacheForm()
+    if not C.selected or not C.fields then return; end
+    local values={};
+    for i,f in ipairs(C.fields) do values[i]=not f.secret and C.inputs[i]:GetText() or ""; end
+    C.drafts[C.selected.name]=values;
+end
+
 function C.loadForm(entry)
     C.loading=true; C.confirmation=nil; C.fields=M.schema(entry);
     for i,widget in ipairs(C.inputs) do
-        local f=C.fields[i]; widget:ClearFocus(); widget:SetText("");
-        widget:SetShown(f~=nil); widget.label:SetShown(f~=nil);
+        local f=C.fields[i]; widget:ClearFocus(); widget:SetText((C.drafts[entry.name] or {})[i] or "");
+        widget:SetShown(f~=nil); widget.label:SetShown(f~=nil); widget.picker:Hide();
         if f then
             local columns=math.min(3,#C.fields); local width=(562-(columns-1)*8)/columns;
             local x=18+((i-1)%columns)*(width+8); local y=-200-math.floor((i-1)/columns)*66;
-            widget:ClearAllPoints(); widget:SetPoint("TOPLEFT",x,y-20); widget:SetWidth(width);
+            widget:ClearAllPoints(); widget:SetPoint("TOPLEFT",x,y-20); widget:SetWidth(width-(M.catalogKind(entry,f) and 54 or 0));
+            widget.picker:ClearAllPoints(); widget.picker:SetPoint("TOPLEFT",x+width-48,y-20); widget.picker:SetShown(M.catalogKind(entry,f)~=nil);
             widget.label:ClearAllPoints(); widget.label:SetPoint("TOPLEFT",x,y); widget.label:SetWidth(width); widget.label:SetHeight(18);
-            widget.placeholder:SetText(M.hint(f)); widget.placeholder:SetWidth(width-20);
+            widget.placeholder:SetText(M.hint(f)); widget.placeholder:SetWidth(widget:GetWidth()-20);
             widget:SetPassword(not not f.secret);
             widget.label:SetText(M.label(entry,f)..(f.optional and " (optional)" or " *"));
         end
@@ -193,6 +203,9 @@ end
 function C.updateForm()
     if C.loading or not C.selected or not C.fields then return; end
     local command,err=M.build(C.selected,C.fields,C.values());
+    if command and C.selected.name=="npc move" and not C.inputs[1]:GetText():match("^%s*$") and UnitGUID("target") then
+        command=nil; err="Clear your target before moving an NPC by spawn ID.";
+    end
     if command and (C.selected.name=="npc move" or C.selected.name=="npc delete") and C.inputs[1]:GetText():match("^%s*$") then
         local guid=UnitGUID("target");
         if not guid or not guid:match("^Creature%-") or UnitIsPlayer("target") then command=nil; err="Target an NPC or enter its database spawn ID."; end
@@ -214,7 +227,7 @@ function C.editChanged()
 end
 
 function C.clearForm()
-    if C.selected then C.loadForm(C.selected); C.updateForm(); end
+    if C.selected then C.drafts[C.selected.name]=nil; C.loadForm(C.selected); C.updateForm(); end
 end
 
 function C.fillContext()
@@ -254,6 +267,7 @@ end
 
 function C.create()
     local window=CreateFrame("Frame","GMGenie_Commands",UIParent,"BackdropTemplate"); C.window=window;
+    window:SetFrameLevel(window:GetFrameLevel()+50);
     window:SetPoint("CENTER"); U.window(window,"Command workspace",1000,710);
     U.label(window,"Find a command, fill in its arguments, then run it. Nothing runs while browsing.",18,-62,950,"GameFontHighlightSmall",true);
     C.tabs={};
@@ -322,6 +336,7 @@ function C.create()
             GameTooltip:AddLine(M.hint(f),0.65,0.73,0.83,true); GameTooltip:Show();
         end);
         edit:HookScript("OnLeave",function() GameTooltip:Hide(); end);
+        edit.picker=U.button(C.detail,"Find",x+134,y-20,48,function() C.pickField(i); end); edit.picker:Hide();
         C.inputs[i]=edit;
     end
     C.noArguments=U.label(C.detail,"This command takes no arguments. Check your selected target, then click Run command.",18,-222,550,"GameFontHighlight",true);
@@ -349,20 +364,38 @@ function C.create()
     C.source:SetScript("OnEditFocusGained",function(self) self:HighlightText(); end);
     source:Hide();
     window:HookScript("OnHide",function()
-        source:Hide(); C.confirmation=nil;
+        C.cacheForm(); source:Hide(); C.confirmation=nil;
         if C.fields then
             for i,f in ipairs(C.fields) do C.inputs[i]:ClearFocus(); if f.secret then C.inputs[i]:SetText(""); end end
         end
     end);
     window:RegisterEvent("PLAYER_TARGET_CHANGED");
     window:SetScript("OnEvent",function() C.confirmation=nil; if window:IsShown() then C.updateForm(); end end);
+    U.workspace("commands",window,function()
+        C.cacheForm();
+        return {query=C.query:GetText(),mode=C.mode,category=C.category,context=C.context,page=C.page,selected=C.selected and C.selected.name};
+    end,function(state)
+        C.mode,C.category,C.context=state.mode,state.category,state.context;
+        C.query:SetText(state.query); C.refresh(state.query); C.page=state.page; C.refresh();
+        if byName[state.selected] then C.select(byName[state.selected],false); end
+    end);
     window:Hide();
+end
+
+function C.pickField(index)
+    local entry=C.selected; local field=C.fields and C.fields[index];
+    local kind=entry and field and M.catalogKind(entry,field);
+    if not kind then return; end
+    C.cacheForm();
+    GMGenie.Catalog.pick(kind,M.label(entry,field),function(id)
+        if C.selected==entry then C.inputs[index]:SetText(tostring(id)); C.confirmation=nil; C.updateForm(); end
+    end);
 end
 
 function C.open(query)
     if not GMGenieForever.RequireActive() then return; end
-    if GMGenie.Recipes and GMGenie.Recipes.window then GMGenie.Recipes.window:Hide(); end
     if not C.window then C.create(); end
+    U.visit("commands");
     if query and query~="" then C.mode="all"; C.category="all"; C.context="all"; end
     local text=query~=nil and query or C.preferences().query or "";
     C.window:Show(); C.query:SetText(text); C.refresh(text);

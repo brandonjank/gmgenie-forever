@@ -14,7 +14,7 @@ function GMGenie.Macros.Mail.optionsOnLoad()
 
     getglobal(panel:GetName() .. "_Title"):SetText("Mail Macros");
     getglobal(panel:GetName() .. "_SubText"):SetText("Here you add and update mail macros, which will be available from the ticket interface and the player context menus.");
-    GMGenie_Macros_Mail_OptionsWindow_Info_Text:SetText("Note: every newline in the mail macro will be a separate mail. It is not possible to have newlines within one mail.\nNote: If the text in the box turns red that means one of the lines (messages) has become too long and might get cut off when sending a mail.\n\nTip: use NAME (in full caps) to use the players' name in the mail text.");
+    GMGenie_Macros_Mail_OptionsWindow_Info_Text:SetText("Note: every newline in the mail macro will be a separate mail. It is not possible to have newlines within one mail.\nInvalid or overlong mail is blocked before sending. Straight double quotes cannot be represented by the server mail parser; use curly quotation marks instead.\n\nTip: use NAME (in full caps) to use the players' name in the mail text.");
 
     getglobal("GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text"):SetScript("OnTextChanged", GMGenie.Macros.Mail.updateMacroText);
 
@@ -27,21 +27,9 @@ function GMGenie.Macros.Mail.updateMacroText()
 end
 
 function GMGenie.Macros.Mail.checkMacroLength()
-    local macro = GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:GetText();
-    local macro = string.gsub(macro, "NAME", "abcdefghijkl");
-    local lines = { strsplit("\n", macro) };
-
-    local maxlength = 226 - string.len(GMGenie_Macros_Mail_OptionsWindow_Subject:GetText());
-    if #lines > 1 then
-        maxlength = maxlength - 4;
-    end
-    local tooLong = false;
-    for _, line in ipairs(lines) do
-        if string.len(line) > maxlength then
-            tooLong = true;
-        end
-    end
-    GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:SetTextColor(1, tooLong and 0 or 1, tooLong and 0 or 1);
+    local commands=GMGenie.Macros.Mail.build("abcdefghijkl",
+        GMGenie_Macros_Mail_OptionsWindow_Subject:GetText(),GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:GetText());
+    GMGenie_Macros_Mail_OptionsWindow_Macro_Frame_Text:SetTextColor(1,commands and 1 or 0,commands and 1 or 0);
 end
 
 GMGenie.Macros.Mail.currentEditing = nil;

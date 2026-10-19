@@ -31,6 +31,7 @@ H.readNotice(nil,'PLAYER_TARGET_CHANGED')
 assert(H.targetName.text=='Training Dummy' and H.targetCommands.enabled and not H.inspect.enabled)
 H.inspectTarget(); assert(not inspected)
 H.browseTarget(); assert(GMGenie.Commands.query.text=='npc' and #sent==0)
+assert(GMGenie.Commands.window.level>GMGenie_Hud.level) -- workspace must cover the HUD
 targetGuid='Pet-0-1-1-1-1'; H.updateTarget(); assert(not H.targetCommands.enabled)
 targetGuid='Player-1-2'; targetPlayer=true; targetName='Example'
 H.updateTarget(); assert(H.inspect.enabled)

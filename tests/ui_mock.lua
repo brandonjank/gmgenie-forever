@@ -58,7 +58,7 @@ function methods:ClearFocus() self:Fire("OnEditFocusLost"); end
 function methods:SetFocus() self:Fire("OnEditFocusGained"); end
 function methods:SetPassword(value) self.password=value; end
 function methods:SetJustifyV(value) self.justifyV=value; end
-for _,name in ipairs({"SetJustifyH","SetTextColor","SetAutoFocus","SetFontObject","SetTextInsets","SetMaxLetters","SetBackdrop","RegisterForDrag","SetMovable","SetClampedToScreen","EnableMouse","SetFrameStrata","SetNormalFontObject","SetHighlightFontObject","SetDisabledFontObject","ClearAllPoints","HighlightText","EnableMouseWheel","StartMoving","StopMovingOrSizing","RegisterEvent","SetAlpha","SetOwner","AddLine"}) do
+for _,name in ipairs({"SetCursorPosition","SetJustifyH","SetTextColor","SetAutoFocus","SetFontObject","SetTextInsets","SetMaxLetters","SetBackdrop","RegisterForDrag","SetMovable","SetClampedToScreen","EnableMouse","SetFrameStrata","SetNormalFontObject","SetHighlightFontObject","SetDisabledFontObject","ClearAllPoints","HighlightText","EnableMouseWheel","StartMoving","StopMovingOrSizing","RegisterEvent","SetAlpha","SetOwner","AddLine"}) do
     methods[name]=function() end;
 end
 function CreateFrame(_,name,parent) local f=frame(name); f.parent=parent; return f; end
