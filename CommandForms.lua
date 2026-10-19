@@ -269,3 +269,15 @@ function M.confirm(entry)
         or entry.name=="npc set movetype"
         or entry.name:match(" despawngroup$");
 end
+
+
+-- Only template IDs with matching bundled catalogs are selectable here.
+-- Spawn IDs, paths, display IDs and gameobjects are deliberately not inferred.
+function M.catalogKind(entry,field)
+    local name=field.name;
+    if ((entry.name=="npc add" or entry.name=="npc add temp") and name=="id")
+        or (entry.name=="npc set entry" and name=="entry")
+        or field.type=="CreatureEntry" then return "creatures"; end
+    if (entry.name=="npc add item" or entry.name=="npc delete item" or entry.name=="additem" or entry.name=="additem to")
+        and name=="item" then return "items"; end
+end

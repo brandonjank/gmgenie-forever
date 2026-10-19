@@ -2,6 +2,10 @@
 GMGenie.Recipes={page=1,pageSize=12,mode="all",checked={},sent={},sessions={},draftSerial=0};
 local R,M,U=GMGenie.Recipes,GMGenie.CommandForms,GMGenieUI;
 local commands={}; for _,e in ipairs(GMGenie.CommandData.entries) do commands[e.name]=e; end
+local function clone(value)
+    if type(value)~="table" then return value; end
+    local out={}; for k,v in pairs(value) do out[k]=clone(v); end return out;
+end
 local function trim(s) return tostring(s or ""):match("^%s*(.-)%s*$"); end
 local function variable(key,label,required) return {var=key,label=label,required=required~=false}; end
 local function step(title,command,values,note,target)
@@ -162,12 +166,13 @@ end
 function R.bindTarget()
     local guid=R.npcGUID();
     if not guid then R.notice("Select an NPC first."); return; end
-    if not R.bound or R.bound.guid~=guid then
+    if R.checkedTarget~=guid then
         for i in ipairs(R.draft.steps) do
             local e,_,values,s=R.resolve(R.draft,i);
             if R.targetPolicy(e.name,values,s)=="npc" then R.checked[i]=nil; R.sent[i]=nil; end
         end
     end
+    R.checkedTarget=guid;
     R.bound={guid=guid,name=(GetUnitName and GetUnitName("target",true)) or UnitName("target") or "NPC"};
     R.confirmation=nil; R.update();
 end
@@ -246,7 +251,7 @@ function R.capture(entry,values,append)
     if append and #recipe.steps>=20 then R.notice("A recipe can contain at most 20 steps."); return; end
     recipe.steps[#recipe.steps+1]=s;
     local copied,err=R.copy(recipe); if not copied then recipe.steps[#recipe.steps]=nil; R.notice(err); return; end
-    if not append then R.savedID=nil; R.bound=nil; end
+    if not append then R.savedID=nil; R.bound=nil; R.checkedTarget=nil; end
     R.draft=copied; R.dirty=true; R.checked={}; R.sent={}; R.confirmation=nil;
     R.openDraft(#copied.steps);
 end
@@ -267,10 +272,8 @@ end
 function R.newDraftID() R.draftSerial=R.draftSerial+1; return "draft-"..R.draftSerial; end
 function R.cacheDraft()
     if not R.draft or not R.draft.id then return; end
-    if R.dirty then
-        local copied=R.copy(R.draft);
-        if copied then R.sessions[R.draft.id]={recipe=copied,index=R.stepIndex,savedID=R.savedID,dirty=true}; end
-    else R.sessions[R.draft.id]=nil; end
+    R.sessions[R.draft.id]={recipe=clone(R.draft),index=R.stepIndex,savedID=R.savedID,dirty=R.dirty,
+        checked=clone(R.checked),sent=clone(R.sent),checkedTarget=R.checkedTarget};
 end
 
 function R.refresh()
@@ -283,7 +286,7 @@ function R.refresh()
         if R.mode=="examples" and source~="example" or R.mode=="mine" and source=="example" then return; end
         local text=(recipe.name.." "..recipe.category.." "..recipe.summary):lower();
         for _,word in ipairs(words) do if not text:find(word,1,true) then return; end end
-        list[#list+1]={recipe=recipe,source=source,dirty=cached~=nil};
+        list[#list+1]={recipe=recipe,source=source,dirty=cached and cached.dirty or false};
     end
     for _,recipe in ipairs(R.examples) do include(recipe,"example"); end
     R.invalidSaved=0;
@@ -299,7 +302,7 @@ function R.refresh()
         row.record=list[(R.page-1)*R.pageSize+i]; row:SetShown(row.record~=nil);
         if row.record then
             local source=row.record.source=="example" and "Example" or row.record.source=="saved" and "Saved" or "Unsaved draft";
-            row:SetText((row.record.dirty and "* " or "")..row.record.recipe.name.."\n|cff94a8bd"..source.." / "..row.record.recipe.category.."|r");
+            row:SetText((row.record.dirty and "* " or "")..(row.record.recipe.name~="" and row.record.recipe.name:gsub("|","||") or "(Unnamed recipe)").."\n|cff94a8bd"..source.." / "..row.record.recipe.category.."|r");
             row.selected=R.draft and row.record.recipe.id==R.draft.id; U.paint(row,"button",row.selected);
         end
     end
@@ -314,10 +317,12 @@ function R.choose(record)
     if not record then return; end
     R.cacheDraft();
     local cached=R.sessions[record.recipe.id];
-    local copied,err=R.copy(cached and cached.recipe or record.recipe);
+    local copied,err;
+    if cached then copied=clone(cached.recipe); else copied,err=R.copy(record.recipe); end
     if not copied then R.notice(err); return; end
     R.draft=copied; R.savedID=cached and cached.savedID or (record.source=="saved" and copied.id or nil);
-    R.dirty=cached~=nil; R.bound=nil; R.checked={}; R.sent={}; R.confirmation=nil;
+    R.dirty=cached and cached.dirty or false; R.bound=nil; R.checked=clone(cached and cached.checked or {}); R.sent=clone(cached and cached.sent or {});
+    R.checkedTarget=cached and cached.checkedTarget; R.confirmation=nil;
     R.openDraft(cached and cached.index or 1);
 end
 
@@ -325,8 +330,7 @@ function R.openDraft(index)
     if not GMGenieForever.RequireActive() then return; end
     if not R.window then R.create(); end
     R.loading=true; R.name:SetText(R.draft.name); R.summary:SetText(R.draft.summary); R.loading=false;
-    R.window:Show();
-    if GMGenie.Commands.window then GMGenie.Commands.window:Hide(); end
+    U.visit("recipes");
     R.selectStep(index or 1); R.refresh();
 end
 
@@ -335,14 +339,15 @@ function R.selectStep(index)
     R.stepIndex=math.max(1,math.min(#R.draft.steps,index)); R.confirmation=nil; R.loading=true;
     local e,fields,values=R.resolve(R.draft,R.stepIndex); R.entry=e; R.fields=fields;
     for i,input in ipairs(R.inputs) do
-        local f=fields[i]; input:ClearFocus(); input:SetText(f and values[i] or ""); input:SetShown(f~=nil); input.label:SetShown(f~=nil);
+        local f=fields[i]; input:ClearFocus(); input:SetText(f and values[i] or ""); input:SetShown(f~=nil); input.label:SetShown(f~=nil); input.picker:Hide();
         if f then
             local cols=math.min(3,#fields); local width=(592-(cols-1)*8)/cols;
             local x=18+((i-1)%cols)*(width+8); local y=-350-math.floor((i-1)/cols)*64;
-            input:ClearAllPoints(); input:SetPoint("TOPLEFT",x,y-20); input:SetWidth(width);
+            input:ClearAllPoints(); input:SetPoint("TOPLEFT",x,y-20); input:SetWidth(width-(M.catalogKind(e,f) and 54 or 0));
+            input.picker:ClearAllPoints(); input.picker:SetPoint("TOPLEFT",x+width-48,y-20); input.picker:SetShown(M.catalogKind(e,f)~=nil);
             input.label:ClearAllPoints(); input.label:SetPoint("TOPLEFT",x,y); input.label:SetWidth(width);
             input.label:SetText((f.recipeLabel or M.label(e,f))..(f.optional and " (optional)" or " *"));
-            input.placeholder:SetText(M.hint(f)); input.placeholder:SetWidth(width-20);
+            input.placeholder:SetText(M.hint(f)); input.placeholder:SetWidth(input:GetWidth()-20);
         end
     end
     R.loading=false; R.update();
@@ -400,12 +405,12 @@ function R.optionsMenu(owner)
         if R.savedID then
             root:CreateButton("Revert to saved fields",function()
                 for _,recipe in ipairs(R.preferences().recipes) do if recipe.id==R.savedID then
-                    R.sessions[R.savedID]=nil; R.dirty=false; R.choose({recipe=recipe,source="saved"}); break;
+                    R.sessions[R.savedID]=nil; R.dirty=false; R.draft=nil; R.choose({recipe=recipe,source="saved"}); break;
                 end end
             end);
         else
             for _,example in ipairs(R.examples) do if example.id==R.draft.id then
-                root:CreateButton("Reset example fields",function() R.sessions[example.id]=nil; R.dirty=false; R.choose({recipe=example,source="example"}); end);
+                root:CreateButton("Reset example fields",function() R.sessions[example.id]=nil; R.dirty=false; R.draft=nil; R.choose({recipe=example,source="example"}); end);
             end end
         end
     end);
@@ -481,7 +486,8 @@ function R.create()
             GameTooltip:SetOwner(self,"ANCHOR_RIGHT"); GameTooltip:SetText(f.recipeLabel or M.label(R.entry,f));
             GameTooltip:AddLine(M.hint(f)..(f.shared and "\nThis value is shared with other recipe steps." or ""),0.65,0.73,0.83,true); GameTooltip:Show();
         end);
-        input:HookScript("OnLeave",function() GameTooltip:Hide(); end); R.inputs[i]=input;
+        input:HookScript("OnLeave",function() GameTooltip:Hide(); end);
+        input.picker=U.button(detail,"Find",18,-370,48,function() R.pickField(i); end); input.picker:Hide(); R.inputs[i]=input;
     end
     R.noArguments=U.label(detail,"No arguments. Check the bound NPC and review this step's instructions.",18,-382,592,"GameFontHighlight",true);
     U.label(detail,"EXACT COMMAND PREVIEW",18,-482,592,"GameFontHighlightSmall",true);
@@ -491,7 +497,7 @@ function R.create()
     R.run=U.button(detail,"Review step",18,-546,126,R.execute);
     R.check=U.button(detail,"I checked the result",152,-546,176,R.markChecked);
     U.button(detail,"Add step...",336,-546,126,function()
-        R.cacheDraft(); R.window:Hide(); GMGenie.Commands.open();
+        R.cacheDraft(); GMGenie.Commands.open();
         GMGenie.showGMMessage("Choose and fill a command, then Save form > Append to your open recipe.");
     end);
     U.button(detail,"Builder",470,-546,140,function() if GMGenie.Spawns then GMGenie.Spawns.toggle(); end end);
@@ -502,14 +508,29 @@ function R.create()
         R.cacheDraft(); R.confirmation=nil; R.bound=nil;
         R.name:ClearFocus(); R.summary:ClearFocus(); for _,input in ipairs(R.inputs) do input:ClearFocus(); end
     end);
+    U.workspace("recipes",window,function() R.cacheDraft(); return {id=R.draft and R.draft.id,index=R.stepIndex}; end,function(state)
+        local cached=state.id and R.sessions[state.id];
+        if cached then R.choose({recipe=cached.recipe,source=cached.savedID and "saved" or "draft"}); end
+        R.refresh();
+    end);
     window:Hide();
+end
+
+function R.pickField(index)
+    if not R.draft then return; end
+    local draft,stepIndex=R.draft,R.stepIndex;
+    local e,fields=R.resolve(draft,stepIndex); local kind=M.catalogKind(e,fields[index]);
+    if not kind then return; end
+    R.cacheDraft();
+    GMGenie.Catalog.pick(kind,fields[index].recipeLabel or M.label(e,fields[index]),function(id)
+        if R.draft and R.draft.id==draft.id and R.stepIndex==stepIndex then R.inputs[index]:SetText(tostring(id)); end
+    end);
 end
 
 function R.open(query)
     if not GMGenieForever.RequireActive() then return; end
     if not R.window then R.create(); end
-    R.window:Show();
-    if GMGenie.Commands.window then GMGenie.Commands.window:Hide(); end
+    U.visit("recipes");
     if query~=nil then R.search:SetText(query); R.mode="all"; end
     R.refresh(); if R.draft then R.openDraft(R.stepIndex); end
 end

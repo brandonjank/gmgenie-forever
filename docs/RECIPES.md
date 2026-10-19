@@ -90,9 +90,9 @@ administration forms are excluded.
 
 Recipe names, notes, steps and argument values are saved in the existing
 `GMGenie_SavedVars.worldRecipes`. Up to **100 personal recipes**, **20 steps per
-recipe**, and **32 shared fields** are supported. Ordinary in-session drafts are
+recipe**, and **32 shared fields** are supported. Incomplete in-session drafts and manual checks are
 retained when switching recipes, but **Save copy/Update saved is required before
-reloading**. Bound target GUIDs, live positions and manual checks are never saved.
+reloading**. Bound target GUIDs, live positions and manual checks are never saved to disk. Returning to a recipe requires an explicit NPC binding before target-dependent commands can run.
 Deleting a personal recipe leaves its current draft open for recovery and does not
 undo world edits.
 
@@ -114,3 +114,5 @@ Custom cores can change behavior; Server help remains available for every step.
 previews, guarded sends, shared fields, saved updates/deletion, fresh-session
 persistence, schema checks and example inventory IDs. Network sends in this suite
 are mocked; it does not claim live world/database changes were tested.
+
+**Find** beside supported item/creature entry fields opens a catalog picker. Choose **Use selection** to return that template ID, or **Cancel/Back** to return without changes. Picker mode disables spawning and item delivery. **Back** between the main workspaces restores your previous search and selection. Spawn IDs, Path IDs and display IDs cannot be substituted with catalog template entries.

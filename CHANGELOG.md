@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.3-forever.19 — 2026-10-19
+
+- Guard NPC moves by spawn ID against an unrelated selected target.
+- Keep command drafts in memory across browsing, excluding credential fields.
+- Preserve incomplete recipe drafts and session checks without restoring target bindings.
+- Add Back navigation between Commands, Recipes and Catalog.
+- Pick creature/item template IDs from the Forever catalog into supported inline fields;
+  picking and canceling never sends commands. Spawn, path and display IDs stay separate.
+- Validate entire mail macros before sending; block unrepresentable straight quotes,
+  invalid text and commands exceeding the byte limit instead of sending malformed mail.
+
 ## 0.7.3-forever.18 — 2026-10-13
 
 - Add world-building recipes with nine guided vendor, patrol and placement examples.

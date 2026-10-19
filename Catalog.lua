@@ -88,7 +88,7 @@ end
 function C.refresh(query)
     if query~=nil then C.page=1; end
     if not C.window then return; end
-    C.pending=nil; C.confirm:Hide();
+    C.pending=nil; C.confirm:Hide(); C.queryPending=false;
     local tokens={}; for token in C.query:GetText():lower():gmatch("%S+") do tokens[#tokens+1]=token; end
     C.matches={};
     if C.loaded[C.kind] then
@@ -127,6 +127,7 @@ function C.resetFilters()
 end
 
 function C.setKind(kind)
+    if C.pickRequest then return; end
     C.kind=kind; C.selected=nil; C.resetFilters(); C.load(kind);
 end
 
@@ -231,8 +232,9 @@ function C.select(entry)
     local changed=C.selected~=entry; C.selected=entry;
     C.pending=nil; C.confirm:Hide();
     for _,row in ipairs(C.rows) do row.selected=entry~=nil and row.entry==entry; U.paint(row,"button",row.selected); end
-    C.add:SetShown(C.kind=="items"); C.quantity:SetShown(C.kind=="items"); C.quantityLabel:SetShown(C.kind=="items");
-    C.temporary:SetShown(C.kind=="creatures"); C.persistent:SetShown(C.kind=="creatures");
+    C.add:SetShown(not C.pickRequest and C.kind=="items"); C.quantity:SetShown(not C.pickRequest and C.kind=="items"); C.quantityLabel:SetShown(not C.pickRequest and C.kind=="items");
+    C.temporary:SetShown(not C.pickRequest and C.kind=="creatures"); C.persistent:SetShown(not C.pickRequest and C.kind=="creatures");
+    C.updatePicker();
     C.add:SetEnabled(entry~=nil); C.temporary:SetEnabled(entry~=nil); C.persistent:SetEnabled(entry~=nil); C.favorite:SetEnabled(entry~=nil);
     C.copy:SetText(entry and tostring(entry.id) or "");
     C.url:SetText(entry and ("https://www.wowhead.com/forever/"..(C.kind=="items" and "item=" or "npc=")..entry.id) or "");
@@ -250,9 +252,11 @@ function C.select(entry)
     end
     C.description:SetText(C.description:GetText()..availability);
     if changed then C.variantIndex=1; C.remember(entry); C.preview(entry); end
+    C.updatePicker();
 end
 
 function C.addItem()
+    if C.pickRequest then return; end
     local entry=C.selected; if C.kind~="items" or not entry then return; end
     local count=tonumber(C.quantity:GetText());
     if not count or count~=math.floor(count) or count<1 or count>1000 then GMGenie.showGMMessage("Enter a whole quantity from 1 to 1000."); return; end
@@ -263,18 +267,21 @@ function C.addItem()
 end
 
 function C.spawnTemporary()
+    if C.pickRequest then return; end
     if C.kind~="creatures" or not C.selected then return; end
     GMGenieForever.SendChatMessage(".npc add temp noloot "..C.selected.id,"GUILD");
     C.actionNote:SetText("Requested a temporary "..C.selected.name.." at your position. Check the world and server response in chat.");
 end
 
 function C.askPersistent()
+    if C.pickRequest then return; end
     if C.kind~="creatures" or not C.selected then return; end
     C.pending=C.selected;
     C.confirmText:SetText("Save "..C.selected.name.." ("..C.selected.id..") as a persistent spawn at your current position and facing?\n\nThis creature will remain after server restarts."); C.confirm:Show();
 end
 
 function C.spawnPersistent()
+    if C.pickRequest then return; end
     local entry=C.pending; C.pending=nil; C.confirm:Hide();
     if C.kind~="creatures" or not entry or entry~=C.selected then return; end
     GMGenieForever.SendChatMessage(".npc add "..entry.id,"GUILD");
@@ -296,7 +303,7 @@ end
 function C.create()
     local window=CreateFrame("Frame","GMGenie_Catalog",UIParent,"BackdropTemplate"); C.window=window;
     window:SetFrameLevel(window:GetFrameLevel()+50);
-    window:SetPoint("CENTER"); U.window(window,"Forever content catalog",1050,750);
+    window:SetPoint("CENTER"); U.window(window,"Forever content catalog",1050,750,function() if C.pickRequest then C.finishPick(false,true); else window:Hide(); end end);
     C.itemsTab=U.button(window,"Items",18,-62,120,function() C.setKind("items"); end);
     C.creaturesTab=U.button(window,"NPCs & monsters",148,-62,158,function() C.setKind("creatures"); end);
     C.modeButton=U.button(window,"All entries",318,-62,152,C.modeMenu);
@@ -304,7 +311,7 @@ function C.create()
     C.query=U.edit(window,"GMGenie_Catalog_Search",18,-104,914,32);
     C.placeholder=U.label(C.query,"Search by name, exact ID or NPC title...",10,-10,880,"GameFontHighlightSmall",true);
     C.query:SetScript("OnTextChanged",function(self)
-        C.placeholder:SetShown(self:GetText()=="");
+        C.placeholder:SetShown(self:GetText()==""); C.queryPending=true; C.updatePicker();
         C.queryToken=(C.queryToken or 0)+1; local token=C.queryToken;
         C_Timer.After(0.15,function() if token==C.queryToken then C.refresh(self:GetText()); end end);
     end);
@@ -369,6 +376,9 @@ function C.create()
     U.tooltip(C.temporary,"Temporary spawn","Uses .npc add temp noloot at your position. This creature is not saved to the world database. It can stay alive until removed or the map/server unloads.");
     U.tooltip(C.persistent,"Persistent spawn","Uses .npc add at your position and facing, saving a world spawn. You will confirm the chosen entry before sending it.");
     C.actionNote=U.label(window,"",430,-698,602,"GameFontHighlightSmall",true);
+    C.pickUse=U.button(window,"Use selection",430,-662,412,function() C.finishPick(true,true); end,nil,30);
+    C.pickCancel=U.button(window,"Cancel",854,-662,178,function() C.finishPick(false,true); end,nil,30);
+    C.pickUse:Hide(); C.pickCancel:Hide();
     -- Confirmation is internal to the browser and is invalidated by selection,
     -- filters, tab changes or closing the catalog.
     C.confirm=U.panel(detail,24,-140,554,170); C.confirm:SetFrameLevel(detail:GetFrameLevel()+20);
@@ -380,14 +390,61 @@ function C.create()
     window:SetScript("OnEvent",function(_,event,id,success)
         if event=="ITEM_DATA_LOAD_RESULT" and success and C.kind=="items" and C.selected and C.selected.id==id and window:IsShown() then C.preview(C.selected,true); end
     end);
+    window:HookScript("OnHide",function()
+        if C.pickRequest then
+            if U.navigating then C.finishPick(false,false); else C.finishPick(false,true); end
+        end
+    end);
+    U.workspace("catalog",window,C.captureState,C.restoreState);
     window:Hide();
+end
+
+function C.captureState()
+    return {kind=C.kind,mode=C.mode,page=C.page,query=C.query:GetText(),typeFilter=C.typeFilter,rankFilter=C.rankFilter,
+        slotFilter=C.slotFilter,roleFilter=C.roleFilter,selected=C.selected and C.selected.id};
+end
+function C.restoreState(state)
+    C.kind=state.kind; C.mode=state.mode; C.typeFilter=state.typeFilter; C.rankFilter=state.rankFilter;
+    C.slotFilter=state.slotFilter; C.roleFilter=state.roleFilter;
+    C.queryToken=(C.queryToken or 0)+1; C.query:SetText(state.query); C.queryToken=(C.queryToken or 0)+1;
+    C.load(C.kind); C.page=state.page; C.refresh();
+    if C.byID[C.kind] and C.byID[C.kind][state.selected] then C.select(C.byID[C.kind][state.selected]); end
+    if C.selected then C.preview(C.selected); end
+end
+function C.updatePicker()
+    if not C.pickUse then return; end
+    local request=C.pickRequest;
+    C.pickUse:SetShown(request~=nil); C.pickCancel:SetShown(request~=nil);
+    C.itemsTab:SetEnabled(not request); C.creaturesTab:SetEnabled(not request);
+    if request then
+        C.pickUse:SetEnabled(not C.queryPending and C.kind==request.kind and C.selected~=nil);
+        C.pickUse:SetText(C.selected and ("Use "..C.selected.name) or "Choose a result");
+        C.actionNote:SetText("Choose "..request.label..". Returns its template ID to your form; no command is sent.");
+    end
+end
+function C.pick(kind,label,callback)
+    if not GMGenieForever.RequireActive() or (kind~="items" and kind~="creatures") then return; end
+    if not C.window then C.create(); end
+    if C.pickRequest then C.finishPick(false,false); end
+    local state=C.captureState();
+    U.visit("catalog"); C.kind=kind; C.selected=nil; C.resetFilters();
+    C.pickRequest={kind=kind,label=label,callback=callback,previous=state};
+    C.load(kind); C.refresh(); C.updatePicker();
+end
+function C.finishPick(use,returning)
+    local request=C.pickRequest; if not request then return; end
+    local entry=use and C.kind==request.kind and C.selected or nil;
+    C.pickRequest=nil; C.restoreState(request.previous); C.updatePicker();
+    if returning then U.back(); end
+    if entry then request.callback(entry.id); end
 end
 
 function C.open(query,kind)
     if not GMGenieForever.RequireActive() then return; end
     if not C.window then C.create(); end
+    U.visit("catalog");
     if kind then C.kind=kind; C.resetFilters(); end
-    C.window:Show(); C.load(C.kind);
+    C.load(C.kind);
     if query~=nil then C.query:SetText(query); end
     C.refresh(); if C.selected then C.preview(C.selected); end
 end
