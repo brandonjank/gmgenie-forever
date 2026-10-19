@@ -6,6 +6,7 @@
 - Keep command drafts in memory across browsing, excluding credential fields.
 - Preserve incomplete recipe drafts and session checks without restoring target bindings.
 - Add Back navigation between Commands, Recipes and Catalog.
+- Keep the command workspace above the HUD and ignore unchanged native edit events.
 - Pick creature/item template IDs from the Forever catalog into supported inline fields;
   picking and canceling never sends commands. Spawn, path and display IDs stay separate.
 - Validate entire mail macros before sending; block unrepresentable straight quotes,

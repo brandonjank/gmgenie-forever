@@ -267,6 +267,7 @@ end
 
 function C.create()
     local window=CreateFrame("Frame","GMGenie_Commands",UIParent,"BackdropTemplate"); C.window=window;
+    window:SetFrameLevel(window:GetFrameLevel()+50);
     window:SetPoint("CENTER"); U.window(window,"Command workspace",1000,710);
     U.label(window,"Find a command, fill in its arguments, then run it. Nothing runs while browsing.",18,-62,950,"GameFontHighlightSmall",true);
     C.tabs={};

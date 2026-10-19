@@ -205,8 +205,10 @@ function R.markChecked()
 end
 
 function R.invalidateField(index,text)
-    if R.loading or not R.draft then return; end
+    if R.loading or not R.draft or not R.fields or not R.fields[index] then return; end
     local binding=R.draft.steps[R.stepIndex].values[index];
+    local previous=type(binding)=="table" and R.draft.variables[binding.var] or (binding or "");
+    if previous==text then return; end
     if type(binding)=="table" then
         R.draft.variables[binding.var]=text;
         for j,s in ipairs(R.draft.steps) do for _,v in ipairs(s.values) do if type(v)=="table" and v.var==binding.var then R.checked[j]=nil; R.sent[j]=nil; end end end
@@ -329,7 +331,7 @@ end
 function R.openDraft(index)
     if not GMGenieForever.RequireActive() then return; end
     if not R.window then R.create(); end
-    R.loading=true; R.name:SetText(R.draft.name); R.summary:SetText(R.draft.summary); R.loading=false;
+    R.loading=true; R.name:SetText(R.draft.name); R.summary:SetText(R.draft.summary); R.summary:SetCursorPosition(0); R.loading=false;
     U.visit("recipes");
     R.selectStep(index or 1); R.refresh();
 end
@@ -450,10 +452,10 @@ function R.create()
     local detail=U.panel(window,354,-88,628,610); R.detail=detail;
     U.label(detail,"RECIPE NAME",18,-8,592,"GameFontHighlightSmall",true);
     R.name=U.edit(detail,"GMGenie_Recipes_Name",18,-28,592,30); R.name:SetMaxLetters(80);
-    R.name:SetScript("OnTextChanged",function(self) if not R.loading and R.draft then R.draft.name=self:GetText(); R.dirty=true; R.update(); end end);
+    R.name:SetScript("OnTextChanged",function(self) if not R.loading and R.draft and R.draft.name~=self:GetText() then R.draft.name=self:GetText(); R.dirty=true; R.update(); end end);
     R.origin=U.label(detail,"",18,-66,592,"GameFontHighlightSmall",true);
     R.summary=U.edit(detail,"GMGenie_Recipes_Note",18,-86,592,30); R.summary:SetMaxLetters(400);
-    R.summary:SetScript("OnTextChanged",function(self) if not R.loading and R.draft then R.draft.summary=self:GetText(); R.dirty=true; end end);
+    R.summary:SetScript("OnTextChanged",function(self) if not R.loading and R.draft and R.draft.summary~=self:GetText() then R.draft.summary=self:GetText(); R.dirty=true; end end);
     R.summary:HookScript("OnEnter",function(self) GameTooltip:SetOwner(self,"ANCHOR_RIGHT"); GameTooltip:SetText("Recipe note"); GameTooltip:AddLine(self:GetText(),0.65,0.73,0.83,true); GameTooltip:Show(); end);
     R.summary:HookScript("OnLeave",function() GameTooltip:Hide(); end);
     R.stepPrevious=U.button(detail,"Previous",18,-130,70,function() R.selectStep(R.stepIndex-1); end);

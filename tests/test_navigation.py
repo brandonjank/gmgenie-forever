@@ -53,6 +53,9 @@ C.pickField(1); flush(); K.query:SetText('68'); flush(); U.back()
 assert(not K.pickRequest and C.inputs[1].text=='54' and #sent==0)
 
 R.open(); R.choose({recipe=R.examples[1],source='example'})
+R.dirty=false; R.name:Fire('OnTextChanged'); R.summary:Fire('OnTextChanged')
+for _,input in ipairs(R.inputs) do input:Fire('OnTextChanged') end
+assert(not R.dirty and R.copy(R.draft)) -- native same-text and hidden-input events cannot fabricate edits
 R.checked[1]=true; R.sent[1]=true
 R.choose({recipe=R.examples[1],source='example'})
 assert(R.checked[1] and R.sent[1])
